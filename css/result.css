@@ -1,0 +1,179 @@
+.result_message, .real_message_author, .leaderboard, .gain, .comments-leaderboard, .output, .last-title {
+    text-align: center;
+}
+
+.container {
+    position: absolute;
+    left: 15%;
+    top: 15%;
+    width: 80%;
+    height: 100%;
+    /*margin-left: -10px;*/
+    /* -1/2 width */
+   /* margin-top: -10px;*/
+    /*position: absolute;
+    top: 25%;
+    left: 25%;
+    height: 100%;
+    margin: -100px 0 0 -150px;
+    display: flex;*/
+    /*justify-content: center;
+    align-items: center;*/
+}
+
+.real_message_author {
+    padding: 20px;
+}
+
+.left, .right {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.continue_button {
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    /*text-align: right;
+    padding-right: 50px;*/
+}
+
+#final_leaderboard {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.leaderboard {
+    height: 35%;
+    width: 90%;
+}
+
+.score {
+    height: 5%;
+    width: 90%;
+}
+
+.last-title {
+    padding-bottom: 50px;
+    padding-top: 25px;
+}
+
+#continue {
+    width : 150px;
+    height: 50px;
+}
+
+#end_title {
+    width: 300px;
+}
+
+.wait4results {
+    padding-left: 20px;
+}
+
+.big-box {
+    box-shadow: 
+    0 0 10vw 0vw #FF773C,
+    0 0  2vw  0.4vw #C53C00,
+
+    inset 0 0 0.5vw 0.2vw #FF773C,
+    inset 0 0 0.2vw 0.2vw #FF550B,
+    inset 0 0 0.25vw 0.2vw #C53C00;
+}
+
+#card-body {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 700px;
+}
+
+.body-main {
+    height: 90%;
+    display: flex;
+    flex-direction: row;
+}
+
+.top {
+    height: 10%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.not_shown{
+    width:30%;
+    height: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding-right: 10%;
+}
+
+.gain {
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.comments-leaderboard {
+    height: 10%;
+    width: 90%;
+}
+
+.main_title {
+    text-decoration: none;
+    font-size: 1.5em;
+}
+
+.results {
+    height: 64%;
+    width: 90%;
+    display: flex;
+    align-items: center;
+}
+
+.results-card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: black;
+}
+
+.active {
+    background-color: #FF550B !important; 
+    color: black !important;
+}
+
+.leaderboard-container {
+    height: 60%;
+    margin-bottom: 6%;
+}
+
+#page-selection {
+    height: 10%;
+}
+
+.wait4result {
+    height: 30%;
+    display: flex;
+    align-items: center;
+}
+
+.loader_container {
+    padding-right: 2%;
+}
+
+/*.leaderboard-title{
+    border: none;
+}*/
+
+.pagination-container {
+    width: 100%;
+}

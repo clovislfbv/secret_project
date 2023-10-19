@@ -1,0 +1,435 @@
+h1, h3, .start_game, #droppable-player, .result_button, h4 {
+    text-align : center;
+}
+
+#title {
+    height: 50%;
+    padding-bottom: 5%;
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.secret_and_progress {
+    height: 100%;
+    border: none;
+}
+
+#secret_and_progress {
+    height : 100%;
+    border: none;
+}
+
+#secret_message {
+    resize: none;
+}
+
+.margin-div {
+    margin: 5.25%;
+}
+
+.whole_thing {
+    height: 80%;
+    min-width: 100%;
+    max-width: 100%;
+}
+
+.container {
+    position: absolute;
+    left: 15%;
+    top: 15%;
+    width: 80%;
+    height: 100%;
+    /*margin-left: -10px;*/
+    /* -1/2 width */
+   /* margin-top: -10px;*/
+    /*position: absolute;
+    top: 25%;
+    left: 25%;
+    height: 100%;
+    margin: -100px 0 0 -150px;
+    display: flex;*/
+    /*justify-content: center;
+    align-items: center;*/
+}
+.start_game {
+    padding-top: 20px; 
+}
+
+.main_title {
+    text-decoration: none;
+    font-size: 1.5em;
+}
+
+.players-list {
+    /*width: inherit;*/
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#body-card {
+    width: inherit;
+    height: 90%;
+}
+
+.body-players, #loading-body{
+    width: inherit;
+    height: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.players {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.player {
+    margin: 5px;
+    z-index: 2000;
+}
+    /*
+    text-align: center;
+    z-index: 10;
+    flex-grow: 1;
+    flex-basis: 200;
+}*/
+
+.guess_secret {
+    z-index: 0;
+}
+
+#droppable-player {
+    z-index: 2;
+    padding: 5px;
+    border-radius: 5px;
+    border-style: dashed;
+    height: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes progress-mbj53w {
+    33% {
+        background-position: 0% 33% ,100% 33% ,200% 33%;
+    }
+
+    66% {
+        background-position: -100%  66%,0%   66% ,100% 66%;
+    }
+
+    100% {
+        background-position: 0% 100%,100% 100%,200% 100%;
+    }
+} 
+
+#loader_start {
+    justify-content: center;
+    --r1: 154%;
+    --r2: 68.5%;
+    width: 67.2px;
+    height: 67.2px;
+    border-radius: 50%;
+    background: radial-gradient(var(--r1) var(--r2) at top   ,#0000 79.5%,#f87d0b 80%) center left,
+         radial-gradient(var(--r1) var(--r2) at bottom,#f87d0b 79.5%,#0000 80%) center center,
+         radial-gradient(var(--r1) var(--r2) at top   ,#0000 79.5%,#f87d0b 80%) center right,
+         #eeb355;
+    background-size: 50.5% 220%;
+    background-position: -100% 0%,0% 0%,100% 0%;
+    background-repeat: no-repeat;
+    animation: progress-mbj53w 2.8s infinite linear;
+}
+
+#card-body {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 700px;
+}
+
+#all_players {
+    height: 90%;
+    width: 80%;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.correct {
+    background-color: #FF550B;
+    color: #000;
+}
+
+.normal {
+    background-color: #000;
+}
+
+.ui-state-highlight {
+    background-color: #e68156;
+    color: #000;
+}
+
+.ui-state-error {
+    background-color: darkred;
+    color: #000;
+}
+
+#addon-wrapping {
+    color: #000;
+}
+
+.result_button {
+    padding-top: 50px;
+}
+
+.current_player {
+    width: 100%;
+    height: 120%;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+
+.current_player_comments {
+    padding : 10px;
+}
+
+.list-players-comments {
+    height : 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.current {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#progress-players {
+    height: 20%;
+    position: relative;
+}
+
+.tartampion {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+#myLottie {
+    height: 300px;
+    display: flex;
+    align-items: center;
+}
+
+.wait4 {
+    display: flex;
+    justify-content: space-between;
+}
+
+.wait4played {
+    padding-left: 20px;
+}
+
+.waiting4played {
+    padding-left: 20px;
+}
+
+.progress {
+    background-color: #000;
+    border: 1px solid;
+    border-radius: 40px !important;
+}
+
+.progress-bar {
+    color: #000;
+    font-weight: bold;
+}
+
+@keyframes blink {
+    /**
+     * At the start of the animation the dot
+     * has an opacity of .2
+     */
+    0% {
+      opacity: 0;
+    }
+    /**
+     * At 20% the dot is fully visible and
+     * then fades out slowly
+     */
+    20% {
+      opacity: 1;
+    }
+    /**
+     * Until it reaches an opacity of .2 and
+     * the animation can start again
+     */
+    100% {
+      opacity: 0;
+    }
+}
+
+.waiting-players span {
+    /**
+     * Use the blink animation, which is defined above
+     */
+    animation-name: blink;
+    /**
+     * The animation should take 1.4 seconds
+     */
+    animation-duration: 1.4s;
+    /**
+     * It will repeat itself forever
+     */
+    animation-iteration-count: infinite;
+    animation-delay: .4s;
+    /**
+     * This makes sure that the starting style (opacity: .2)
+     * of the animation is applied before the animation starts.
+     * Otherwise we would see a short flash or would have
+     * to set the default styling of the dots to the same
+     * as the animation. Same applies for the ending styles.
+     */
+    animation-fill-mode: both;
+}
+
+.waiting-players span:nth-child(2) {
+    /**
+     * Starts the animation of the third dot
+     * with a delay of .2s, otherwise all dots
+     * would animate at the same time
+     */
+    animation-delay: 0s;
+}
+
+.waiting-players span:nth-child(3) {
+    /**
+     * Starts the animation of the third dot
+     * with a delay of .4s, otherwise all dots
+     * would animate at the same time
+     */
+    animation-delay: 0.2s;
+}
+
+.form-control[type="text"]{
+    background-color: #000;
+    color: #FF550B;
+}
+
+.form-control:focus {
+    background-color: #000;
+    color: #FF550B;
+}
+
+.form-control::placeholder {
+    background-color: #000;
+    color: #FF550B;
+}
+
+.big-box {
+    box-shadow: 
+    0 0 10vw 0vw #FF773C,
+    0 0  2vw  0.4vw #C53C00,
+
+    inset 0 0 0.5vw 0.2vw #FF773C,
+    inset 0 0 0.2vw 0.2vw #FF550B,
+    inset 0 0 0.25vw 0.2vw #C53C00;
+}
+
+
+/* ------------------------------------LE CSS CUSTOM DE "GUESS_SECRET"------------------------------------------- */
+
+.container-guess-secret {
+    width: 100%;
+    height: 100%;
+    /* background: blue; */
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+.container-guess-secret .wrapper {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    /* background: pink; */
+    /* justify-content: space-between; */
+}
+
+/* .container-guess-secret .wrapper .image {
+    width: 20%;
+    height: 100%;
+    background: #FF550B;
+} */
+
+.container-guess-secret .wrapper .image .image-test {
+    height: 100%;
+}
+
+.container-guess-secret .wrapper .container-secret-message {
+    width: 100%;
+    height: 100%;
+    /* background: yellow; */
+}
+
+.container-guess-secret .wrapper .container-secret-message .question-guess {
+    width: 100%;
+    height: 25%;
+    /* background: lightblue; */
+    text-transform: uppercase;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.container-guess-secret .wrapper .container-secret-message .text-secrets {
+    width: 100%;
+    height: 50%;
+    /* background: lightcyan; */
+}
+
+.body-main {
+    height: 90%;
+    display: flex;
+    flex-direction: row;
+}
+
+.top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.not_shown{
+    width:30%;
+    height: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding-right: 10%;
+}
+
+.secret_overall {
+    height: 90%;
+}
+
+.margin-div-right {
+    margin: 5%;
+}

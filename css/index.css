@@ -1,0 +1,114 @@
+h3, div {
+    text-align: center;
+}
+
+#mySecret {
+    min-height: 100px;
+}
+
+.container {
+    position: absolute;
+    left: 15%;
+    top: 15%;
+    width: 80%;
+    height: 75%;
+    margin-left: -10px;
+    /* -1/2 width */
+    margin-top: -10px;
+    /*position: absolute;
+    top: 25%;
+    left: 30%;
+    width: 60%;
+    margin: -100px 0 0 -150px;
+    display: flex;*/
+}
+
+.whole_thing .infos {
+    background-color: transparent;
+}
+
+#card-body {
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row nowrap;
+}
+
+.left {
+    width: 30%;
+    height: 100%;
+    padding: 1em;
+}
+
+.right {
+    width: 70%;
+    height: 100%;
+    padding: 1em;
+}
+
+.confirm {
+    padding-top: 50px;
+    padding-bottom: 30px;
+}
+
+#title {
+    display: flex;
+    align-items: center;
+    word-spacing: 100vw;
+}
+
+.main_title {
+    text-decoration: none;
+    line-height: 2em;
+    opacity: 70%;
+}
+
+.user_input {
+    padding-top: 30px;
+    height: 50%;
+}
+
+.middle {
+    padding-top: 100px;
+    padding-top: 20px;
+}
+
+.title, .infos {
+    min-height: 100%;
+}
+
+.infos {
+    border: none;
+}
+
+.title {
+    background: url("../images/whoIsBehind.jpg") top/100% auto no-repeat;
+    background-size: cover; 
+}
+
+.form-control{
+    background-color: #000;
+    color: #FF550B;
+}
+
+.form-control:focus {
+    background-color: #000;
+    color: #FF550B;
+}
+
+.form-control::placeholder {
+    color: #FF550B;
+}
+
+.big-box {
+    box-shadow: 
+    0 0 10vw 0vw #FF773C,
+    0 0  2vw  0.4vw #C53C00,
+
+    inset 0 0 0.5vw 0.2vw #FF773C,
+    inset 0 0 0.2vw 0.2vw #FF550B,
+    inset 0 0 0.25vw 0.2vw #C53C00;
+}
+
+#addon-wrapping {
+    color: #000;
+}
