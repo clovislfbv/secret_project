@@ -12,6 +12,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script src="../jquery-bootpag/lib/jquery.bootpag.js"></script>
+    <script src="../lottie-player/player/node_modules/@dotlottie/player-component/dist/dotlottie-player.js" type="module"></script>
     <script src="../js/script_game.js" type="module"></script>
   </head>
   <body>
@@ -110,15 +111,14 @@
                     }
                     
                     echo "<h3 class='real_message_author text-primary'>L'auteur du message était : " . $name_array["p_name"] . "</h3>";
+                    echo "</div></div><h5 class='gain text-primary'>";
+                    if ($post_variables[1] === $name_array["p_name"]){
+                      echo "+ 20 points !";
+                    } else {
+                      echo "+ 0 points !";
+                    }
+                    echo "</h5><p class='comments-leaderboard card-subtitle mb-2 text-muted'></p>";
                   }
-
-                  echo "</div></div><h5 class='gain text-primary'>";
-                  if ($post_variables[1] === $name_array["p_name"]){
-                    echo "+ 20 points !";
-                  } else {
-                    echo "+ 0 points !";
-                  }
-                  echo "</h5><p class='comments-leaderboard card-subtitle mb-2 text-muted'></p>";
                 ?>
               </div>
               <div class="col-6 right">
@@ -128,6 +128,23 @@
                     echo "<div class='pagination-container'><div id='page-selection'></div></div>";
                     echo "<div class='wait4result text-primary'><div class='loader-container'><span class='wait4results spinner-border' role='status'></span></div><h4 class='waiting4results'>En attente du résultat de tous les joueurs</h4></div>";
                     echo '<div class="continue_button d-none"><button id="continue_btn" class="pressToto btn btn-outline-primary" type="button">Continuer</button></div>';
+                  } else {
+                    echo "<div class='scoreboard'>";
+                    echo "<div class='scoreboard__podiums'>";
+                    echo "<div class='scoreboard__podium js-podium' data-height='200px'>";
+                    echo "<div class='scoreboard__podium-base scoreboard__podium-base--second'>";
+                    echo "<div class='scoreboard__podium-rank'>2</div></div>";
+                    echo "<div class='scoreboard__podium-number'>Bar de Wever<small><span class='js-podium-data'>160</span></small></div></div>";
+                    
+                    echo "<div class='scoreboard__podium js-podium' data-height='250px'>";
+                    echo "<div class='scoreboard__podium-base scoreboard__podium-base--first'>";
+                    echo "<div class='scoreboard__podium-rank'>1</div></div>"; 
+                    echo "<div class='scoreboard__podium-number'>Charles Michel<small><span class='js-podium-data'>195</span></small></div></div>";
+                    
+                    echo "<div class='scoreboard__podium js-podium' data-height='150px'>";
+                    echo "<div class='scoreboard__podium-base scoreboard__podium-base--third'>";
+                    echo "<div class='scoreboard__podium-rank'>3</div></div>";
+                    echo "<div class='scoreboard__podium-number'>Jan Jambon<small><span class='js-podium-data'>100</span></small></div></div></div>";
                   }
                 ?>
                 <!--<div class='wait4results'></div>-->

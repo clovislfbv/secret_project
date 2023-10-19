@@ -23,7 +23,7 @@ include_once ("conn.php");
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script src="../js/bootstrap/bootstrap.js"></script>
-    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+    <script src="../lottie-player/player/node_modules/@dotlottie/player-component/dist/dotlottie-player.js" type="module"></script> 
     <script src="../js/script_game.js" type="module" type="text/javascript"></script>
   </head>
   <body>
@@ -132,7 +132,7 @@ include_once ("conn.php");
                     <h1><a href="index.php" class="main_title text-primary">Discover my secret</a></h1>
                   </div> -->
                   <div id="cadenas" class="cadenas">
-                    <dotlottie-player id="myLottie" src="https://lottie.host/4640af69-d5c6-4074-95e0-f682d76be193/ctXiGOZQ9a.json" background="transparent" speed="0" direction="1" mode="normal" autoplay></dotlottie-player>
+                    <dotlottie-player id="myLottie" src="../lottie-player/lock_animation/lock_animation.lottie" background="transparent" speed="0" direction="1" mode="normal" autoplay></dotlottie-player>
                     <!--<div class="text-center text-primary loading">
                       <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                       Loading...

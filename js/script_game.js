@@ -137,7 +137,6 @@ $j(document).ready(function () {
   });
 
   $j("#result_btn").click(function (e) {
-
     updatePlayerContinued(JSON.parse(getcurrPlayer())["id"]);
     author_random_message = getAuthorRandomSecret();
 

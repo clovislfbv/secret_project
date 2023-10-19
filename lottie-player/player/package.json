@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@dotlottie/player-component": "^2.7.0"
+  }
+}
