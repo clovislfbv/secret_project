@@ -18,6 +18,11 @@
   font-size: 2em;
 }
 
+.error-chars {
+  font-family: "Bad grunge";
+  font-size: 25em;
+}
+
 :root {
   --blue: #007bff;
   --indigo: #6610f2;

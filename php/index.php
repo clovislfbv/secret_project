@@ -69,7 +69,6 @@
           </div>
         </div>
       </div>
-    <!--<div class="col-3 right"></div>-->
     </div>
     </div>
   </body>

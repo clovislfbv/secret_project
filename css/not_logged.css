@@ -1,0 +1,103 @@
+.whole_thing {
+    height: 80%;
+    min-width: 100%;
+    max-width: 100%;
+}
+
+.container {
+    position: absolute;
+    left: 15%;
+    top: 15%;
+    width: 80%;
+    height: 100%;
+    /*margin-left: -10px;*/
+    /* -1/2 width */
+   /* margin-top: -10px;*/
+    /*position: absolute;
+    top: 25%;
+    left: 25%;
+    height: 100%;
+    margin: -100px 0 0 -150px;
+    display: flex;*/
+    /*justify-content: center;
+    align-items: center;*/
+}
+
+.big-box {
+    box-shadow: 
+    0 0 10vw 0vw #FF773C,
+    0 0  2vw  0.4vw #C53C00,
+
+    inset 0 0 0.5vw 0.2vw #FF773C,
+    inset 0 0 0.2vw 0.2vw #FF550B,
+    inset 0 0 0.25vw 0.2vw #C53C00;
+}
+
+#card-body {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 700px;
+}
+
+.top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.not_shown{
+    width:30%;
+    height: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding-right: 10%;
+}
+
+.body-main {
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.not-logged-description {
+    height: 100%;
+    width: 100%;
+    border: none;
+}
+
+#not-logged-description-id {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.description {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 3%; 
+    padding-bottom: 5%;
+    width: 70%;
+}
+
+#description {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-title {
+    padding-top: 5%;
+    padding-bottom: 2%;
+}
+
+.error-chars {
+    line-height: 50%;
+}

@@ -1,3 +1,11 @@
+<?php
+  require_once("helper.php");
+  session_start();
+  if (!(isset($_SESSION)) && is_logged()){
+    echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
+  }
+?>
+
 <!doctype html>
 <html lang="fr">
   <head>
@@ -31,7 +39,7 @@
                           <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"></path>
                         </svg>
                       </span>
-                      <?php session_start(); echo $_SESSION["username"];?>
+                      <?php echo $_SESSION["username"];?>
                     </a>
                   </li>
                   <li class="nav-item">
@@ -131,10 +139,11 @@
                   } else {
                     echo "<div class='scoreboard'>";
                     echo "<div class='scoreboard__podiums'>";
+
                     echo "<div class='scoreboard__podium js-podium' data-height='200px'>";
                     echo "<div class='scoreboard__podium-base scoreboard__podium-base--second'>";
-                    echo "<div class='scoreboard__podium-rank'>2</div></div>";
-                    echo "<div class='scoreboard__podium-number'>Bar de Wever<small><span class='js-podium-data'>160</span></small></div></div>";
+                    echo "<div class='scoreboard__podium-number'>Bar de Wever<small><span class='js-podium-data'>160</span></small></div></div></div>";
+                    echo "<div class='scoreboard__podium-rank'>2</div>";
                     
                     echo "<div class='scoreboard__podium js-podium' data-height='250px'>";
                     echo "<div class='scoreboard__podium-base scoreboard__podium-base--first'>";

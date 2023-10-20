@@ -1,11 +1,9 @@
 <?php
-
+session_start();
 include_once("conn.php");
 
 $player = $_POST['username'];
 $player_secret = htmlspecialchars( $_POST['mySecret'], ENT_QUOTES);
-
-session_start();
 
 if (isset($_SESSION["random"])) {
   unset($_SESSION["random"]);

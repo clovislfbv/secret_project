@@ -100,6 +100,16 @@
         }
     }
 
+    function is_logged(){
+        include "conn.php";
+
+        $player_id = $_SESSION["player_id"];
+
+        $request = "SELECT logged FROM players WHERE id=" . $player_id;
+        $output = $conn->query($request)->fetch_array();
+
+        return $output[0];
+    }
 
     function update_player_when_played(){
         include "conn.php";
