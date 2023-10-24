@@ -317,6 +317,7 @@ export function loading(){
       LottiePlayer.seek(0);
       LottiePlayer.stop();
     }
+    console.log(total_players_logged, animation_finished, hasGameBegun());
     if (total_players_logged > 1 && animation_finished == 0 && hasGameBegun()){
       if (nbr_messages_discovered > 0){
         LottiePlayer.setSpeed(1);
@@ -802,10 +803,21 @@ export function hasGameBegun(){
     data: {action: "has_game_begun"},
     async: false,
     success: function (res) {
-      begun = res
+      begun = res;
     }
   })
   return begun
+}
+
+export function startGame(){
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "start_game"},
+    success: function (res) {
+      console.log("game_started");
+    }
+  })
 }
 
 export function decodeSecret(secret) {

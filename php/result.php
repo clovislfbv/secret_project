@@ -1,7 +1,7 @@
 <?php
-  require_once("helper.php");
   session_start();
-  if (!(isset($_SESSION)) && is_logged()){
+  require_once("helper.php");
+  if (!(isset($_SESSION["player_id"])) || (is_logged() != '1')){
     echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
   }
 ?>

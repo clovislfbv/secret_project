@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="../css/index.css">
     <script src="../js/bootstrap/bootstrap.min.js"></script>
     <script src="../js/jquery.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
     <script type="module" src="../js/script_game.js"></script>
     <title>Discover my secret</title>
   </head>

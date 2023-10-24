@@ -1,4 +1,4 @@
-import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard } from "./helper.js";
+import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame } from "./helper.js";
 
 var $j = jQuery.noConflict();
 
@@ -9,105 +9,21 @@ var hidden = 0;
 var author_random_message;
 
 $j(document).ready(function () {
-  //console.log("test");
-
-  /*var hidden = sessionStorage.getItem("hidden");
-  sessionStorage.setItem("hidden", 1);*/
-  
-  /*
-  let dropped;
-
-  $j("#start_button").click(function (e) {
-    let random_message = JSON.parse(chooseRandomSecret());
-    author_random_message = getAuthorRandomSecret();
-    console.log(random_message);
-    $j("#secret_message").text(decodeSecret(random_message["p_secret"]));
-    $j("input").val(random_message["id_secret"]);
-    $j("#secret_message").addClass(random_message["id_player"])
-    console.log('testclick');
-
-    $j(".guess_secret").removeClass('d-none');
-    $j("#progress-players").removeClass('d-none');
-    $j('#start_button').addClass('d-none');
-    $j(".player").draggable({revert : true});
-    $j("#droppable-player").droppable({
-      over: function(event, ui) {
-        if (dropped == 1) {
-          $j(this).addClass("ui-state-error");
-        } else {
-          $j(this).addClass("ui-state-highlight");
-        }
-        $j(this).removeClass("correct");
-      },
-      drop: function( event, ui ) {
-        if (dropped != 1){
-          $j(".wait4").removeClass("d-none");
-          ui.draggable.draggable( "option", "revert", false);
-          ui.draggable.position({
-            my: "center",
-            at: "center",
-            of: $j(this),
-          });
-          $j(this).removeClass( "ui-state-highlight" );
-          $j(this).addClass("correct");
-          ui.draggable.draggable("disable", 1);
-          dropped = 1;
-          let chosen_player = ui.draggable[0].id.split("-");
-          updatePlayerWhenPlayed(chosen_player[1]);
-
-          let value = $j("input").val()
-          if (!(value.indexOf("-") > -1)){
-            $j("input").val(value + "-" + chosen_player[0] + "-" + chosen_player[1]);
-          }
-          //header("Refresh: 0;");
-            
-          //location.reload();
-          //à partir d'ici mon code fait pas comme expected
-        } else {
-          $j(ui.draggable).css({
-            'top': '0px',
-            'left': '0px',
-            'position': 'relative'
-          });
-          $j(this).addClass("correct");
-          $j(this).removeClass("ui-state-highlight");
-          $j(this).removeClass("ui-state-error");
-        }
-        
-      },
-      out: function(event, ui) {
-        $j(this).removeClass("ui-state-error")
-        $j(this).removeClass("ui-state-highlight")
-        if (dropped == 1)
-          $j(this).addClass("correct")
-        else
-          $j(this).removeClass("correct")
-      },
-    });
-  }); 
-
-  if ($j("input").length && $j("input").val().split("-").length > 1){
-    let player_played = JSON.parse(getChosenPlayer());
-    $j("#"+player_played["p_name"]+"-"+player_played["id"]).draggable("disable", 1);
-    $j("#"+player_played["p_name"]+"-"+player_played["id"]).click(function (e) {
-      updatePlayerWhenClicked();
-      $j(".wait4").addClass("d-none");
-      $j("#"+player_played["p_name"]+"-"+player_played["id"]).draggable( "option", "revert", true);
-      //$j("#res_button").addClass("d-none");
-      $j(".progress").removeClass("d-none");
-      $j("#"+player_played["p_name"]+"-"+player_played["id"]).css({
-        'top': '0px',
-        'left': '0px',
-        'position': 'relative'
-      });
-      $j("input").val($j("input").val().replace("-" + player_played["p_name"] + "-" + player_played["id"], ""));
-      $j("#droppable-player").removeClass("correct");
-      dropped = 0;
-      $j("#"+player_played["p_name"]+"-"+player_played["id"]).draggable("enable", 1);
-      //header("Refresh: 10;");
-      //console.log("changed");
-    });
-  }*/
+  setInterval(function() {
+    if (hasGameBegun() == 1 && shown == 0){
+      LottiePlayer.setSpeed(1);
+      LottiePlayer.play();
+      setTimeout(function () {
+        setAnimationFinished(1);
+        $j("#cadenas").addClass("d-none");
+        /*$j("#main_title").css({
+          "margin-bottom": "13%",
+        })*/
+        showSecret();
+        shown = 1;
+      }, 2500)
+    }
+  }, 1500);
 
   $j('#page-selection').on("page", function(event, num){
     let minimum = (num * 5) - 5;
@@ -145,24 +61,11 @@ $j(document).ready(function () {
     console.log(id_chosen_player, author_random_message["id"], JSON.parse(getcurrPlayer())["id"]);
     updateScore(id_chosen_player, author_random_message["id"], JSON.parse(getcurrPlayer())["id"]);
     shown = 0;
-    
-    /*
-    sql_update = "UPDATE players SET p_played = 1, id_p_choice = $id_chosen_player WHERE id=" . $player_id
-
-    let sql_update;
-    if (name_author_random_message == id_chosen_player){
-      sql_update = "UPDATE players SET score = score + 20, p_played = 1, id_p_choice = $id_chosen_player WHERE id=" . $player_id; // update db
-    } else {
-      sql_update = "UPDATE players set p_played = 1, id_p_choice = $id_chosen_player WHERE id=" . $player_id;
-    }
-    $res = $conn->query(sql_update);*/
-    /*if (!($j("#start_button").hasClass("2"))){
-      $j("#start_button").addClass("2");
-    }*/
   })
 
   $j(".start_game").click(function (e) {
     if (shown == 0){
+      startGame();
       LottiePlayer.setSpeed(1);
       LottiePlayer.play();
       setTimeout(function () {
@@ -208,9 +111,11 @@ $j(document).ready(function () {
     disconnectPlayer(current_player_id);
   })
 
-  $j("#btn_sendform").submit(function (e) {
-    e.preventDefault()
-    hasGameBegun();
+  $j("form[name='secret_form']").submit(function (e) {
+    if (hasGameBegun() == 1){
+      e.preventDefault();
+      alert("Une partie a déjà commencé veuillez attendre qu'elle se termine avant d'en rejoindre une nouvelle")
+    };
   })
 
   var checkCloseX = 0;
