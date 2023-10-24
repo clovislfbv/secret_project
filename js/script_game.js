@@ -7,6 +7,7 @@ var shown = 0;
 var LottiePlayer = document.getElementById("myLottie"); //points to the locker animation
 var hidden = 0;
 var author_random_message;
+
 $j(document).ready(function () {
   //console.log("test");
 
@@ -252,30 +253,10 @@ $j(document).ready(function () {
       currentKey = e.key.toUpperCase();
     })
     if (event) {
+      console.log("test");
       if (checkCloseX == 1 || ((prevKey == "CONTROL" || prevKey == "ALT") && (currentKey != "R" && currentKey != "F5"))){
         ConfirmLeave();
-      } else {
-        resetPlayedPlayer(JSON.parse(getcurrPlayer())["id"]);
       }
     }
   }
-
-  /*window.onunload = function (event) {
-    if (event) {
-    }
-  }*/
-
-  /*window.addEventListener('beforeunload', function (e) {
-    e.preventDefault();
-    e.returnValue = '';
-    // Display a confirmation message in some browsers
-    return 'Are you sure you want to leave this page? Your changes may not be saved.';
-});*/
-/*
-  $j(window).on('unload', function (event){
-    event.preventDefault();
-    window.location.replace("../php/index.php");
-    console.log("Logging out");
-    return "test";
-  });*/
 })

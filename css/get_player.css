@@ -23,15 +23,20 @@ h1, h3, .start_game, #droppable-player, .result_button, h4 {
 .secret_and_progress {
     height: 100%;
     border: none;
+    padding: none;
 }
 
 #secret_and_progress {
     height : 100%;
     border: none;
+    padding: none;
 }
 
 #secret_message {
-    resize: none;
+    padding-left: 1%;
+    height: 75%;
+    border-radius: 5px;
+    border: 1px solid;
 }
 
 .margin-div {
@@ -393,7 +398,7 @@ h1, h3, .start_game, #droppable-player, .result_button, h4 {
     height: 25%;
     /* background: lightblue; */
     text-transform: uppercase;
-    font-size: 1.5em;
+    font-size: 1.25em;
     font-weight: bold;
 }
 
@@ -404,7 +409,7 @@ h1, h3, .start_game, #droppable-player, .result_button, h4 {
 }
 
 .body-main {
-    height: 90%;
+    height: 95%;
     display: flex;
     flex-direction: row;
 }
@@ -414,6 +419,7 @@ h1, h3, .start_game, #droppable-player, .result_button, h4 {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    height: 5%;
 }
 
 .not_shown{
@@ -432,4 +438,8 @@ h1, h3, .start_game, #droppable-player, .result_button, h4 {
 
 .margin-div-right {
     margin: 5%;
+}
+
+#scrt_and_prgress {
+    padding: 0;
 }

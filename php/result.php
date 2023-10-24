@@ -46,124 +46,114 @@
                     <a class="nav-link current_score text-primary disabled" href="#" data-toggle="tab">
                       <?php
                         require_once("helper.php"); 
-                        echo get_curr_player()["score"] . " points"
+                        echo get_curr_player()["score"] . " points";
                       ?>
                     </a>
                   </li>
                 </ul>
               </div>
-              <!-- <div class="not_shown"> -->
-                <!-- <div id="border-primary current">
-                  <nav class="player-playing navbar navbar-expand-md navbar-dark bg-primary mb-2"> -->
-                    
-                  <!-- </nav> 
-                      </div>-->
-                <!-- <div class="border-primary current_score">
-                  <nav class="score-player-playing navbar navbar-expand-md navbar-dark bg-primary mb-2"> -->
-                    
-                  <!-- </nav>
-                </div> -->
               <div id="main_title">
                 <h1><a href="index.php" class="main_title text-primary">Discover my secret</a></h1>
               </div>
             </div>
             <div class="body-main">
-              <div class="col-6 left">
-                <script type="module">
-                  import { displayContinueButton } from "../js/helper.js";
-                  //var $j = jQuery.noConflict();
-                  displayContinueButton();
-                </script>
-                <?php
-                  include_once("conn.php");
-                  require_once("helper.php");
+                <div class="col-6 left">
+                  <script type="module">
+                    import { displayContinueButton } from "../js/helper.js";
+                    //var $j = jQuery.noConflict();
+                    displayContinueButton();
+                  </script>
+                  <?php
+                    include_once("conn.php");
+                    require_once("helper.php");
 
-                  $_SESSION["on_get"] = 0;
-                  if (isset($_SESSION["random"])){
-                    unset($_SESSION['random']);
-                  }
-                  $post_variables = explode("-", $_POST["secret_id_played"]);
-                  //var_dump($post_variables);
-                  /*echo "<br> id du message : " . $post_variables[0] . "<br>";
-                  echo "chosen player : " . $post_variables[1] . "<br>";
-                  echo "nom du joueur en train de jouer : " . $_SESSION["username"] . "<br>";
-                  echo "vrai auteur du message : " . $_SESSION["id_answer_player"] . "<br>";*/
-                  //$real_author = $_SESSION["id_answer_player"];
-                  $real_author = get_author_random_message();
-                  $username = $_SESSION["username"];
-                  
-                  $secret_discovered = "UPDATE mysecret SET discovered = 1 WHERE id=" . $post_variables[0];
-                  $conn->query($secret_discovered);
-
-                  $total = get_nbr_secrets_not_discovered();
-
-                  if ($total == 0) {
-                    //echo "<div class='last-title'><h1><a href='index.php' class='main_title'>Discover my secret</a></h1></div>
-                    echo "<div class='end card'><div class='card-body'><div class='id='end-title'><h2 class='comments'>Jeu terminé !</h2></div><h4 class='comments card-subtitle mb-2 text-muted'>Voici le classement finale !</h4></div></div>";
-                    echo "<div id='final_leaderboard' class='final_leaderboard'><div class='card-body'><div class='results card'><div class='card-header leaderboard'><h1>classement finale des scores </h1></div><ul class='list-group list-group-flush'></ul></div></div></div>";
-                    echo "<div class='result_button output' id='res_button'><button type='button'>Quitter</button></div>";
-
-                  } else {
-                    //echo "<form name='result_form' method='' action='get_player.php'>
-                    echo "<div class='results border-primary card'><div class='results-card-body card-body'>";
-                    
-                    $author = $real_author["id"];
-                    $request = "SELECT p_name FROM players WHERE id = $author";
-                    $name = $conn->query($request);
-                    $name_array = $name->fetch_array();
-
-                    if ($post_variables[1] === $name_array["p_name"]){
-                      echo "<div class='result_message text-primary'><h1 class='card-title'>Bien joué !</h1><h3>Tu as trouvé la personne qui a écrite ce secret !</h3></div>";
-                    } else {
-                      echo "<div class='result_message text-primary card-title'><h1>Dommage !</h1><h3>Tu n'as pas réussi à trouver la personne qui a écrite ce secret !</h3></div>";
+                    $_SESSION["on_get"] = 0;
+                    if (isset($_SESSION["random"])){
+                      unset($_SESSION['random']);
                     }
+                    $post_variables = explode("-", $_POST["secret_id_played"]);
+                    //var_dump($post_variables);
+                    /*echo "<br> id du message : " . $post_variables[0] . "<br>";
+                    echo "chosen player : " . $post_variables[1] . "<br>";
+                    echo "nom du joueur en train de jouer : " . $_SESSION["username"] . "<br>";
+                    echo "vrai auteur du message : " . $_SESSION["id_answer_player"] . "<br>";*/
+                    //$real_author = $_SESSION["id_answer_player"];
+                    $real_author = get_author_random_message();
+                    $username = $_SESSION["username"];
                     
-                    echo "<h3 class='real_message_author text-primary'>L'auteur du message était : " . $name_array["p_name"] . "</h3>";
-                    echo "</div></div><h5 class='gain text-primary'>";
-                    if ($post_variables[1] === $name_array["p_name"]){
-                      echo "+ 20 points !";
-                    } else {
-                      echo "+ 0 points !";
-                    }
-                    echo "</h5><p class='comments-leaderboard card-subtitle mb-2 text-muted'></p>";
-                  }
-                ?>
-              </div>
-              <div class="col-6 right">
-                <?php
-                  if ($total > 0){
-                    echo "<div class='leaderboard-container'><div class='card-header text-primary border-primary leaderboard' style='background-color:black; border: 1px solid #FF550B; height: auto'><h1>classement actuel des scores </h1></div><ul class='list-group list-group-flush'></ul></div>";
-                    echo "<div class='pagination-container'><div id='page-selection'></div></div>";
-                    echo "<div class='wait4result text-primary'><div class='loader-container'><span class='wait4results spinner-border' role='status'></span></div><h4 class='waiting4results'>En attente du résultat de tous les joueurs</h4></div>";
-                    echo '<div class="continue_button d-none"><button id="continue_btn" class="pressToto btn btn-outline-primary" type="button">Continuer</button></div>';
-                  } else {
-                    echo "<div class='scoreboard'>";
-                    echo "<div class='scoreboard__podiums'>";
+                    $secret_discovered = "UPDATE mysecret SET discovered = 1 WHERE id=" . $post_variables[0];
+                    $conn->query($secret_discovered);
 
-                    echo "<div class='scoreboard__podium js-podium' data-height='200px'>";
-                    echo "<div class='scoreboard__podium-base scoreboard__podium-base--second'>";
-                    echo "<div class='scoreboard__podium-number'>Bar de Wever<small><span class='js-podium-data'>160</span></small></div></div></div>";
-                    echo "<div class='scoreboard__podium-rank'>2</div>";
-                    
-                    echo "<div class='scoreboard__podium js-podium' data-height='250px'>";
-                    echo "<div class='scoreboard__podium-base scoreboard__podium-base--first'>";
-                    echo "<div class='scoreboard__podium-rank'>1</div></div>"; 
-                    echo "<div class='scoreboard__podium-number'>Charles Michel<small><span class='js-podium-data'>195</span></small></div></div>";
-                    
-                    echo "<div class='scoreboard__podium js-podium' data-height='150px'>";
-                    echo "<div class='scoreboard__podium-base scoreboard__podium-base--third'>";
-                    echo "<div class='scoreboard__podium-rank'>3</div></div>";
-                    echo "<div class='scoreboard__podium-number'>Jan Jambon<small><span class='js-podium-data'>100</span></small></div></div></div>";
-                  }
-                ?>
-                <!--<div class='wait4results'></div>-->
-                <script type='module'>
-                  import { displayLeaderboard } from '../js/helper.js';
-                  var $j = jQuery.noConflict();
-                  displayLeaderboard();
-                </script>
-              </div>
-              </div>
+                    $total = get_nbr_secrets_not_discovered();
+
+                    if ($total == 0) {
+                      echo "<div class='end-title-comments'><div class='end card border-primary text-primary'><div class='card-body'><div class='id='end-title'><h2 class='comments'>Jeu terminé !</h2></div><h4 class='comments card-subtitle mb-2 text-muted'>Voici le classement finale !</h4></div></div></div>";
+                      echo "<div class='all_players'><div id='final_leaderboard' class='final_leaderboard text-primary'><div class='card-header leaderboard' style='background-color:black; border: 1px solid #FF550B;'><h1>classement finale des scores </h1></div><ul class='list-group list-group-flush'></ul></div></div>";
+                      echo "<div class='pagination-container'><div id='page-selection'></div></div>";
+
+                    } else {
+                      //echo "<form name='result_form' method='' action='get_player.php'>
+                      echo "<div class='results border-primary card'><div class='results-card-body card-body'>";
+                      
+                      $author = $real_author["id"];
+                      $request = "SELECT p_name FROM players WHERE id = $author";
+                      $name = $conn->query($request);
+                      $name_array = $name->fetch_array();
+
+                      if ($post_variables[1] === $name_array["p_name"]){
+                        echo "<div class='result_message text-primary'><h1 class='card-title'>Bien joué !</h1><h3>Tu as trouvé la personne qui a écrite ce secret !</h3></div>";
+                      } else {
+                        echo "<div class='result_message text-primary card-title'><h1>Dommage !</h1><h3>Tu n'as pas réussi à trouver la personne qui a écrite ce secret !</h3></div>";
+                      }
+                      
+                      echo "<h3 class='real_message_author text-primary'>L'auteur du message était : " . $name_array["p_name"] . "</h3>";
+                      echo "</div></div><h5 class='gain text-primary'>";
+                      if ($post_variables[1] === $name_array["p_name"]){
+                        echo "+ 20 points !";
+                      } else {
+                        echo "+ 0 points !";
+                      }
+                      echo "</h5><p class='comments-leaderboard card-subtitle mb-2 text-muted'></p>";
+                    }
+                  ?>
+                </div>
+                <div class="col-6 right">
+                  <?php
+                    if ($total > 0){
+                      echo "<div class='leaderboard-container'><div class='card-header text-primary border-primary leaderboard' style='background-color:black; border: 1px solid #FF550B; height: auto'><h1>classement actuel des scores </h1></div><ul class='list-group list-group-flush'></ul></div>";
+                      echo "<div class='pagination-container'><div id='page-selection'></div></div>";
+                      echo "<div class='wait4result text-primary'><div class='loader-container'><span class='wait4results spinner-border' role='status'></span></div><h4 class='waiting4results'>En attente du résultat de tous les joueurs</h4></div>";
+                      echo '<div class="continue_button d-none"><button id="continue_btn" class="pressToto btn btn-outline-primary" type="button">Continuer</button></div>';
+                    } else {
+                      echo "<div class='scoreboard'>";
+                      echo "<div class='scoreboard__podiums'>";
+
+                      echo "<div class='scoreboard__podium js-podium column-second' data-height='200px'>";
+                      echo "<div class='scoreboard__podium-number second'>Bar de Wever<small><span class='js-podium-data-second'>160</span></small></div>";
+                      echo "<div class='scoreboard__podium-base scoreboard__podium-base--second'>";
+                      echo "<div class='scoreboard__podium-rank'>2</div></div></div>";
+                      
+                      echo "<div class='scoreboard__podium js-podium column-first' data-height='250px'>";
+                      echo "<div class='scoreboard__podium-number first'>Charles Michel<small><span class='js-podium-data-first'>195</span></small></div>";
+                      echo "<div class='scoreboard__podium-base scoreboard__podium-base--first'>";
+                      echo "<div class='scoreboard__podium-rank'>1</div></div></div>"; 
+                      
+                      echo "<div class='scoreboard__podium js-podium column-third' data-height='150px'>";
+                      echo "<div class='scoreboard__podium-number third'>Jan Jambon<small><span class='js-podium-data-third'>100</span></small></div>";
+                      echo "<div class='scoreboard__podium-base scoreboard__podium-base--third'>";
+                      echo "<div class='scoreboard__podium-rank'>3</div></div></div></div></div>";
+
+
+                      echo "<div class='result_button output' id='res_button'><button type='button' class='btn btn-lg btn-outline-primary'>Quitter</button></div>";
+                    }
+                  ?>
+                  <!--<div class='wait4results'></div>-->
+                  <script type='module'>
+                    import { displayLeaderboard } from '../js/helper.js';
+                    var $j = jQuery.noConflict();
+                    displayLeaderboard();
+                  </script>
+                </div>
             </div>
           </div>
         </div>

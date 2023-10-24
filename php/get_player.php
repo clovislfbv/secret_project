@@ -1,7 +1,7 @@
 <?php
   session_start();
   require_once("helper.php");
-  if (!(isset($_SESSION)) || (is_logged() != '1')){
+  if (!(isset($_SESSION["player_id"])) || (is_logged() != '1')){
     echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
   }
 ?>
@@ -73,8 +73,10 @@
                       </div>
                       <div class='players-list'>
                         <script type="module">
-                          import { displayAllPlayersOnline, resetPlayedPlayer, resetPlayerContinued, loading, getcurrPlayer, disconnectPlayer, getNbrPlayersOnline } from "../js/helper.js"
+                          import { displayAllPlayersOnline, resetPlayedPlayer, resetPlayerContinued, loading, getcurrPlayer, disconnectPlayer, getNbrPlayersOnline, actionMobileInit} from "../js/helper.js"
                           var $j = jQuery.noConflict();
+
+                          actionMobileInit();
 
                           loading();
                           
@@ -108,13 +110,13 @@
                   </div>
                   <div id="secret_and_progress">
                     <div class="secret_and_progress card text-primary d-none">
-                      <div class="card-body">
+                      <div class="card-body" id="scrt_and_prgress">
                         <div class="guess_secret input-group" id="title">
                           <div class="container-guess-secret">
                             <div class="wrapper">
                               <div class="container-secret-message text-primary">
                                 <div class="question-guess">A qui appartient ce secret ?</div>
-                                <div class="text-secret" id="secret_message"></div>
+                                <div class="text-secret border-primary" id="secret_message"></div>
                               </div>
                             </div>
                           </div>
@@ -124,7 +126,7 @@
                             Drag-drop ici la personne qui aurait écris ce secret selon toi
                           </h5>
                         </div>
-                        <div class="margin-div-right"></div>
+                        <!-- <div class="margin-div-right"></div> -->
                         <form name="result_form" method="POST" action="result.php">
                           <div>
                             <input type="hidden" name="secret_id_played" class="secret_id_played"></input>

@@ -30,6 +30,36 @@ var begun;
 var min = 0; //min pour le leeaderboard
 var max = 5; //max pour le leaderboard
 
+export function actionMobileInit() {
+  document.addEventListener("touchstart", touchHandler, true);
+  document.addEventListener("touchmove", touchHandler, true);
+  document.addEventListener("touchend", touchHandler, true);
+  document.addEventListener("touchcancel", touchHandler, true);
+  window.addEventListener("load", hideAddressBar, true);
+  return hideAddressBar();
+};
+
+document.ontouchmove = function(event) {
+  return event.preventDefault();
+};
+
+function hideAddressBar() {
+  return window.scrollTo(0, 1);
+};
+
+function touchHandler(event) {
+  var simulatedEvent, touch;
+  touch = event.changedTouches[0];
+  simulatedEvent = document.createEvent("MouseEvent");
+  simulatedEvent.initMouseEvent({
+    touchstart: "mousedown",
+    touchmove: "mousemove",
+    touchend: "mouseup"
+  }[event.type], true, true, window, 1, touch.screenX, touch.screenY, touch.clientX, touch.clientY, false, false, false, false, 0, null);
+  return touch.target.dispatchEvent(simulatedEvent);
+};
+
+
 /*******
  * Disable the start button, if nothing is written otherwise it enables it
  * *******/
@@ -143,7 +173,6 @@ export function resetPlayedPlayer(identifiant){
     type:"POST",
     url: "../php/helper.php",
     data: {action: "reset_played_player", id: identifiant},
-    async: false,
     error: function (err) {
       console.log(err);
     }
@@ -551,6 +580,7 @@ function getNbrSecretsNotDiscovered(){
     type: "POST",
     url: "../php/helper.php",
     data: {action: "get_nbr_secrets_not_discovered"},
+    async: false,
     success: function (res) {
       nbrSecretsNotDiscovered = res;
     }
@@ -581,10 +611,20 @@ export function displayLeaderboard() {
   let first_test = 1;
   setInterval(function() {
     var curr_leaderboard = JSON.parse(getLeaderboard());
+    console.log(curr_leaderboard);
     let nbrSecretsNotDiscovered = getNbrSecretsNotDiscovered();
     let counter = 1;
     var output = "";
+    var nbr_players = getNbrPlayersOnline();
+    console.log(nbrSecretsNotDiscovered);
     if (nbrSecretsNotDiscovered == 0){
+      $j('#page-selection').bootpag({
+        total: Math.ceil(nbr_players/5),
+        maxVisible: 13,
+      })
+      $j('#page-selection li').addClass('page-item');
+      $j('#page-selection a').addClass('page-link');
+
       curr_leaderboard.forEach(function(element){
         if (!(element["id"] in already_shown)){
           already_shown[element["id"]] = element["score"];
@@ -595,158 +635,96 @@ export function displayLeaderboard() {
         }
       })
 
+      counter = 1;
+      let counter_player = min;
+
       jQuery.each(already_shown, function(id, score){
         player = JSON.parse(getPlayerById(id));
         currPlayer = JSON.parse(getcurrPlayer());
         if (currPlayer["id"] == player["id"]){
-          output += "<li class='list-group-item score active' id='"+ id +"'>" + player["p_name"] + " : " + score + " points </li>";
+          output += "<li class='list-group-item score active' id='"+ id +"'><span id='addon-wrapping'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'></path><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'></path></svg></span>" + player["p_name"] + " : " + score + " points </li>";
         } else {
-          output += "<li class='list-group-item score' id='"+ id +"'>" + player["p_name"] + " : " + score + " points </li>";
+          output += "<li class='list-group-item score' style='background-color: black; color: #FF550B;' id='"+ id +"'><span id='addon-wrapping'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'></path><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'></path></svg></span>" + player["p_name"] + " : " + score + " points </li>";
+        }
+
+        if (counter < 4) {
+          let classname = ".";
+          let scorename = ".js-podium-data-";
+          if (counter == 1) {
+            classname += "first";
+            scorename += "first";
+          }
+
+          if (counter == 2) {
+            classname += "second";
+            scorename += "second";
+          }
+
+          if (counter == 3) {
+            classname += "third";
+            scorename += "third";
+          }
+
+          $j(classname).text(player["p_name"]);
+          $j(classname).html($j(classname).html() + "<small><span class='js-podium-data-second'>" + player["score"] + " points" + "</span></small>");
+          counter++;
         }
       })
 
       document.getElementsByClassName("list-group")[0].innerHTML = output;
 
+      if (counter == 4) {
+        $j(".column-third").removeClass("d-none");
+      }
+
+      if (counter <= 3) {
+        $j(".column-third").addClass("d-none");
+        $j(".column-second").removeClass("d-none");
+      }
+
+      if (counter <= 2) {
+        $j(".column-second").addClass("d-none");
+        $j(".column-first").removeClass("d-none");
+      }
+
+      if (counter == 1){
+        $j(".column-first").addClass("d-none");
+      } 
+
+
       var sum = 1000; // rank 1.
       var time = 250;
-  
-      $j(".scoreboard__podium-base--first ")
-
-  
-      $j('.js-podium').each(function(){
-        var t = $j(this);
+      let third = $j(".column-third");
+      if (!(third.hasClass("d-none"))){
         setTimeout( function(){ 
-        t.addClass('is-visible');
-        var h = t.data('height');
+        third.addClass('is-visible');
+        var h = third.data('height');
         console.log(h);
-        t.find('.scoreboard__podium-base').css('height', h).addClass('is-expanding');
+        third.find('.scoreboard__podium-base').css('height', h).addClass('is-expanding');
           }, time);
-        time += 250;
-      });
-        
-        randomizeData();
-        startBars();
-        sortItems();
-        countUp();
-        // randomizePodium();
-        
-        
-        setInterval(function(){ 
-          
-          randomizeData(); 
-          startBars();
-          sortItems();
-          countUp();
-          oneUp();
-          $j('.js-podium').removeClass('bump');
-          podiumUpdate();
-          
-        }, 10000);
+        time += 1000;
+      };
 
-
-      function countUp() {
-        
-        $j('.scoreboard__item').each(function() {
-        var $this = $j(this),
-            countTo = $this.data('count');
-        
-        $j({ countNum: $this.text()}).animate({
-          countNum: countTo
-        },
-
-        {
-          duration: 500,
-          easing:'linear',
-          step: function() {
-            $this.find('.js-number').text(Math.floor(this.countNum));
-          },
-          complete: function() {
-            $this.find('.js-number').text(this.countNum);
-            //alert('finished');
-          }
-
-          });  
-        }); 
-      }
-
-      function randomizeData() {
-        $j('.scoreboard__item').each(function(){
-        var rand = Math.floor(Math.random() * 900) + 1;
-          $j(this).data('count', rand );
-          $j(this).find('.js-number').text(rand);
-        });
-          
-      }
-
-      function startBars() {
-      $j('.js-bar').each(function() {
-        console.log('running');
-        // calculate %.
-        var t = $j(this);
+      let second = $j(".column-second");
+      if (!(second.hasClass("d-none"))){
         setTimeout( function(){ 
-        var width = t.parent('.scoreboard__item').data('count'); 
-        width = width  / sum * 100;
-          width = Math.round(width);
-        t.find('.scoreboard__bar-bar').css('width',  width + "%");
-          t.parent('li').addClass('is-visible');
-            }, time);
-        time += 0;
-        });
-      }
+        second.addClass('is-visible');
+        var h = second.data('height');
+        console.log(h);
+        second.find('.scoreboard__podium-base').css('height', h).addClass('is-expanding');
+          }, time);
+        time += 1750;
+      };
 
-      function sortItems() {
-      tinysort.defaults.order = 'desc';
-        
-      var ul = document.getElementById('scoreboard__items')
-          ,lis = ul.querySelectorAll('li')
-          ,liHeight = lis[0].offsetHeight
-      ;
-      ul.style.height = ul.offsetHeight+'px';
-      for (var i= 0,l=lis.length;i<l;i++) {
-          var li = lis[i];
-          li.style.position = 'absolute';
-          li.style.top = i*liHeight+'px';
-      }
-      tinysort('ol#scoreboard__items>li', 'span.js-number').forEach(function(elm,i){
-          setTimeout((function(elm,i){
-              elm.style.top = i*liHeight+'px';
-          }).bind(null,elm,i),40);
-      });
-        
-        
-      }
-
-      function randEmail() {
-        var chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
-      var string = '';
-      for(var ii=0; ii<15; ii++){
-          string += chars[Math.floor(Math.random() * chars.length)];
-      }
-        return string + '@domain.tld';
-      }
-
-      function oneUp() {
-        // play audio - update email.
-        var randEmail = window.randEmail();
-        $j('.js-oneup').html('Ny påmeldt: ' + randEmail);
-        $j('.js-oneup-audio')[0].play();
-      }
-
-
-      function randomizePodium() {
-        $j('.js-podium-data').each(function() {
-          var random = Math.floor(Math.random() * 900) + 1;
-        $j(this).fadeOut(200).text(random + ' deltagere').fadeIn(200);
-        });
-        $j(this).data('count', random);
-      }
-
-      function podiumUpdate() {
-        $j('.js-podium').each(function() {
-          $j(this).addClass('bump');
-          randomizePodium();
-        });
-      }
+      let first = $j(".column-first");
+      if (!(first.hasClass("d-none"))){
+        setTimeout( function(){ 
+        first.addClass('is-visible');
+        var h = first.data('height');
+        console.log(h);
+        first.find('.scoreboard__podium-base').css('height', h).addClass('is-expanding');
+          }, time);
+      };
       
     } else {
       let rank_previous = null;
