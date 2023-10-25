@@ -102,6 +102,10 @@
         if ($_POST["action"] == "get_chosen_player"){
             get_chosen_player();
         }
+
+        if ($_POST["action"] == "end_game"){
+            end_game();
+        }
     }
 
     function is_logged(){
@@ -386,16 +390,13 @@
         include "conn.php";
 
         $id_curr_game_session = get_current_game_session()["id"];
-        var_dump($id_curr_game_session);
 
-        $new_request = "SELECT * FROM players WHERE id_game_session =" . $id_curr_game_session . "ORDER BY score DESC";
-        $leaderboard = null;
-        while ($leaderboard == null){
-            $leaderboard = $conn->query($new_request);
-        }
+        $new_request = "SELECT * FROM players WHERE id_game_session = '" . $id_curr_game_session . "' ORDER BY score DESC";
+        /*$leaderboard = null;
+        while ($leaderboard == null){*/
+        $leaderboard = $conn->query($new_request);
+        //}
         $curr_leaderboard = $leaderboard->fetch_all(MYSQLI_ASSOC);
-
-        var_dump($curr_leaderboard);
          
         echo json_encode($curr_leaderboard);
     }
@@ -486,6 +487,15 @@
         include "conn.php";
 
         $request = "INSERT INTO game_session (isalive, hasgamebegun, nbrplayers) VALUES (1, 0, 0)";
+        $conn->query($request);
+    }
+
+    function end_game(){
+        include "conn.php";
+
+        $id_curr_game_session = get_current_game_session()["id"];
+
+        $request = "UPDATE game_session SET hasgamebegun = 0 WHERE id = " . $id_curr_game_session;
         $conn->query($request);
     }
 ?>

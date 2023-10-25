@@ -195,6 +195,7 @@ h1 {
   margin: 0 auto;
   /*padding: 3rem 50px;*/
   flex-direction: column;
+  padding-bottom: 20%;
 }
 .scoreboard__item {
   display: flex;

@@ -270,6 +270,14 @@ export function getPlayerById(identifiant) {
   return player;
 }
 
+function endGame(){
+  jQuery.ajax({
+    type:"POST",
+    url: "../php/helper.php",
+    data: {action: "end_game"},
+  })
+}
+
 export function loading(){
   let output = "";
   var save = 0;
@@ -299,6 +307,8 @@ export function loading(){
       $j(".start_game").addClass("d-none");
       $j(".secret_and_progress").addClass("d-none");
       $j(".waiting-players").removeClass("d-none");
+
+      endGame();
       
       if (dropped == 1){
         dropped = 0;
@@ -612,68 +622,84 @@ export function displayLeaderboard() {
   let first_test = 1;
   setInterval(function() {
     var curr_leaderboard = JSON.parse(getLeaderboard());
-    console.log(curr_leaderboard);
+    console.log(curr_leaderboard)
+    let currPlayer = JSON.parse(getcurrPlayer());
+    let nbr_players = curr_leaderboard.length;
+    console.log(nbr_players);
     let nbrSecretsNotDiscovered = getNbrSecretsNotDiscovered();
     let counter = 1;
     var output = "";
-    var nbr_players = getNbrPlayersOnline();
-    console.log(nbrSecretsNotDiscovered);
-    if (nbrSecretsNotDiscovered == 0){
-      $j('#page-selection').bootpag({
-        total: Math.ceil(nbr_players/5),
-        maxVisible: 13,
-      })
-      $j('#page-selection li').addClass('page-item');
-      $j('#page-selection a').addClass('page-link');
+    let rank;
 
-      curr_leaderboard.forEach(function(element){
-        if (!(element["id"] in already_shown)){
-          already_shown[element["id"]] = element["score"];
-        }
+    $j('#page-selection').bootpag({
+      total: Math.ceil(nbr_players/5),
+      maxVisible: 13,
+    })
+    $j('#page-selection li').addClass('page-item');
+    $j('#page-selection a').addClass('page-link');
 
-        if (already_shown[element["id"]] != element["score"]){
-          already_shown[element["id"]] = element["score"];
-        }
-      })
-
-      counter = 1;
-      let counter_player = min;
-
-      jQuery.each(already_shown, function(id, score){
-        player = JSON.parse(getPlayerById(id));
-        currPlayer = JSON.parse(getcurrPlayer());
-        if (currPlayer["id"] == player["id"]){
-          output += "<li class='list-group-item score active' id='"+ id +"'><span id='addon-wrapping'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'></path><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'></path></svg></span>" + player["p_name"] + " : " + score + " points </li>";
+    for (let i = min; i < max; i++){
+      if (i < nbr_players){
+        if (currPlayer["id"] == curr_leaderboard[i]["id"]){
+          output += "<li class='list-group-item score active' id='";
         } else {
-          output += "<li class='list-group-item score' style='background-color: black; color: #FF550B;' id='"+ id +"'><span id='addon-wrapping'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'></path><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'></path></svg></span>" + player["p_name"] + " : " + score + " points </li>";
+          output += "<li class='list-group-item score' style='background-color: black; color: #FF550B;' id='";
         }
 
-        if (counter < 4) {
-          let classname = ".";
-          let scorename = ".js-podium-data-";
-          if (counter == 1) {
-            classname += "first";
-            scorename += "first";
-          }
+        rank = i+1;
 
-          if (counter == 2) {
-            classname += "second";
-            scorename += "second";
-          }
+        output += curr_leaderboard[i]["id"] + "'>" + rank + ". <span id='addon-wrapping'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'></path><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'></path></svg></span> " + curr_leaderboard[i]["p_name"] + " : " + curr_leaderboard[i]["score"] + " points </li>";
 
-          if (counter == 3) {
-            classname += "third";
-            scorename += "third";
+        if (nbrSecretsNotDiscovered == 0) {
+          if (counter < 4) {
+            let classname = ".";
+            let scorename = ".js-podium-data-";
+            if (counter == 1) {
+              classname += "first";
+              scorename += "first";
+            }
+    
+            if (counter == 2) {
+              classname += "second";
+              scorename += "second";
+            }
+    
+            if (counter == 3) {
+              classname += "third";
+              scorename += "third";
+            }
+            
+            if (i == 0 || i == 1 || i == 2){
+              $j(classname).text(curr_leaderboard[i]["p_name"]);
+              $j(classname).html($j(classname).html() + "<small><span class='js-podium-data-second'>" + curr_leaderboard[i]["score"] + " points" + "</span></small>");
+            }
+              counter++;
           }
-
-          $j(classname).text(player["p_name"]);
-          $j(classname).html($j(classname).html() + "<small><span class='js-podium-data-second'>" + player["score"] + " points" + "</span></small>");
-          counter++;
         }
-      })
+      } else {
+        output += "<li class='list-group-item score' style='background-color: black; color: black;'>.</li>";
+      }
+    }
 
-      document.getElementsByClassName("list-group")[0].innerHTML = output;
+    $j(".list-group").html(output);
 
+    if (nbrSecretsNotDiscovered > 0) {
+      rank = 1;
+      for (let i = rank-1; i < curr_leaderboard.length && curr_leaderboard[i]["id"] != id; i++){
+        rank_previous = curr_leaderboard[i];
+        rank++;
+      }
+  
+      console.log($j(".comments-leaderboard").html());
+  
+      if (rank_previous != null && $j(".comments-leaderboard").html() != "Tu es actuellement au rang " + rank + " au classement actuel avec un score de " + curr_leaderboard[rank-1]["score"] + " points.<br>Tu es juste derrière " + rank_previous["p_name"] + " qui a un score de " + rank_previous["score"] + " points."){
+        $j(".comments-leaderboard").html("Tu es actuellement au rang " + rank + " au classement actuel avec un score de " + curr_leaderboard[rank-1]["score"] + " points.<br>");
+        $j(".comments-leaderboard").html($j(".comments-leaderboard").html() + "Tu es juste derrière " + rank_previous["p_name"] + " qui a un score de " + rank_previous["score"] + " points.");
+        first_test = 0;
+      } else if ($j(".comments-leaderboard").html() != "Tu es actuellement au rang " + rank + " au classement actuel avec un score de " + curr_leaderboard[rank-1]["score"] + " points." && first_test){
+        $j(".comments-leaderboard").html("Tu es actuellement au rang " + rank + " au classement actuel avec un score de " + curr_leaderboard[rank-1]["score"] + " points.");
+      }
+    } else {
       if (counter == 4) {
         $j(".column-third").removeClass("d-none");
       }
@@ -726,57 +752,6 @@ export function displayLeaderboard() {
         first.find('.scoreboard__podium-base').css('height', h).addClass('is-expanding');
           }, time);
       };
-      
-    } else {
-      let rank_previous = null;
-      let previous = null;
-      var rank = 0;
-      let store_current = null;
-      var currPlayer = JSON.parse(getcurrPlayer());
-      var username = currPlayer["p_name"];
-      var id = currPlayer["id"];
-      var nbr_players = getNbrPlayersOnline();
-
-      $j('#page-selection').bootpag({
-        total: Math.ceil(nbr_players/5),
-        maxVisible: 13,
-      })
-      $j('#page-selection li').addClass('page-item');
-      $j('#page-selection a').addClass('page-link');
-
-      for (let i = min; i < max; i++){
-        if (i < nbr_players){
-          if (currPlayer["id"] == curr_leaderboard[i]["id"]){
-            output += "<li class='list-group-item score active' id='";
-          } else {
-            output += "<li class='list-group-item score' style='background-color: black; color: #FF550B;' id='";
-          }
-
-          rank = i+1;
-
-          output += curr_leaderboard[i]["id"] + "'>" + rank + ". <span id='addon-wrapping'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'></path><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'></path></svg></span> " + curr_leaderboard[i]["p_name"] + " : " + curr_leaderboard[i]["score"] + " points </li>";
-        } else {
-          output += "<li class='list-group-item score' style='background-color: black; color: black;'>.</li>";
-        }
-      }
-
-      $j(".list-group").html(output);
-
-      rank = 1;
-      for (let i = rank-1; i < curr_leaderboard.length && curr_leaderboard[i]["id"] != id; i++){
-        rank_previous = curr_leaderboard[i];
-        rank++;
-      }
-
-      console.log($j(".comments-leaderboard").html());
-
-      if (rank_previous != null && $j(".comments-leaderboard").html() != "Tu es actuellement au rang " + rank + " au classement actuel avec un score de " + curr_leaderboard[rank-1]["score"] + " points.<br>Tu es juste derrière " + rank_previous["p_name"] + " qui a un score de " + rank_previous["score"] + " points."){
-        $j(".comments-leaderboard").html("Tu es actuellement au rang " + rank + " au classement actuel avec un score de " + curr_leaderboard[rank-1]["score"] + " points.<br>");
-        $j(".comments-leaderboard").html($j(".comments-leaderboard").html() + "Tu es juste derrière " + rank_previous["p_name"] + " qui a un score de " + rank_previous["score"] + " points.");
-        first_test = 0;
-      } else if ($j(".comments-leaderboard").html() != "Tu es actuellement au rang " + rank + " au classement actuel avec un score de " + curr_leaderboard[rank-1]["score"] + " points." && first_test){
-        $j(".comments-leaderboard").html("Tu es actuellement au rang " + rank + " au classement actuel avec un score de " + curr_leaderboard[rank-1]["score"] + " points.");
-      }
     }
   }, 2000);
 }

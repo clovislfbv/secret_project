@@ -10,7 +10,7 @@ var author_random_message;
 
 $j(document).ready(function () {
   setInterval(function() {
-    if (hasGameBegun() == 1 && shown == 0){
+    if (hasGameBegun() == 1 && shown == 0 && !($j("#cadenas").hasClass("d-none"))){
       LottiePlayer.setSpeed(1);
       LottiePlayer.play();
       setTimeout(function () {
@@ -28,9 +28,9 @@ $j(document).ready(function () {
   $j('#page-selection').on("page", function(event, num){
     let minimum = (num * 5) - 5;
     let maximum = num * 5;
-    let nbr_players = getNbrPlayersOnline();
     let currPlayer = JSON.parse(getcurrPlayer());
     let curr_leaderboard = JSON.parse(getLeaderboard());
+    let nbr_players = curr_leaderboard.length;
     let rank;
     setMinMax(minimum, maximum); 
     var output = "";
