@@ -85,7 +85,6 @@
                     set_message_as_discovered();
 
                     $total = get_nbr_secrets_not_discovered();
-                    var_dump($total);
 
                     if ($total == 0) {
                       echo "<div class='end-title-comments'><div class='end card border-primary text-primary'><div class='card-body'><div class='id='end-title'><h2 class='comments'>Jeu terminé !</h2></div><h4 class='comments card-subtitle mb-2 text-muted'>Voici le classement finale !</h4></div></div></div>";

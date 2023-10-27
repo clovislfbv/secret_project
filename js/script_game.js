@@ -1,4 +1,4 @@
-import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession } from "./helper.js";
+import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered } from "./helper.js";
 
 var $j = jQuery.noConflict();
 
@@ -206,6 +206,22 @@ $j(document).ready(function () {
       }, 2500)
     }
 
+    if (toto_clicked == 1 && $j(".pressToto").length && !($j(".pressToto").hasClass("d-none"))){
+      setTimeout(function (){
+        unset_secret();
+        if (!($j("#cadenas").hasClass("d-none"))){
+          $j("#cadenas").addClass("d-none");
+        }
+        result_clicked = 0;
+        toto_clicked = 0;
+        /*let currPlayerId = JSON.parse(getcurrPlayer())["id"];
+        resetPlayedPlayer(currPlayerId);*/
+      }, 500);
+    }
+
+    /*if (window.location.pathname == "/secret_project/php/result.php" && getNbrSecretsNotDiscovered() == 0){
+
+    }*/
     /*console.log(getNbrPlayersContinued());
     console.log(result_clicked);
     console.log(!($j("#result_btn").hasClass("d-none")));

@@ -643,7 +643,7 @@ export function showSecret() {
   author = getAuthorRandomSecret();
 }
 
-function getNbrSecretsNotDiscovered(){
+export function getNbrSecretsNotDiscovered(){
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
@@ -976,31 +976,39 @@ export function displayAllPlayersOnline(){
       all_players_disconnected = getAllPlayersDisconnected();
       all_players_disconnected.forEach(function(element){
         if ($j("#"+element["p_name"]+"-"+element["id"]).length > 0){
-          if (!($j("#"+element["p_name"]+"-"+element["id"]).hasClass("d-none"))){
-            $j("#"+element["p_name"]+"-"+element["id"]).addClass("d-none");
+          setTimeout(function(){
+            let all_players_disconnected_2 = getAllPlayersDisconnected();
+            let all_players_disconnected_id = all_players_disconnected_2.filter('["id"=' + element["id"] + ']')
+            console.log(all_players_disconnected_id);
+            if (all_players_disconnected_id.length > 0){
+              if (!($j("#"+element["p_name"]+"-"+element["id"]).hasClass("d-none"))){
+                $j("#"+element["p_name"]+"-"+element["id"]).addClass("d-none");
 
-            if (changed == 1 && value.length > 1 && ((value[1] == element["p_name"] && value[2] == element["id"]) || (author["p_name"] == element["p_name"] && author["id"] == element["id"]))){
-              changed = 0;
-              getAuthorRandomSecret();
-              $j(".secret_id_played").val($j(".secret_id_played").val().replace("-"+value[1]+"-"+value[2], ""));
-              $j("#"+value[1]+"-"+value[2]).css({
-                'top': '0px',
-                'left': '0px',
-                'position': 'relative'
-              });
-              updatePlayerWhenClicked();
-              $j(".wait4").addClass("d-none");
-              $j("#droppable-player").removeClass("correct");
-              $j("#droppable-player").addClass("normal text-primary");
-              $j("#"+value[1]+"-"+value[2]).draggable({revert : true})
-            } /*else {
-              $j("#"+value[1]+"-"+value[2]).position({
-                my: "center",
-                at: "center",
-                of: $j("#"+value[1]+"-"+value[2]),
-              });
-            }*/
-          }
+                if (changed == 1 && value.length > 1 && ((value[1] == element["p_name"] && value[2] == element["id"]) || (author["p_name"] == element["p_name"] && author["id"] == element["id"]))){
+                
+                    changed = 0;
+                    getAuthorRandomSecret();
+                    $j(".secret_id_played").val($j(".secret_id_played").val().replace("-"+value[1]+"-"+value[2], ""));
+                    $j("#"+value[1]+"-"+value[2]).css({
+                      'top': '0px',
+                      'left': '0px',
+                      'position': 'relative'
+                    });
+                    updatePlayerWhenClicked();
+                    $j(".wait4").addClass("d-none");
+                    $j("#droppable-player").removeClass("correct");
+                    $j("#droppable-player").addClass("normal text-primary");
+                    $j("#"+value[1]+"-"+value[2]).draggable({revert : true})
+                } /*else {
+                  $j("#"+value[1]+"-"+value[2]).position({
+                    my: "center",
+                    at: "center",
+                    of: $j("#"+value[1]+"-"+value[2]),
+                  });
+                }*/
+              }
+            }
+          }, 2500);
         }
         
       })
