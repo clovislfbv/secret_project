@@ -12,14 +12,6 @@
     <title>Discover my secret</title>
   </head>
   <body>
-    <?php
-      include_once("conn.php");
-
-      if (isset($_SESSION["logged"])){
-        $reset = "UPDATE players SET logged = 0";
-        $conn->query($reset);
-      }
-    ?>
     <div class="container">
     <div class="row">
       <div class="card whole_thing border-primary big-box">

@@ -80,11 +80,12 @@
                     //$real_author = $_SESSION["id_answer_player"];
                     $real_author = get_author_random_message();
                     $username = $_SESSION["username"];
-                    
-                    $secret_discovered = "UPDATE mysecret SET discovered = 1 WHERE id=" . $post_variables[0];
-                    $conn->query($secret_discovered);
+
+                    $_SESSION["secret_id"] = $post_variables[0];
+                    set_message_as_discovered();
 
                     $total = get_nbr_secrets_not_discovered();
+                    var_dump($total);
 
                     if ($total == 0) {
                       echo "<div class='end-title-comments'><div class='end card border-primary text-primary'><div class='card-body'><div class='id='end-title'><h2 class='comments'>Jeu terminé !</h2></div><h4 class='comments card-subtitle mb-2 text-muted'>Voici le classement finale !</h4></div></div></div>";

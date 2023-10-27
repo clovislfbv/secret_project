@@ -3,6 +3,10 @@
     include "conn.php";
 
     if (isset($_POST["action"])){
+        if ($_POST["action"] == "connect_curr_player"){
+            connect_curr_player();
+        }
+
         if ($_POST["action"] == "update_player_when_played"){
             update_player_when_played();
         }
@@ -82,6 +86,10 @@
         if ($_POST["action"] == "get_nbr_secrets_not_discovered"){
             get_nbr_secrets_not_discovered_js();
         }
+
+        if ($_POST["action"] == "set_message_as_discovered"){
+            set_message_as_discovered();
+        }
         
         if ($_POST["action"] == "update_score"){
             update_score();
@@ -103,20 +111,41 @@
             get_chosen_player();
         }
 
+        if ($_POST["action"] == "kill_session"){
+            kill_session();
+        }
+
         if ($_POST["action"] == "end_game"){
             end_game();
+        }
+
+        if ($_POST["action"] == "destroy_session_variable"){
+            destroy_session_variable();
         }
     }
 
     function is_logged(){
         include "conn.php";
 
-        $player_id = $_SESSION["player_id"];
+        $id_curr_game_session = $_SESSION["id_curr_game_session"];
 
-        $request = "SELECT logged FROM players WHERE id=" . $player_id;
+        $request = "SELECT isalive FROM game_session WHERE id=" . $id_curr_game_session;
         $output = $conn->query($request)->fetch_array();
 
         return $output[0];
+    }
+
+    function connect_curr_player(){
+        include "conn.php";
+        session_start();
+
+        $id_curr_game_session = $_SESSION["id_curr_game_session"];
+        $player_id = $_SESSION["player_id"];
+
+        $request = "UPDATE players SET logged = 1 WHERE id=" . $player_id;
+        $conn->query($request);
+    
+        $request = "UPDATE game_session SET isalive = 1 WHERE $id_curr_game_session";
     }
 
     function update_player_when_played(){
@@ -272,13 +301,21 @@
 
     function set_new_random_secret(){
         include "conn.php";
-        $setMarker = "UPDATE mySecret SET random_choice = 1 WHERE discovered = 0 ORDER BY RAND() LIMIT 1";
+        session_start();
+
+        $id_curr_game_session = $_SESSION['id_curr_game_session'];
+
+        $setMarker = "UPDATE mySecret, players SET mySecret.random_choice = 1 WHERE mySecret.discovered = 0 AND mySecret.id = players.id_secret AND players.id_game_session =" . $id_curr_game_session . " ORDER BY RAND() LIMIT 1";
         $conn->query($setMarker);
     }
 
     function unset_new_random_secret(){
         include "conn.php";
-        $unsetMarker = "UPDATE mySecret SET random_choice = 0 WHERE discovered = 1";
+        session_start();
+
+        $id_curr_game_session = $_SESSION['id_curr_game_session'];
+
+        $unsetMarker = "UPDATE mySecret, players SET mySecret.random_choice = 0 WHERE mySecret.discovered = 1 AND mySecret.id = players.id_secret AND players.id_game_session =" . $id_curr_game_session;
         $conn->query($unsetMarker);
     }
 
@@ -287,7 +324,7 @@
 
         $id_curr_game_session = get_current_game_session()["id"];
         
-        $getSecret = "SELECT * FROM mySecret, players WHERE mySecret.random_choice = 1 AND mySecret.id_player = players.id AND players.logged = 1 AND players.id_game_session = " . $id_curr_game_session;
+        $getSecret = "SELECT * FROM mySecret, players WHERE mySecret.random_choice = 1 AND mySecret.id_player = players.id AND players.id_game_session = " . $id_curr_game_session;
         $secret = $conn->query($getSecret);
         $check = $secret->fetch_array();
 
@@ -360,17 +397,12 @@
         $status = $conn->query($request)->fetch_array();
 
         if ($status[0] == '1'){
-            $reset = "UPDATE players SET logged = 0, p_played = 0 WHERE id=" . $player_id;
+            $reset = "UPDATE players SET logged = 0 WHERE id=" . $player_id;
             $conn->query($reset);
             
             $id_curr_game_session = get_current_game_session()["id"];
             $request = "SELECT COUNT(*) FROM players WHERE logged = 1 AND id_game_session = " . $id_curr_game_session;
             $counter = $conn->query($request)->fetch_array();
-
-            if ($counter[0] == '0'){
-                $kill_session = "UPDATE game_session SET isalive = 0 AND hasgamebegun = 0 WHERE id=" . $id_curr_game_session;
-                $conn->query($kill_session);
-            }
         }
     }
 
@@ -384,6 +416,13 @@
         $nbr_discovered_array = $nbr_discovered->fetch_array();
 
         echo $nbr_discovered_array[0];
+    }
+
+    function set_message_as_discovered(){
+        include "conn.php";
+
+        $secret_discovered = "UPDATE mysecret SET discovered = 1 WHERE id=" . $_SESSION["secret_id"];
+        $conn->query($secret_discovered);
     }
 
     function get_leaderboard(){
@@ -406,7 +445,7 @@
 
         $id_curr_game_session = get_current_game_session()["id"];
 
-        $get_num_not_discovered = "SELECT COUNT(*) FROM mysecret, players WHERE mysecret.discovered = 0 AND players.id = mysecret.id_player AND players.logged = 1 AND id_game_session =" . $id_curr_game_session;
+        $get_num_not_discovered = "SELECT COUNT(*) FROM mysecret, players WHERE mysecret.discovered = 0 AND players.id = mysecret.id_player AND id_game_session =" . $id_curr_game_session;
         $length = $conn->query($get_num_not_discovered);
         $total = $length->fetch_array();
 
@@ -488,6 +527,23 @@
 
         $request = "INSERT INTO game_session (isalive, hasgamebegun, nbrplayers) VALUES (1, 0, 0)";
         $conn->query($request);
+    }
+
+    function kill_session(){
+        include "conn.php";
+        session_start();
+
+        $id_curr_game_session = $_SESSION['id_curr_game_session'];
+
+        //$id_curr_game_session = get_current_game_session()["id"];
+
+        $kill_session = "UPDATE game_session SET isalive = 0 AND hasgamebegun = 0 WHERE id=" . $id_curr_game_session;
+        echo $conn->query($kill_session);
+    }
+
+    function destroy_session_variable(){
+        session_start();
+        session_unset();
     }
 
     function end_game(){

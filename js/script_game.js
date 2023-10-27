@@ -1,4 +1,4 @@
-import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame } from "./helper.js";
+import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession } from "./helper.js";
 
 var $j = jQuery.noConflict();
 
@@ -7,24 +7,12 @@ var shown = 0;
 var LottiePlayer = document.getElementById("myLottie"); //points to the locker animation
 var hidden = 0;
 var author_random_message;
+let result_clicked = 0;
+var toto_clicked = 0;
+var NbrPlayersOnline;
+var main_title = 0;
 
 $j(document).ready(function () {
-  setInterval(function() {
-    if (hasGameBegun() == 1 && shown == 0 && !($j("#cadenas").hasClass("d-none"))){
-      LottiePlayer.setSpeed(1);
-      LottiePlayer.play();
-      setTimeout(function () {
-        setAnimationFinished(1);
-        $j("#cadenas").addClass("d-none");
-        /*$j("#main_title").css({
-          "margin-bottom": "13%",
-        })*/
-        showSecret();
-        shown = 1;
-      }, 2500)
-    }
-  }, 1500);
-
   $j('#page-selection').on("page", function(event, num){
     let minimum = (num * 5) - 5;
     let maximum = num * 5;
@@ -61,6 +49,11 @@ $j(document).ready(function () {
     console.log(id_chosen_player, author_random_message["id"], JSON.parse(getcurrPlayer())["id"]);
     updateScore(id_chosen_player, author_random_message["id"], JSON.parse(getcurrPlayer())["id"]);
     shown = 0;
+    result_clicked = 1;
+    toto_clicked = 0;
+    setTimeout(function () {
+      $j("#result_form").submit();
+    }, 1500);
   })
 
   $j(".start_game").click(function (e) {
@@ -81,22 +74,37 @@ $j(document).ready(function () {
   })
 
   function unset_secret() {
+    getAuthorRandomSecret();
     unsetNewRandomSecret();
   }
 
   $j(".pressToto").click(function (e) {
-    unset_secret();
-    if (!($j("#cadenas").hasClass("d-none"))){
-      $j("#cadenas").addClass("d-none");
-    }
-    /*let currPlayerId = JSON.parse(getcurrPlayer())["id"];
-    resetPlayedPlayer(currPlayerId);*/
+    setTimeout(function (){
+      unset_secret();
+      if (!($j("#cadenas").hasClass("d-none"))){
+        $j("#cadenas").addClass("d-none");
+      }
+      result_clicked = 0;
+      toto_clicked = 1;
+      /*let currPlayerId = JSON.parse(getcurrPlayer())["id"];
+      resetPlayedPlayer(currPlayerId);*/
+    }, 500);
   })
 
   $j(".main_title").click(function (e) {
     console.log("title CLICKED");
     getAuthorRandomSecret();
     disconnectPlayer(JSON.parse(getcurrPlayer())["id"]);
+    NbrPlayersOnline = getNbrPlayersOnline();
+    main_title = 1;
+    if (NbrPlayersOnline == 0){
+      killSession();
+    }
+    destroySessionVariable();
+    window.location.href = "../php/index.php";
+    setTimeout(function(){
+      main_title = 0;
+    }, 2000);
   })
 
   $j(".output").click(function (e) {
@@ -105,10 +113,17 @@ $j(document).ready(function () {
     while (current_player == null){
       current_player = getcurrPlayer()
     }
+    console.log(current_player)
     var current_player_id = JSON.parse(current_player)["id"];
     console.log("id:"+current_player_id);
 
     disconnectPlayer(current_player_id);
+    NbrPlayersOnline = getNbrPlayersOnline();
+    if (NbrPlayersOnline == 0){
+      killSession();
+    }
+    destroySessionVariable();
+    window.location.href = "../php/index.php";
   })
 
   $j("form[name='secret_form']").submit(function (e) {
@@ -127,10 +142,10 @@ $j(document).ready(function () {
 
     //console.log(checkCloseX);
     //console.log(window.closed)
-  });
+  })
 
   function ConfirmLeave(){
-    getAuthorRandomSecret();
+
     disconnectPlayer(JSON.parse(getcurrPlayer())["id"]);
   }
 
@@ -154,7 +169,14 @@ $j(document).ready(function () {
 
   var currentKey;
   window.onbeforeunload = function (event) {
-    $j(document).keydown(function (e) {
+    if (toto_clicked == 0){
+      ConfirmLeave();
+      NbrPlayersOnline = getNbrPlayersOnline();
+      if (NbrPlayersOnline == 0){
+        killSession();
+      }
+    }
+    /*$j(document).keydown(function (e) {
       currentKey = e.key.toUpperCase();
     })
     if (event) {
@@ -162,6 +184,44 @@ $j(document).ready(function () {
       if (checkCloseX == 1 || ((prevKey == "CONTROL" || prevKey == "ALT") && (currentKey != "R" && currentKey != "F5"))){
         ConfirmLeave();
       }
-    }
+    }*/
   }
+
+  setInterval(function() {
+    if ((main_title == 0) && (window.location.pathname != "/secret_project/php/index.php")){
+      ConnectCurrPlayer();
+    }
+
+    if (hasGameBegun() == 1 && shown == 0 && $j("#cadenas").length && !($j("#cadenas").hasClass("d-none"))){
+      LottiePlayer.setSpeed(1);
+      LottiePlayer.play();
+      setTimeout(function () {
+        setAnimationFinished(1);
+        $j("#cadenas").addClass("d-none");
+        /*$j("#main_title").css({
+          "margin-bottom": "13%",
+        })*/
+        showSecret();
+        shown = 1;
+      }, 2500)
+    }
+
+    /*console.log(getNbrPlayersContinued());
+    console.log(result_clicked);
+    console.log(!($j("#result_btn").hasClass("d-none")));
+
+    if (getNbrPlayersContinued() > 0 && result_clicked == 0 && $j("#result_btn").length &&!($j("#result_btn").hasClass("d-none"))){
+      updatePlayerContinued(JSON.parse(getcurrPlayer())["id"]);
+      author_random_message = getAuthorRandomSecret();
+
+      let id_chosen_player = $j(".secret_id_played").val().split("-")[2];
+      console.log(id_chosen_player, author_random_message["id"], JSON.parse(getcurrPlayer())["id"]);
+      updateScore(id_chosen_player, author_random_message["id"], JSON.parse(getcurrPlayer())["id"]);
+      shown = 0;
+      result_clicked = 1;
+      setTimeout(function () {
+        $j("#result_form").submit();
+      }, 1500);
+    }*/
+  }, 1500);
 })

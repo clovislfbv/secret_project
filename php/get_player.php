@@ -127,12 +127,12 @@
                           </h5>
                         </div>
                         <!-- <div class="margin-div-right"></div> -->
-                        <form name="result_form" method="POST" action="result.php">
+                        <form name="result_form" id="result_form" method="POST" action="result.php">
                           <div>
                             <input type="hidden" name="secret_id_played" class="secret_id_played"></input>
                           </div>
                           <div class="result_button d-none">
-                            <button type="submit" class="btn btn-outline-primary" id="result_btn">Voir les résultats</button>
+                            <button type="button" class="btn btn-outline-primary" id="result_btn">Voir les résultats</button>
                           </div>
                         </form>
                         <div id="progress-players" class="progress-container d-none">

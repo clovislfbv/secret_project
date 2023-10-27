@@ -23,6 +23,7 @@ $_SESSION["played"] = 0;
 $_SESSION["began"] = 0;
 $_SESSION["on_get"] = 0;
 $_SESSION["hidden"] = 0;
+$_SESSION["id_curr_game_session"] = $curr_game_session["id"];
 
 echo $player;
 echo $player_secret;

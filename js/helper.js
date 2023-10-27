@@ -72,6 +72,21 @@ export function success() {
     }
   }
 
+export function ConnectCurrPlayer() {
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "connect_curr_player"},
+  });
+}
+
+export function destroySessionVariable(){
+  jQuery.ajax({
+    type:"POST",
+    url: "../php/helper.php",
+    data: {action: "destroy_session_variable"},
+  });
+}
 
 /*******
  * update the played variable if a player drags a button to the dropper
@@ -158,7 +173,9 @@ export function updateProgressBar(){
         $j("#progress-players").addClass("d-none");
       }, 4000);
     } else if (progressbarValue < 100 && $j(".start_button").hasClass("d-none") && $j("#cadenas").hasClass("d-none")){
-      $j(".result_button").addClass("d-none");
+      if ($j(".secret_id_played").val().length == 1){
+        $j(".result_button").addClass("d-none");
+      }
       $j("#progress-players").removeClass("d-none");
     }
 
@@ -278,6 +295,21 @@ function endGame(){
   })
 }
 
+export function killSession(){
+  jQuery.ajax({
+    type:"POST",
+    url: "../php/helper.php",
+    data: {action: "kill_session"},
+    async: false,
+    success: function (res){
+      console.log(res);
+    },
+    error: function (err){
+      console.log(err);
+    }
+  })
+}
+
 export function loading(){
   let output = "";
   var save = 0;
@@ -291,41 +323,45 @@ export function loading(){
     total_players_logged = getNbrPlayersOnline();
 
     if (total_players_logged < 2) {
-      if (!($j(".secret_and_progress").hasClass("d-none"))){
-        save = 1;
-      }
+      setTimeout(function() {
+        if (total_players_logged < 2) {
+          if (!($j(".secret_and_progress").hasClass("d-none"))){
+            save = 1;
+          }
 
-      shown = 0;
+          shown = 0;
 
-      /*$j("#main_title").css({
-        "margin-bottom": "0%",
-      })*/
-      $j("#cadenas").removeClass("d-none");
-      if ($j(".start_game").hasClass("d-none")) {
-        $j(".player").draggable("disable");
-      }
-      $j(".start_game").addClass("d-none");
-      $j(".secret_and_progress").addClass("d-none");
-      $j(".waiting-players").removeClass("d-none");
+          /*$j("#main_title").css({
+            "margin-bottom": "0%",
+          })*/
+          $j("#cadenas").removeClass("d-none");
+          if ($j(".start_game").hasClass("d-none")) {
+            $j(".player").draggable("disable");
+          }
+          $j(".start_game").addClass("d-none");
+          $j(".secret_and_progress").addClass("d-none");
+          $j(".waiting-players").removeClass("d-none");
 
-      endGame();
-      
-      if (dropped == 1){
-        dropped = 0;
-        let value = $j(".secret_id_played").val().split("-");
-        updatePlayerWhenClicked();
-        $j("#"+value[1]+"-"+value[2]).css({
-          'top': '0px',
-          'left': '0px',
-          'position': 'relative'
-        });
-        $j("#"+value[1]+"-"+value[2]).addClass("d-none")
-        $j("#droppable-player").removeClass("correct");
-        $j("#droppable-player").addClass("normal text-primary");
-      }
+          endGame();
+          
+          if (dropped == 1){
+            //dropped = 0;
+            let value = $j(".secret_id_played").val().split("-");
+            /*updatePlayerWhenClicked();
+            $j("#"+value[1]+"-"+value[2]).css({
+              'top': '0px',
+              'left': '0px',
+              'position': 'relative'
+            });*/
+            $j("#"+value[1]+"-"+value[2]).addClass("d-none")
+            /*$j("#droppable-player").removeClass("correct");
+            $j("#droppable-player").addClass("normal text-primary");*/
+          }
 
-      LottiePlayer.seek(0);
-      LottiePlayer.stop();
+          LottiePlayer.seek(0);
+          LottiePlayer.stop();
+        }
+      }, 2000);
     }
     console.log(total_players_logged, animation_finished, hasGameBegun());
     if (total_players_logged > 1 && animation_finished == 0 && hasGameBegun()){
@@ -359,6 +395,30 @@ export function loading(){
             $j(".wait4").addClass("d-none");
             save = 0;
             $j(".player").draggable({revert: true})
+
+            if (dropped == 1){
+              let value = $j(".secret_id_played").val().split("-");
+              $j("#" + value[1] + "-" + value[2]).draggable( "option", "revert", false);
+              $j("#" + value[1] + "-" + value[2]).draggable("disable", 1);
+              $j("#" + value[1] + "-" + value[2]).click(function (e) {
+                $j(".wait4").addClass("d-none");
+                let chosen_player = value;
+                updatePlayerWhenClicked(chosen_player[1]);
+                $j("#"+value[1]+"-"+value[2]).draggable( "option", "revert", true);
+                $j("#res_button").addClass("d-none");
+                $j(".progress").removeClass("d-none");
+                $j("#"+value[1]+"-"+value[2]).css({
+                  'top': '0px',
+                  'left': '0px',
+                  'position': 'relative'
+                });
+                $j(".secret_id_played").val($j(".secret_id_played").val().replace("-" + chosen_player[0] + "-" + chosen_player[1], ""));
+                $j("#droppable-player").removeClass("correct");
+                $j("#droppable-player").addClass("normal text-primary");
+                dropped = 0;
+                $j("#"+value[1]+"-"+value[2]).draggable("enable", 1);
+              })
+            }
           }, 2500)
         } else {
           /*$j("#main_title").css({
@@ -389,8 +449,7 @@ export function unsetNewRandomSecret() {
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
-    data: {action: "unset_new_random_secret"}, 
-    async: false,
+    data: {action: "unset_new_random_secret"},
     success: function () {
       window.location.href = "../php/get_player.php";
     },
@@ -408,6 +467,7 @@ export function chooseRandomSecret(){
     data: {action: "choose_random_secret"},
     async: false,
     success: function (result) {
+      console.log(result);
       if (random_secret != result){
         changed = 1;
         random_secret = result;
@@ -464,9 +524,6 @@ export function disconnectPlayer(player_id){
     type: "POST",
     url: "../php/helper.php",
     data: {action: "disconnect_player", p_id: player_id},
-    success: function () {
-      window.location.href = "../php/index.php";
-    }
   })
 }
 
@@ -599,6 +656,14 @@ function getNbrSecretsNotDiscovered(){
   return nbrSecretsNotDiscovered;
 }
 
+export function setMessageAsDiscovered(){
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "set_message_as_discovered"},
+  })
+}
+
 export function getLeaderboard() {
   jQuery.ajax({
     type: "POST",
@@ -630,6 +695,8 @@ export function displayLeaderboard() {
     let counter = 1;
     var output = "";
     let rank;
+    let rank_previous;
+    let id = currPlayer["id"];
 
     $j('#page-selection').bootpag({
       total: Math.ceil(nbr_players/5),
@@ -926,13 +993,13 @@ export function displayAllPlayersOnline(){
               $j("#droppable-player").removeClass("correct");
               $j("#droppable-player").addClass("normal text-primary");
               $j("#"+value[1]+"-"+value[2]).draggable({revert : true})
-            } else {
+            } /*else {
               $j("#"+value[1]+"-"+value[2]).position({
                 my: "center",
                 at: "center",
                 of: $j("#"+value[1]+"-"+value[2]),
               });
-            }
+            }*/
           }
         }
         
