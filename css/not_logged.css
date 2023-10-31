@@ -2,6 +2,9 @@
     height: 80%;
     min-width: 100%;
     max-width: 100%;
+    background-origin: border-box;
+    background: url("../images/whoIsBehind2.png") bottom/150% auto no-repeat;
+    background-size: cover;
 }
 
 .container {
@@ -69,6 +72,7 @@
     height: 100%;
     width: 100%;
     border: none;
+    background: transparent;
 }
 
 #not-logged-description-id {
@@ -76,6 +80,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background: transparent;
 }
 
 .description {
