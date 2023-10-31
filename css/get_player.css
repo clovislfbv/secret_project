@@ -226,7 +226,8 @@ h1, h3, .start_game, #droppable-player, .result_button, h4 {
 
 #progress-players {
     height: 20%;
-    position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .tartampion {

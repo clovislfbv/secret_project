@@ -129,17 +129,17 @@
                       echo "<div class='scoreboard__podiums'>";
 
                       echo "<div class='scoreboard__podium js-podium column-second' data-height='200px'>";
-                      echo "<div class='scoreboard__podium-number second'>Bar de Wever<small><span class='js-podium-data-second'>160</span></small></div>";
+                      echo "<div class='scoreboard__podium-number second text-primary'>Bar de Wever<small><span class='js-podium-data-second text-primary'>160</span></small></div>";
                       echo "<div class='scoreboard__podium-base scoreboard__podium-base--second'>";
                       echo "<div class='scoreboard__podium-rank'>2</div></div></div>";
                       
                       echo "<div class='scoreboard__podium js-podium column-first' data-height='250px'>";
-                      echo "<div class='scoreboard__podium-number first'>Charles Michel<small><span class='js-podium-data-first'>195</span></small></div>";
+                      echo "<div class='scoreboard__podium-number first text-primary'>Charles Michel<small><span class='js-podium-data-first text-primary'>195</span></small></div>";
                       echo "<div class='scoreboard__podium-base scoreboard__podium-base--first'>";
                       echo "<div class='scoreboard__podium-rank'>1</div></div></div>"; 
                       
                       echo "<div class='scoreboard__podium js-podium column-third' data-height='150px'>";
-                      echo "<div class='scoreboard__podium-number third'>Jan Jambon<small><span class='js-podium-data-third'>100</span></small></div>";
+                      echo "<div class='scoreboard__podium-number third text-primary'>Jan Jambon<small><span class='js-podium-data-third text-primary'>100</span></small></div>";
                       echo "<div class='scoreboard__podium-base scoreboard__podium-base--third'>";
                       echo "<div class='scoreboard__podium-rank'>3</div></div></div></div></div>";
 

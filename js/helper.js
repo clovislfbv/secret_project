@@ -335,7 +335,7 @@ export function loading(){
             "margin-bottom": "0%",
           })*/
           $j("#cadenas").removeClass("d-none");
-          if ($j(".start_game").hasClass("d-none")) {
+          if ($j(".start_game").hasClass("d-none") && $j(".player").data('draggable') && !($j(".player").draggable( "option", "disabled"))) {
             $j(".player").draggable("disable");
           }
           $j(".start_game").addClass("d-none");
@@ -361,7 +361,7 @@ export function loading(){
           LottiePlayer.seek(0);
           LottiePlayer.stop();
         }
-      }, 2000);
+      }, 5000);
     }
     console.log(total_players_logged, animation_finished, hasGameBegun());
     if (total_players_logged > 1 && animation_finished == 0 && hasGameBegun()){
@@ -374,7 +374,9 @@ export function loading(){
             "margin-bottom": "13%",
           })*/
           $j("#cadenas").addClass("d-none");
-          $j(".player").draggable("enable");      
+          if ($j(".player").data('draggable') && $j(".player").draggable( "option", "disabled")){
+            $j(".player").draggable("enable");
+          }    
           $j(".secret_and_progress").removeClass("d-none");
           $j("progress-players").removeClass("d-none");
           $j(".wait4").addClass("d-none");
@@ -524,7 +526,13 @@ export function disconnectPlayer(player_id){
     type: "POST",
     url: "../php/helper.php",
     data: {action: "disconnect_player", p_id: player_id},
-  })
+    /*success: function () {
+      console.log("player has been successfuly disconnected"); 
+    },
+    error: function (err) {
+      console.log(err);
+    }*/
+  });
 }
 
 export function getNbrMessagesDiscovered(){
@@ -738,7 +746,7 @@ export function displayLeaderboard() {
             
             if (i == 0 || i == 1 || i == 2){
               $j(classname).text(curr_leaderboard[i]["p_name"]);
-              $j(classname).html($j(classname).html() + "<small><span class='js-podium-data-second'>" + curr_leaderboard[i]["score"] + " points" + "</span></small>");
+              $j(classname).html($j(classname).html() + "<small><span class='js-podium-data-second text-primary'>" + curr_leaderboard[i]["score"] + " points" + "</span></small>");
             }
               counter++;
           }
@@ -978,9 +986,11 @@ export function displayAllPlayersOnline(){
         if ($j("#"+element["p_name"]+"-"+element["id"]).length > 0){
           setTimeout(function(){
             let all_players_disconnected_2 = getAllPlayersDisconnected();
-            let all_players_disconnected_id = all_players_disconnected_2.filter('["id"=' + element["id"] + ']')
-            console.log(all_players_disconnected_id);
-            if (all_players_disconnected_id.length > 0){
+            let index;
+            for (index = all_players_disconnected_2.length-1; index > 0 && element["id"] < all_players_disconnected_2[index]["id"]; index--){
+              console.log(all_players_disconnected_2[index]);
+            }
+            if (all_players_disconnected_2[index]["id"] == element["id"]){
               if (!($j("#"+element["p_name"]+"-"+element["id"]).hasClass("d-none"))){
                 $j("#"+element["p_name"]+"-"+element["id"]).addClass("d-none");
 

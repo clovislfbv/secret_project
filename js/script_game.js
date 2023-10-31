@@ -146,7 +146,18 @@ $j(document).ready(function () {
 
   function ConfirmLeave(){
 
-    disconnectPlayer(JSON.parse(getcurrPlayer())["id"]);
+    let currPlayer = JSON.parse(getcurrPlayer());
+    disconnectPlayer(currPlayer["id"]);
+    setTimeout(function () {
+      NbrPlayersOnline = getNbrPlayersOnline();
+      if (NbrPlayersOnline == 0){
+        killSession();
+      }
+      currPlayer = JSON.parse(getcurrPlayer());
+      if (currPlayer["logged"] == 0){
+        destroySessionVariable();
+      }
+    }, 5000);
   }
 
   var prevKey="";
@@ -204,19 +215,6 @@ $j(document).ready(function () {
         showSecret();
         shown = 1;
       }, 2500)
-    }
-
-    if (toto_clicked == 1 && $j(".pressToto").length && !($j(".pressToto").hasClass("d-none"))){
-      setTimeout(function (){
-        unset_secret();
-        if (!($j("#cadenas").hasClass("d-none"))){
-          $j("#cadenas").addClass("d-none");
-        }
-        result_clicked = 0;
-        toto_clicked = 0;
-        /*let currPlayerId = JSON.parse(getcurrPlayer())["id"];
-        resetPlayedPlayer(currPlayerId);*/
-      }, 500);
     }
 
     /*if (window.location.pathname == "/secret_project/php/result.php" && getNbrSecretsNotDiscovered() == 0){

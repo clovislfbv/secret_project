@@ -301,21 +301,19 @@
 
     function set_new_random_secret(){
         include "conn.php";
-        session_start();
 
         $id_curr_game_session = $_SESSION['id_curr_game_session'];
 
-        $setMarker = "UPDATE mySecret, players SET mySecret.random_choice = 1 WHERE mySecret.discovered = 0 AND mySecret.id = players.id_secret AND players.id_game_session =" . $id_curr_game_session . " ORDER BY RAND() LIMIT 1";
-        $conn->query($setMarker);
+        $setMarker = "UPDATE mySecret, players SET mySecret.random_choice = 1 WHERE mySecret.discovered = 0 AND mySecret.id = players.id_secret AND players.logged = 1 AND players.id_game_session =" . $id_curr_game_session . " ORDER BY RAND() LIMIT 1";
+        $conn2->query($setMarker);
     }
 
     function unset_new_random_secret(){
         include "conn.php";
-        session_start();
 
         $id_curr_game_session = $_SESSION['id_curr_game_session'];
 
-        $unsetMarker = "UPDATE mySecret, players SET mySecret.random_choice = 0 WHERE mySecret.discovered = 1 AND mySecret.id = players.id_secret AND players.id_game_session =" . $id_curr_game_session;
+        $unsetMarker = "UPDATE mySecret SET mySecret.random_choice = 0 WHERE mySecret.discovered = 1"; /*AND mySecret.id = players.id_secret AND players.id_game_session =" . $id_curr_game_session;*/
         $conn->query($unsetMarker);
     }
 
@@ -338,6 +336,7 @@
     }
 
     function choose_random_secret_js(){
+        session_start();
         $check = choose_random_secret();
         echo json_encode($check);
     }
@@ -353,6 +352,7 @@
     }
 
     function get_author_random_message_js(){
+        session_start();
         $author = get_author_random_message();
         echo json_encode($author);
     }
@@ -445,7 +445,7 @@
 
         $id_curr_game_session = get_current_game_session()["id"];
 
-        $get_num_not_discovered = "SELECT COUNT(*) FROM mysecret, players WHERE mysecret.discovered = 0 AND players.id = mysecret.id_player AND id_game_session =" . $id_curr_game_session;
+        $get_num_not_discovered = "SELECT COUNT(*) FROM mysecret, players WHERE mysecret.discovered = 0 AND players.id = mysecret.id_player AND players.id_game_session =" . $id_curr_game_session;
         $length = $conn->query($get_num_not_discovered);
         $total = $length->fetch_array();
 
