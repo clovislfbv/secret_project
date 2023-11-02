@@ -6,22 +6,29 @@ h3, div {
     min-height: 100px;
 }
 
-.container {
+html, body {
+    height: 100%;
+}
+
+html {
+    display: table;
+    margin: auto;
+}
+
+body {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+/* .container {
     position: absolute;
     left: 15%;
     top: 15%;
     width: 80%;
     height: 75%;
     margin-left: -10px;
-    /* -1/2 width */
     margin-top: -10px;
-    /*position: absolute;
-    top: 25%;
-    left: 30%;
-    width: 60%;
-    margin: -100px 0 0 -150px;
-    display: flex;*/
-}
+} */
 
 .whole_thing .infos {
     background-color: transparent;
@@ -111,4 +118,9 @@ h3, div {
 
 #addon-wrapping {
     color: #000;
+}
+
+#btn_sendform {
+    width: 30%;
+    height: 100%;
 }

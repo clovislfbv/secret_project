@@ -29,6 +29,7 @@ var shown = 0;
 var begun;
 var min = 0; //min pour le leeaderboard
 var max = 5; //max pour le leaderboard
+var enable = 0;
 
 export function actionMobileInit() {
   document.addEventListener("touchstart", touchHandler, true);
@@ -58,19 +59,6 @@ function touchHandler(event) {
   }[event.type], true, true, window, 1, touch.screenX, touch.screenY, touch.clientX, touch.clientY, false, false, false, false, 0, null);
   return touch.target.dispatchEvent(simulatedEvent);
 };
-
-
-/*******
- * Disable the start button, if nothing is written otherwise it enables it
- * *******/
-
-export function success() {
-	 if($j("#username").val()==="" || $j("mySecret").val()==="") { 
-      document.getElementById('start').disabled = true; 
-    } else { 
-      document.getElementById('start').disabled = false;
-    }
-  }
 
 export function ConnectCurrPlayer() {
   jQuery.ajax({
@@ -928,9 +916,9 @@ export function displayAllPlayersOnline(){
           if (!(element["id"] in already_displayed)){
             already_displayed[element["id"]] = element["p_name"];
             if (element["id"] == JSON.parse(getcurrPlayer())["id"]){
-              document.getElementsByClassName("players-list")[0].innerHTML += "<div class='btn player ui-widget-content " + colors[index_colors] + "' id='" + element.p_name + "-" + element["id"] + "' type='button'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'/><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'/></svg>"+"<nbsp><b>"+element.p_name+"</b></nbsp></div>";
+              document.getElementsByClassName("players-list")[0].innerHTML += "<div class='btn player ui-widget-content " + colors[index_colors] + "' id='" + element.p_name + "-" + element["id"] + "' type='button'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'/><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'/></svg>"+"<nbsp>"+ " " +"<b>"+element.p_name+"</b></nbsp></div>";
             } else {
-              document.getElementsByClassName("players-list")[0].innerHTML += "<div class='btn player ui-widget-content " + colors[index_colors] + "' id='" + element.p_name + "-" + element["id"] + "' type='button'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'/><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'/></svg>"+"<nbsp>"+element.p_name+"</nbsp></div>";
+              document.getElementsByClassName("players-list")[0].innerHTML += "<div class='btn player ui-widget-content " + colors[index_colors] + "' id='" + element.p_name + "-" + element["id"] + "' type='button'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'/><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'/></svg>"+"<nbsp>"+ " " +element.p_name+"</nbsp></div>";
             }
 
             index_colors++;

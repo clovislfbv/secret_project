@@ -1,3 +1,17 @@
+html, body {
+    height: 100%;
+}
+
+html {
+    display: table;
+    margin: auto;
+}
+
+body {
+    display: table-cell;
+    vertical-align: middle;
+}
+
 .whole_thing {
     height: 80%;
     min-width: 100%;
@@ -7,24 +21,30 @@
     background-size: cover;
 }
 
-.container {
+#card-body {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 80vh;
+    width: 60vw;
+}
+
+.description {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 3%; 
+    padding-bottom: 5%;
+    width: 70%;
+}
+
+/* .container {
     position: absolute;
     left: 15%;
     top: 15%;
     width: 80%;
     height: 100%;
-    /*margin-left: -10px;*/
-    /* -1/2 width */
-   /* margin-top: -10px;*/
-    /*position: absolute;
-    top: 25%;
-    left: 25%;
-    height: 100%;
-    margin: -100px 0 0 -150px;
-    display: flex;*/
-    /*justify-content: center;
-    align-items: center;*/
-}
+} */
 
 .big-box {
     box-shadow: 
@@ -36,14 +56,8 @@
     inset 0 0 0.25vw 0.2vw #C53C00;
 }
 
-#card-body {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-    height: 700px;
-}
-
 .top {
+    height: 10%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -81,15 +95,8 @@
     justify-content: center;
     align-items: center;
     background: transparent;
-}
-
-.description {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-top: 3%; 
-    padding-bottom: 5%;
-    width: 70%;
+    width: 100%;
+    height: 90%;
 }
 
 #description {
@@ -101,8 +108,52 @@
 .error-title {
     padding-top: 5%;
     padding-bottom: 2%;
+    height: 100%;
 }
 
 .error-chars {
     line-height: 50%;
+}
+
+@media only screen and (orientation:portrait) {
+
+    .main_title {
+        font-family: "Bad grunge";
+        font-size: 5vh;
+    }
+    
+    .error-chars {
+    font-family: "Bad grunge";
+    font-size: 40vh;
+    }
+
+    h1 {
+        font-size: 1vh;
+    }
+
+    h3, .h3 {
+        font-size: 3vh; }
+
+    /* .whole_thing {
+        height: 90vh;
+        width: 100vw;
+        background-origin: border-box;
+        background: url("../images/whoIsBehind2.png") bottom/150% auto no-repeat;
+        background-size: cover;
+    }
+
+    #card-body {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        height: 80vh;
+        width: 100vw;
+    }
+
+    .description {
+        padding-top: 3%; 
+        padding-bottom: 5%;
+        width: 100%;
+    } */
+ 
 }

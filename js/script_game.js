@@ -13,6 +13,52 @@ var NbrPlayersOnline;
 var main_title = 0;
 
 $j(document).ready(function () {
+
+  let save_body = $j("#card-body").html();
+
+  const portrait = window.matchMedia("(orientation: portrait)").matches;
+  if (portrait){
+    $j("#card-body").css({
+      "align-items": "center",
+      "justify-content": "center",
+      "height": "20vh"
+    })
+    $j("#card-body").html("<h1 class='text-primary'>Pour jouer, veuillez mettre votre écran en mode paysage</h1>");
+    $j("h1").css({
+      "font-size": "2vh",
+    })
+  }
+
+  window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
+    const portrait = e.matches;
+    console.log(screen.orientation.type);
+    if (portrait){
+      $j("#card-body").css({
+        "align-items": "center",
+        "justify-content": "center",
+        "height": "20vh"
+      })
+      $j("#card-body").html("<h1 class='text-primary'>Pour jouer, veuillez mettre votre écran en mode paysage</h1>");
+      $j("h1").css({
+        "font-size": "2vh",
+      })
+    } else {
+      $j("#card-body").css({
+        "align-items": "normal",
+        "justify-content": "space-between",
+        "height": "auto",
+      })
+      $j("#card-body").html(save_body);
+    }
+  })
+
+  // check_orientation()
+
+  
+  // $j(window).on("orientationchange", function(event) {
+  //   check_orientation();
+  // })
+
   $j('#page-selection').on("page", function(event, num){
     let minimum = (num * 5) - 5;
     let maximum = num * 5;

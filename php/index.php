@@ -7,8 +7,9 @@
     <link rel="stylesheet" type="text/css" href="../css/index.css">
     <script src="../js/bootstrap/bootstrap.min.js"></script>
     <script src="../js/jquery.js"></script>
-    <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
-    <script type="module" src="../js/script_game.js"></script>
+    <script src="../js/helper.js" type="module"></script>
+    <script src="../js/script_game.js" type="module"></script>
+    <script src="../js/disable-button.js"></script>
     <title>Discover my secret</title>
   </head>
   <body>
@@ -40,7 +41,7 @@
                           <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
                         </svg>
                   </span>
-                  <input type="text" class="form-control border-primary" id="username" name="username" placeholder="Renseignez votre nom" aria-label="username"/>
+                  <input type="text" class="form-control border-primary" id="username" name="username" placeholder="Renseignez votre nom" aria-label="username" onkeyup="success()"/>
                 </div>
 
                 <div class="user_input input-group flex-nowrap">
@@ -50,11 +51,11 @@
                       <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
                     </svg>
                   </span>
-                  <textarea class="form-control border-primary" id="mySecret" name="mySecret" placeholder="Renseignez votre secret" aria-label="With textarea"></textarea>
+                  <textarea class="form-control border-primary" id="mySecret" name="mySecret" placeholder="Renseignez votre secret" aria-label="With textarea" onkeyup="success()"></textarea>
                 </div>
 
                 <div class="confirm">
-                  <button class="btn btn-lg btn-outline-primary" type="submit" id="btn_sendform">Continuer</button>
+                  <button class="btn btn-lg btn-outline-primary" type="submit" id="btn_sendform" disabled>Continuer</button>
                 </div>
               </form>
             </div>

@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv = 'refresh' content='7; index.php'>
+    <!-- <meta http-equiv = 'refresh' content='7; index.php'> -->
     <title>Pas connecté</title>
     <link rel="stylesheet" type="text/css" href="../css/theme.css">
     <link rel="stylesheet" type="text/css" href="../css/not_logged.css">
+    <script src="../js/jquery.js"></script>
+    <script type="module" src="../js/script_game.js"></script>
 </head>
 <body>
     <div class="container">
@@ -43,7 +45,7 @@
                                 <h1 class="error-chars">404</h1>
                             </div>
                             <div class="description text-primary">
-                                <h3 id="description">Vous n'êtes pas connecté au jeu.<br>Veuillez patienter, redirection vers la page de connexion en cours...</h3>                    
+                                <h3 id="description">Vous n'êtes pas connecté au jeu. Veuillez patienter, redirection vers la page de connexion en cours...</h3>                    
                             </div>
                         </div>
                     </div>

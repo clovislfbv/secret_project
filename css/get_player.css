@@ -2,6 +2,20 @@ h1, h3, .start_game, #droppable-player, .result_button, h4 {
     text-align : center;
 }
 
+html, body {
+    height: 100%;
+}
+
+html {
+    display: table;
+    margin: auto;
+}
+
+body {
+    display: table-cell;
+    vertical-align: middle;
+}
+
 #title {
     height: 50%;
     padding-bottom: 5%;
@@ -49,24 +63,14 @@ h1, h3, .start_game, #droppable-player, .result_button, h4 {
     max-width: 100%;
 }
 
-.container {
+/* .container {
     position: absolute;
     left: 15%;
     top: 15%;
     width: 80%;
     height: 100%;
-    /*margin-left: -10px;*/
-    /* -1/2 width */
-   /* margin-top: -10px;*/
-    /*position: absolute;
-    top: 25%;
-    left: 25%;
-    height: 100%;
-    margin: -100px 0 0 -150px;
-    display: flex;*/
-    /*justify-content: center;
-    align-items: center;*/
-}
+} */
+
 .start_game {
     padding-top: 20px; 
 }
@@ -163,7 +167,8 @@ h1, h3, .start_game, #droppable-player, .result_button, h4 {
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-    height: 700px;
+    height: 80vh;
+    width: 60vw;
 }
 
 #all_players {
