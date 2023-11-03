@@ -34,10 +34,16 @@ body {
     background-color: transparent;
 }
 
+.whole_thing {
+    width: 100vw;
+    height: 51.5vh;
+}
+
 #card-body {
     display: flex;
     justify-content: space-between;
     flex-flow: row nowrap;
+    height: 100%;
 }
 
 .left {
@@ -55,23 +61,23 @@ body {
 .confirm {
     padding-top: 50px;
     padding-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #title {
-    display: flex;
-    align-items: center;
     word-spacing: 100vw;
 }
 
 .main_title {
     text-decoration: none;
-    line-height: 2em;
+    line-height: 13vh;
     opacity: 70%;
 }
 
 .user_input {
-    padding-top: 30px;
-    height: 50%;
+    padding-top: 5%;
 }
 
 .middle {
@@ -85,11 +91,39 @@ body {
 
 .infos {
     border: none;
+    height: 100%;
+}
+
+#infos-body {
+    height: 100%;
+    padding: 0rem;
+}
+
+form {
+    height: 100%;
+}
+
+#username {
+    height: 35%;
+}
+
+#mySecret {
+    height: 45%;
+}
+
+.file-lock {
+    height: 95%;
+}
+
+.column-portrait {
+    display: flex;
+    flex-direction: column;
 }
 
 .title {
     background: url("../images/whoIsBehind.jpg") top/100% auto no-repeat;
     background-size: cover; 
+    height: 100%;
 }
 
 .form-control{
@@ -121,6 +155,9 @@ body {
 }
 
 #btn_sendform {
-    width: 30%;
-    height: 100%;
+    width: 10vw;
+    height: 7vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

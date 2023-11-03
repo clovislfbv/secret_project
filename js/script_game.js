@@ -15,18 +15,26 @@ var main_title = 0;
 $j(document).ready(function () {
 
   let save_body = $j("#card-body").html();
+  let save_background = 0;
 
   const portrait = window.matchMedia("(orientation: portrait)").matches;
   if (portrait){
     $j("#card-body").css({
       "align-items": "center",
       "justify-content": "center",
-      "height": "20vh"
+      "height": "20vh",
+      "text-align": "center",
     })
-    $j("#card-body").html("<h1 class='text-primary'>Pour jouer, veuillez mettre votre écran en mode paysage</h1>");
+    $j("#card-body").html("<div class='column-portrait'><h1 class='text-primary'>Pour jouer, veuillez mettre votre écran en mode paysage</h1><div class='rotate' style='transform: rotate(-90deg);height: 300px;width: 300px;'><dotlottie-player src='../lottie-player/phone_rotation/phone_rotation.lottie' background='transparent' speed='1' style='width: 300px;height: 300px;transform: rotateY(180deg);' loop='' autoplay=''></dotlottie-player></div></div>");
     $j("h1").css({
-      "font-size": "2vh",
+      "font-size": "3vh",
     })
+    if ($j(".whole_thing").css("background-image") != "none"){
+      $j(".whole_thing").css({
+        "background": "none",
+      })
+      save_background = 1;
+    }
   }
 
   window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
@@ -36,18 +44,32 @@ $j(document).ready(function () {
       $j("#card-body").css({
         "align-items": "center",
         "justify-content": "center",
-        "height": "20vh"
+        "height": "20vh",
+        "text-align": "center",
       })
       $j("#card-body").html("<h1 class='text-primary'>Pour jouer, veuillez mettre votre écran en mode paysage</h1>");
       $j("h1").css({
-        "font-size": "2vh",
+        "font-size": "3vh",
       })
+      if ($j(".whole_thing").css("background-image") != "none"){
+        $j(".whole_thing").css({
+          "background": "none",
+        })
+        save_background = 1;
+      }
     } else {
       $j("#card-body").css({
         "align-items": "normal",
         "justify-content": "space-between",
-        "height": "auto",
+        "height": "100%",
       })
+      console.log(save_background);
+      if (save_background == 1){
+        $j(".whole_thing").css({
+          "background": "url(../images/whoIsBehind2.png) bottom/150% auto no-repeat",
+        })
+        save_background = 0;
+      }
       $j("#card-body").html(save_body);
     }
   })
