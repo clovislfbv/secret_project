@@ -34,7 +34,7 @@
           <div class="col-6 right">
           <div class="card infos">
             <div class="card-body" id="infos-body">
-              <form name="secret_form" method="POST" action="insert_player.php">
+              <form name="secret_form" method="POST" action="#">
                 <div class="user_input input-group flex-nowrap username_input">
                   <span class="input-group-text bg-primary border-primary" id="addon-wrapping">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
@@ -52,7 +52,7 @@
                       <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
                     </svg>
                   </span>
-                  <input type="password" class="form-control border-primary" id="password" name="password" placeholder="Renseignez votre mot de passe" aria-label="password" onkeyup="success()"/>
+                  <input type="text" class="form-control border-primary" id="password" name="password" placeholder="Renseignez votre mot de passe" aria-label="password" onkeyup="success()"/>
                 </div>
                 <div class="login">
                   <button class="btn btn-lg btn-outline-primary" type="submit" id="btn_login" disabled>Se connecter</button>

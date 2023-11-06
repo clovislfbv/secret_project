@@ -17,7 +17,9 @@ $j(document).ready(function () {
   let save_body = $j("#card-body").html();
   let save_background = 0;
 
-  $j("#connModal").modal("hide")
+  if ($j("#connModal").length){
+    $j("#connModal").modal("hide");
+  }
   var loginClicked = 0;
 
   const portrait = window.matchMedia("(orientation: portrait)").matches;
@@ -127,10 +129,12 @@ $j(document).ready(function () {
     }, 1500);
   })
 
-  $j("#btn_login").click(function (e){
-    console.log(checkPlayerExist());
+  $j("#btn_login").click(function (e, t){
+    console.log(e,t);
     if (checkPlayerExist() != 0){
-      console.log("Yessayyyyyy")
+      $j("form[name='secret_form']").attr('action', "addSecretOrPlay.php");
+      $j("form[name='secret_form']").submit();
+      window.location.href = "addSecretOrPlay.php";
     } else {
       $j("#connModal").modal("show")
       $j(".modal-title").text("Erreur de connexion")
@@ -209,7 +213,6 @@ $j(document).ready(function () {
   })
 
   $j("form[name='secret_form']").submit(function (e) {
-    e.preventDefault();
     
     // if (hasGameBegun() == 1){
     //   e.preventDefault();

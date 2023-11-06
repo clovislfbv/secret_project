@@ -295,6 +295,17 @@
         $request = "SELECT * FROM players WHERE id=" . $identifiant;
         echo json_encode($conn->query($request)->fetch_array());
     }
+
+    function get_player_by_name_password($name, $pass_word) {
+        include "conn.php";
+        
+        $hash_psw = md5($pass_word);
+
+        $request = "SELECT * FROM players WHERE p_name='" . $name . "' AND p_password='" . $hash_psw . "'";
+        $player = $conn->query($request)->fetch_array();
+        
+        return $player;
+    }
     
     function reset_played_player(){
         include "conn.php";
@@ -436,6 +447,17 @@
             $request = "SELECT COUNT(*) FROM players WHERE logged = 1 AND id_game_session = " . $id_curr_game_session;
             $counter = $conn->query($request)->fetch_array();
         }
+    }
+
+    function get_nbr_total_secrets(){
+        include "conn.php";
+        
+        $id_curr_player = get_curr_player()["id"];
+        
+        $request = "SELECT COUNT(*) FROM mySecret WHERE id_player=" . $id_curr_player;
+        $output = $conn->query($request)->fetch_array();
+
+        return $output[0];
     }
 
     function get_nbr_message_discovered(){

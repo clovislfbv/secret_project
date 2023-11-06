@@ -56,7 +56,7 @@
                 </div>
 
                 <div class="confirm">
-                  <button class="btn btn-lg btn-outline-primary" type="submit" id="btn_sendform" disabled>Continuer</button>
+                  <button class="btn btn-lg btn-outline-primary" type="submit" id="btn_sendform">Continuer</button>
                 </div>
               </form>
             </div>
