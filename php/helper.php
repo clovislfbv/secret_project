@@ -7,6 +7,14 @@
             connect_curr_player();
         }
 
+        if ($_POST["action"] == "check_several_usernames"){
+            check_several_usernames();
+        }
+
+        if ($_POST["action"] == "check_player_exist"){
+            check_player_exist();
+        }
+
         if ($_POST["action"] == "update_player_when_played"){
             update_player_when_played();
         }
@@ -124,6 +132,29 @@
         }
     }
 
+    function check_player_exist(){
+        include "conn.php";
+
+        $username_to_check = $_POST["username"];
+        $password_to_check = md5($_POST["password"]);
+
+        $request = "SELECT COUNT(*) FROM players WHERE p_name='" . $username_to_check . "' AND p_password='" . $password_to_check . "'";
+        $output = $conn->query($request)->fetch_array();
+
+        echo $output[0];
+    }
+
+    function check_several_usernames(){
+        include "conn.php";
+
+        $username_to_check = $_POST["username"];
+
+        $request = "SELECT COUNT(*) FROM players WHERE p_name='" . $username_to_check . "'";
+        $output = $conn->query($request)->fetch_array();
+
+        echo $output[0];
+    }
+
     function is_logged(){
         include "conn.php";
 
@@ -152,11 +183,11 @@
         include "conn.php";
         session_start();
 
-        $id_chosen_player = $_POST["chosen_player"];
-        
+        $id_chosen_player = $_POST["chosen_player"]; 
         $player_id = $_SESSION["player_id"];
+        $time_player = $_POST["time_spent"];
 
-        $sql_update = "UPDATE players set p_played = 1, id_p_choice = $id_chosen_player WHERE id=" . $player_id;
+        $sql_update = "UPDATE players set time_spent = $time_player, p_played = 1, id_p_choice = $id_chosen_player WHERE id=" . $player_id;
         $res = $conn->query($sql_update);
         if (!$res){
             $error = mysqli_error($conn);
@@ -176,7 +207,7 @@
         
         $player_id = $_SESSION["player_id"];
 
-        $sql_update = "UPDATE players SET p_played = 0, id_p_choice = 0 WHERE id=" . $player_id;
+        $sql_update = "UPDATE players SET time_spent = 0, p_played = 0, id_p_choice = 0 WHERE id=" . $player_id;
         $res = $conn->query($sql_update);
         if ($res) {
             $msg = "player updated";
@@ -184,7 +215,8 @@
         } else {
             return "error";
         }
-    } 
+    }
+
     function get_all_players_online(){
         include "conn.php";
         
@@ -272,7 +304,7 @@
         $nbr_persons_played = "SELECT COUNT(*) FROM players WHERE p_played = 1 AND logged = 1 AND continued = 1 AND id_game_session = " . $id_curr_game_session;
 
         if ($conn->query($nbr_persons_played)->fetch_array()[0] != '0'){
-            $request = "UPDATE players SET p_played = 0 WHERE logged = 1 AND continued = 1"; /*id=" . $identifiant;*/
+            $request = "UPDATE players SET time_spent = 0, p_played = 0 WHERE logged = 1 AND continued = 1"; /*id=" . $identifiant;*/
             $conn->query($request);
         }
     }

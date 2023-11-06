@@ -3,11 +3,12 @@ h3, div {
 }
 
 #mySecret {
-    min-height: 100px;
+    min-height: 12vh;
 }
 
 html, body {
     height: 100%;
+    width: 100%;
 }
 
 html {
@@ -18,6 +19,10 @@ html {
 body {
     display: table-cell;
     vertical-align: middle;
+}
+
+.container {
+    width: 70%;
 }
 
 /* .container {
@@ -59,25 +64,47 @@ body {
 }
 
 .confirm {
-    padding-top: 50px;
-    padding-bottom: 30px;
+    /* padding-top: 50px;
+    padding-bottom: 30px; */
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 40%;
 }
 
 #title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
     word-spacing: 100vw;
+}
+
+.gameTitle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
 }
 
 .main_title {
     text-decoration: none;
     line-height: 13vh;
     opacity: 70%;
+    font-size: 4vw;
 }
 
-.user_input {
+.username_input {
+    padding-top: 3%;
+    height: 20%;
+}
+
+.secret_input {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
     padding-top: 5%;
+    height: 40%;
 }
 
 .middle {
@@ -103,16 +130,8 @@ form {
     height: 100%;
 }
 
-#username {
-    height: 35%;
-}
-
-#mySecret {
-    height: 45%;
-}
-
 .file-lock {
-    height: 95%;
+    height: auto;
 }
 
 .column-portrait {

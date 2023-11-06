@@ -108,6 +108,10 @@
                       
                       echo "<h3 class='real_message_author text-primary'>L'auteur du message était : " . $name_array["p_name"] . "</h3>";
                       echo "</div></div><h5 class='gain text-primary'>";
+
+                      $time_spent = get_curr_player()["time_spent"];
+                      echo "Voici le temps que vous avez mis pour trouver le propriétaire de ce secret : " . $time_spent/1000 . " secondes.<br/>";
+
                       if ($post_variables[1] === $name_array["p_name"]){
                         echo "+ 20 points !";
                       } else {

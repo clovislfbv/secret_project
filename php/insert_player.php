@@ -28,7 +28,7 @@ $_SESSION["id_curr_game_session"] = $curr_game_session["id"];
 echo $player;
 echo $player_secret;
 
-$insert_player = "INSERT INTO players (p_name, id_secret, logged, score, p_played, continued, id_p_choice, id_game_session) VALUES ('" . $player . "', 0, 1, 0, 0, 0, 0,'" . $id_curr_game_session . "')";
+$insert_player = "INSERT INTO players (p_name, id_secret, logged, score, time_spent, p_played, continued, id_p_choice, id_game_session) VALUES ('" . $player . "', 0, 1, 0, 0, 0, 0, 0,'" . $id_curr_game_session . "')";
 if ($conn->query($insert_player) === true) {
   $id_player = $conn->insert_id; 
   $_SESSION["player_id"] = $id_player; 

@@ -1,5 +1,7 @@
 var $j = jQuery.noConflict();
 
+var doesPlayerExist; //a boolean from the checkPlayerExist function which says if a player exists or not
+var isUsernameUnique; //return a boolean which says if the username given by the user is already used by someone or not
 var totalPlayersOnline = 0; //return value nbr all players currently online for the function getNbrPlayersOnline
 var totalPlayersPlayed = 0; //return value nbr all players who already played for the function getNbrPlayersPlayed
 var progressbarValue; //current progressbar's value
@@ -30,6 +32,7 @@ var begun;
 var min = 0; //min pour le leeaderboard
 var max = 5; //max pour le leaderboard
 var enable = 0;
+var start_time = 0;
 
 export function actionMobileInit() {
   document.addEventListener("touchstart", touchHandler, true);
@@ -76,14 +79,44 @@ export function destroySessionVariable(){
   });
 }
 
+export function checkPlayerExist(){
+  let usernameToCheck = $j("#username").val();
+  let passwordToCheck = $j("#password").val();
+  jQuery.ajax({
+    type:"POST",
+    url: "../php/helper.php",
+    data: {action: "check_player_exist", username: usernameToCheck, password: passwordToCheck},
+    async: false,
+    success: function (res){
+      doesPlayerExist = res;
+    }
+  })
+  return doesPlayerExist;
+}
+
+export function checkSeveralUsernames(){
+  let usernameToCheck = $j("#username").val();
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "check_several_usernames", username: usernameToCheck},
+    async: false,
+    success: function (res) {
+      isUsernameUnique = res;
+    }
+  })
+  return isUsernameUnique;
+}
+
 /*******
  * update the played variable if a player drags a button to the dropper
  *******/
 export function updatePlayerWhenPlayed(choice) {
+  let timeSpent = (new Date() - start_time);
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
-    data: {action: "update_player_when_played", chosen_player: choice},
+    data: {action: "update_player_when_played", chosen_player: choice, time_spent: timeSpent},
     success: function (data) {
       updateProgressBar();
     },
@@ -538,6 +571,7 @@ export function getNbrMessagesDiscovered(){
 
 export function showSecret() {
   shown = 1;
+  start_time = new Date();
   if (!($j(".start_game").hasClass("d-none"))){
     $j('.start_game').addClass('d-none');
   }

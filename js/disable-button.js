@@ -5,16 +5,19 @@ var $j = jQuery.noConflict();
  * *******/
 
 function success() {
-    if($j("#username").val() === ""){
-      $j('#btn_sendform').prop('disabled', true);
+  if($j("#username").val() === ""){
+    $j('#btn_login').prop('disabled', true);
+    $j('#btn_register').prop('disabled', true);
+    console.log("mauvais");
+  } else {
+    if ($j("#password").val() === "") { 
+      $j('#btn_login').prop('disabled', true);
+      $j('#btn_register').prop('disabled', true);
       console.log("mauvais");
     } else {
-      if ($j("#mySecret").val() === "") { 
-        $j('#btn_sendform').prop('disabled', true);
-        console.log("mauvais");
-      } else {
-        $j('#btn_sendform').prop('disabled', false);
-        console.log("bon");
-      }
+      $j('#btn_login').prop('disabled', false);
+      $j('#btn_register').prop('disabled', false);
+      console.log("bon");
     }
   }
+}

@@ -1,4 +1,4 @@
-import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered } from "./helper.js";
+import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist } from "./helper.js";
 
 var $j = jQuery.noConflict();
 
@@ -17,6 +17,9 @@ $j(document).ready(function () {
   let save_body = $j("#card-body").html();
   let save_background = 0;
 
+  $j("#connModal").modal("hide")
+  var loginClicked = 0;
+
   const portrait = window.matchMedia("(orientation: portrait)").matches;
   if (portrait){
     $j("#card-body").css({
@@ -25,7 +28,7 @@ $j(document).ready(function () {
       "height": "20vh",
       "text-align": "center",
     })
-    $j("#card-body").html("<div class='column-portrait'><h1 class='text-primary'>Pour jouer, veuillez mettre votre écran en mode paysage</h1><div class='rotate' style='transform: rotate(-90deg);height: 300px;width: 300px;'><dotlottie-player src='../lottie-player/phone_rotation/phone_rotation.lottie' background='transparent' speed='1' style='width: 300px;height: 300px;transform: rotateY(180deg);' loop='' autoplay=''></dotlottie-player></div></div>");
+    $j("#card-body").html("<div class='column-portrait' style='height: 100%;'><h1 class='text-primary' style='font-size: 3vh;display: flex;height: 50%;align-items: flex-end;'>Pour jouer, veuillez mettre votre écran en mode paysage</h1><div class='rotate' style='transform: rotate(-90deg);height: 100%;width: 100%;/* width: 0%; */display: flex;justify-content: center;align-items: center;'><dotlottie-player src='../lottie-player/phone_rotation/phone_rotation.lottie' background='transparent' speed='1' style='/* display: flex; */width: 100%;height: 100%;transform: rotateY(180deg);' loop='' autoplay=''></dotlottie-player></div></div>");
     $j("h1").css({
       "font-size": "3vh",
     })
@@ -47,7 +50,7 @@ $j(document).ready(function () {
         "height": "20vh",
         "text-align": "center",
       })
-      $j("#card-body").html("<h1 class='text-primary'>Pour jouer, veuillez mettre votre écran en mode paysage</h1>");
+      $j("#card-body").html("<div class='column-portrait' style='height: 100%;'><h1 class='text-primary' style='font-size: 3vh;display: flex;height: 50%;align-items: flex-end;'>Pour jouer, veuillez mettre votre écran en mode paysage</h1><div class='rotate' style='transform: rotate(-90deg);height: 100%;width: 100%;/* width: 0%; */display: flex;justify-content: center;align-items: center;'><dotlottie-player src='../lottie-player/phone_rotation/phone_rotation.lottie' background='transparent' speed='1' style='/* display: flex; */width: 100%;height: 100%;transform: rotateY(180deg);' loop='' autoplay=''></dotlottie-player></div></div>");
       $j("h1").css({
         "font-size": "3vh",
       })
@@ -124,6 +127,17 @@ $j(document).ready(function () {
     }, 1500);
   })
 
+  $j("#btn_login").click(function (e){
+    console.log(checkPlayerExist());
+    if (checkPlayerExist() != 0){
+      console.log("Yessayyyyyy")
+    } else {
+      $j("#connModal").modal("show")
+      $j(".modal-title").text("Erreur de connexion")
+      $j("#modal-body").text("Nom d'utilisateur ou mot de passe incorrect.")
+    }
+  })
+
   $j(".start_game").click(function (e) {
     if (shown == 0){
       startGame();
@@ -195,10 +209,22 @@ $j(document).ready(function () {
   })
 
   $j("form[name='secret_form']").submit(function (e) {
-    if (hasGameBegun() == 1){
-      e.preventDefault();
-      alert("Une partie a déjà commencé veuillez attendre qu'elle se termine avant d'en rejoindre une nouvelle")
-    };
+    e.preventDefault();
+    
+    // if (hasGameBegun() == 1){
+    //   e.preventDefault();
+    //   $j("#connModal").modal("show")
+    //   $j(".modal-title").text("Erreur d'insertion de joueur")
+    //   $j("#modal-body").text("Une partie a déjà commencé veuillez attendre qu'elle se termine avant d'en rejoindre une nouvelle")
+    // } else {
+    //   console.log(checkSeveralUsernames());
+    //   if (checkSeveralUsernames() > 0){
+    //     e.preventDefault();
+    //     $j("#connModal").modal("show")
+    //     $j(".modal-title").text("Erreur d'insertion de joueur")
+    //     $j("#modal-body").text("Un utilisateur possède déjà ce nom. Veuillez choisir un autre nom.")
+    //   }
+    // }
   })
 
   var checkCloseX = 0;
