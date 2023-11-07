@@ -20,7 +20,10 @@ $j(document).ready(function () {
   if ($j("#connModal").length){
     $j("#connModal").modal("hide");
   }
-  var loginClicked = 0;
+
+  if ($j("#secret_modal").length){
+    $j("#secret_modal").modal("hide");
+  }
 
   const portrait = window.matchMedia("(orientation: portrait)").matches;
   if (portrait){
@@ -139,7 +142,26 @@ $j(document).ready(function () {
       $j("#connModal").modal("show")
       $j(".modal-title").text("Erreur de connexion")
       $j("#modal-body").text("Nom d'utilisateur ou mot de passe incorrect.")
+      e.preventDefault();
     }
+  })
+
+  $j("#btn_register").click(function (e, t){
+    console.log(e,t);
+    if (checkSeveralUsernames() != 0){
+      $j("#connModal").modal("show")
+      $j(".modal-title").text("Erreur de connexion")
+      $j("#modal-body").text("Un utilisateur possède déjà ce nom.")
+      e.preventDefault();
+    } else {
+      $j("#secret_modal").modal("show");
+    }
+  })
+
+  $j("#btn_secret").click(function (e, t){
+    $j("form[name='secret_form']").attr('action', "create_player.php");
+      $j("form[name='secret_form']").submit();
+      window.location.href = "create_player.php";
   })
 
   $j(".start_game").click(function (e) {

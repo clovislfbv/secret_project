@@ -30,11 +30,13 @@
                             include_once("conn.php");
                             require_once("helper.php");
 
-                            $player = $_POST['username'];
-                            $pass_word = $_POST["password"];
-
-                            $_SESSION["username"] = $player;
-                            $_SESSION["password"] = $pass_word;
+                            if (isset($_SESSION)){
+                                $player = $_SESSION["username"];
+                                $pass_word = $_SESSION["password"];
+                            } else {
+                                $player = $_POST['username'];
+                                $pass_word = $_POST["password"];
+                            }
 
                             if (isset($_SESSION["username"])){
                                 echo $_SESSION["username"];

@@ -21,3 +21,11 @@ function success() {
     }
   }
 }
+
+function success_secret() {
+  if ($j("#mySecret").val() === ""){
+    $j('#btn_secret').prop('disabled', true);
+  } else {
+    $j('#btn_secret').prop('disabled', false);
+  }
+}

@@ -58,7 +58,28 @@
                   <button class="btn btn-lg btn-outline-primary" type="submit" id="btn_login" disabled>Se connecter</button>
                 </div>
                 <div class="register">
-                  <button class="btn btn-lg btn-outline-primary" type="submit" id="btn_register" disabled>S'enregistrer</button>
+                  <button class="btn btn-lg btn-outline-primary" type="button" id="btn_register" disabled>S'enregistrer</button>
+                </div>
+                <div class="modal" id="secret_modal" tabindex="-1" role="dialog">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="text-primary">Veuillez écrire un secret</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <p class="text-primary">
+                          <textarea class="form-control border-primary" id="mySecret" name="mySecret" placeholder="Renseignez votre secret" aria-label="With textarea" onkeyup="success_secret()"></textarea>
+                        </p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="btn_secret" disabled>Enregister le secret</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </form>
             </div>
@@ -81,7 +102,7 @@
             <p class="text-primary" id="modal-body">Modal body text goes here.</p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary text-primary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
