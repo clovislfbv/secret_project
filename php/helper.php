@@ -98,6 +98,18 @@
         if ($_POST["action"] == "set_message_as_discovered"){
             set_message_as_discovered();
         }
+
+        if ($_POST["action"] == "add_new_secret"){
+            add_new_secret();
+        }
+
+        if ($_POST["action"] == "get_all_secrets_stored"){
+            get_all_secrets_stored();
+        }
+
+        if ($_POST["action"] == "get_nbr_total_secrets"){
+            get_nbr_total_secrets();
+        }
         
         if ($_POST["action"] == "update_score"){
             update_score();
@@ -449,6 +461,17 @@
         }
     }
 
+    function get_all_secrets_stored(){
+        include "conn.php";
+
+        $id_curr_player = get_curr_player()["id"];
+
+        $request = "SELECT * FROM mySecret WHERE id_player=" . $id_curr_player;
+        $output = $conn->query($request)->fetch_all(MYSQLI_ASSOC);
+
+        echo json_encode($output);
+    }
+
     function get_nbr_total_secrets(){
         include "conn.php";
         
@@ -457,7 +480,19 @@
         $request = "SELECT COUNT(*) FROM mySecret WHERE id_player=" . $id_curr_player;
         $output = $conn->query($request)->fetch_array();
 
-        return $output[0];
+        echo $output[0];
+    }
+
+    function add_new_secret(){
+        include "conn.php";
+
+        $id_curr_player = get_curr_player()["id"];
+        $new_secret = $_POST["secret"];
+
+        $request = "INSERT INTO mysecret (p_secret, id_player, discovered, random_choice) VALUES ('" . $new_secret . "', '". $id_curr_player ."', 0, 0)";
+        $output = $conn->query($request);
+
+        echo $output;
     }
 
     function get_nbr_message_discovered(){

@@ -9,6 +9,9 @@ var test; //array of all players currently online
 var test2; //array of all players disconnected
 var test3; //name of the player currently playing
 var player; //player returned by getPlayerById
+var WasSecretadded; //a boolean from the addNewSecret function which says if a new secret has successfuly been added or not
+var nbr_total_secrets; //an int from the getNbrTotalSecrets function that says the number of secrets that the user added to the game
+var all_secrets_stored;
 var all_players_logged = []; //array of all players currently online
 var total_players_logged; //nbr of all players online
 var all_players_disconnected; //array of all players disconnected
@@ -453,6 +456,73 @@ export function loading(){
       $j(".waiting-players").addClass("d-none");
     }
   }, 3000)
+}
+
+export function getAllSecretsStored(){
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "get_all_secrets_stored"},
+    async: false,
+    success: function (res) {
+      all_secrets_stored = res;
+    } 
+  })
+  return all_secrets_stored;
+}
+
+export function checkSecretAlreadyStored(secretToCheck){
+  let all_secrets = JSON.parse(getAllSecretsStored());
+  let found = 0;
+  all_secrets.forEach(function(element){
+    if (secretToCheck == decodeSecret(element.p_secret)){
+      found = 1
+    }
+  })
+  return found;
+}
+
+export function getNbrTotalSecrets(){
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "get_nbr_total_secrets"},
+    async: false,
+    success: function (res) {
+      nbr_total_secrets = res;
+    }
+  })
+  return nbr_total_secrets;
+}
+
+export function displayNbrTotalSecrets(){
+  let nbr_secrets = getNbrTotalSecrets();
+  if (nbr_secrets != 1){
+    $j(".total_secrets").text("Vous avez " + nbr_secrets + " secrets. Que voulez-vous faire ?")
+  } else {
+    $j(".total_secrets").text("Vous avez " + nbr_secrets + " secret. Que voulez-vous faire ?")
+  }
+  setInterval(function (){
+    nbr_secrets = getNbrTotalSecrets();
+    if (nbr_secrets != 1){
+      $j(".total_secrets").text("Vous avez " + nbr_secrets + " secrets. Que voulez-vous faire ?")
+    } else {
+      $j(".total_secrets").text("Vous avez " + nbr_secrets + " secret. Que voulez-vous faire ?")
+    }
+  }, 1500)
+}
+
+export function addNewSecret(){
+  let new_secret = $j("#mySecret").val();
+  jQuery.ajax({
+    type:"POST",
+    url: "../php/helper.php",
+    data: {action: "add_new_secret", secret: new_secret},
+    success: function (res) {
+      WasSecretadded = res
+    }
+  })
+  return WasSecretadded;
 }
 
 export function getAuthorRandomSecret(){

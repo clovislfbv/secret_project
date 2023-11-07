@@ -1,4 +1,4 @@
-import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist } from "./helper.js";
+import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored } from "./helper.js";
 
 var $j = jQuery.noConflict();
 
@@ -23,6 +23,14 @@ $j(document).ready(function () {
 
   if ($j("#secret_modal").length){
     $j("#secret_modal").modal("hide");
+  }
+
+  if ($j("#add_secret_modal").length){
+    $j("#add_secret_modal").modal("hide");
+  }
+
+  if ($j("#list_secrets_modal").length){
+    $j("#list_secrets_modal").modal("hide");
   }
 
   const portrait = window.matchMedia("(orientation: portrait)").matches;
@@ -160,8 +168,37 @@ $j(document).ready(function () {
 
   $j("#btn_secret").click(function (e, t){
     $j("form[name='secret_form']").attr('action', "create_player.php");
-      $j("form[name='secret_form']").submit();
-      window.location.href = "create_player.php";
+    $j("form[name='secret_form']").submit();
+    window.location.href = "create_player.php";
+  })
+
+  $j("#btn_add_secret").click(function (e){
+    $j("#add_secret_modal").modal("show");
+  })
+
+  $j("#btn_add_secret_modal").click(function(e) {
+    let secretToCheck = $j("#mySecret").val();
+    if (checkSecretAlreadyStored(secretToCheck)){
+      e.preventDefault();
+      $j(".invalid-feedback").removeClass("d-none");
+    } else {
+      addNewSecret();
+      $j("#mySecret").val("");
+      $j("#add_secret_modal").modal("hide");
+    }
+  })
+
+  $j("#btn_list_secrets").click(function(e){
+    let all_secrets = JSON.parse(getAllSecretsStored());
+    let output = "";
+    console.log(all_secrets);
+
+    all_secrets.forEach(function(element){
+      output += "<li>" + element.p_secret + "</li>";
+    })
+    $j(".list_secrets_body").html(output);
+
+    $j("#list_secrets_modal").modal("show");
   })
 
   $j(".start_game").click(function (e) {
@@ -234,22 +271,13 @@ $j(document).ready(function () {
     window.location.href = "../php/index.php";
   })
 
-  $j("form[name='secret_form']").submit(function (e) {
-    
-    // if (hasGameBegun() == 1){
-    //   e.preventDefault();
-    //   $j("#connModal").modal("show")
-    //   $j(".modal-title").text("Erreur d'insertion de joueur")
-    //   $j("#modal-body").text("Une partie a déjà commencé veuillez attendre qu'elle se termine avant d'en rejoindre une nouvelle")
-    // } else {
-    //   console.log(checkSeveralUsernames());
-    //   if (checkSeveralUsernames() > 0){
-    //     e.preventDefault();
-    //     $j("#connModal").modal("show")
-    //     $j(".modal-title").text("Erreur d'insertion de joueur")
-    //     $j("#modal-body").text("Un utilisateur possède déjà ce nom. Veuillez choisir un autre nom.")
-    //   }
-    // }
+  $j("form[name='start_game_form']").submit(function (e) {
+    if (hasGameBegun() == 1){
+      e.preventDefault();
+      $j("#connModal").modal("show")
+      $j(".modal-title").text("Erreur d'insertion de joueur")
+      $j("#modal-body").text("Une partie a déjà commencé veuillez attendre qu'elle se termine avant d'en rejoindre une nouvelle")
+    }
   })
 
   var checkCloseX = 0;
