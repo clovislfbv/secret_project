@@ -26,8 +26,10 @@ function success_secret() {
   console.log($j("#mySecret").val());
   if ($j("#mySecret").val() === ""){
     $j('#btn_add_secret_modal').prop('disabled', true);
+    $j('#btn_secret').prop('disabled', true);
   } else {
     $j('#btn_add_secret_modal').prop('disabled', false);
+    $j('#btn_secret').prop('disabled', false);
   }
   $j(".invalid-feedback").addClass("d-none");
 }

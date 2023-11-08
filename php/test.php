@@ -60,7 +60,7 @@
                 <div class="register">
                   <button class="btn btn-lg btn-outline-primary" type="button" id="btn_register" disabled>S'enregistrer</button>
                 </div>
-                <div class="modal" id="secret_modal" tabindex="-1" role="dialog">
+                <div class="modal" id="secret_modal" data-backdrop="static" tabindex="-1" role="dialog">
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
                       <div class="modal-header">

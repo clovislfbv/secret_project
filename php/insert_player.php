@@ -22,13 +22,19 @@ $_SESSION["played"] = 0;
 $_SESSION["began"] = 0;
 $_SESSION["on_get"] = 0;
 $_SESSION["hidden"] = 0;
-$_SESSION["id_curr_game_session"] = $curr_game_session["id"];
+$_SESSION["id_curr_game_session"] = $id_curr_game_session;
 
 echo $player;
-echo $player_secret;
+echo $player_id;
+echo $id_curr_game_session;
 
-$insert_player = "UPDATE players SET id_game_session ='" . $id_curr_game_session . "'WHERE id='" . $player_id . "')";
-if ($conn->query($insert_player) === true) {
+$insert_player = "UPDATE players SET id_game_session =" . $id_curr_game_session . ", p_played = 0 WHERE id=" . $player_id;
+$output = $conn->query($insert_player);
+echo $output;
+if ($output) {
+  $update_secret = "UPDATE mySecret SET discovered = 0, random_choice = 0 WHERE id_player=" . $player_id;
+  $conn->query($update_secret);
+
   $update_nbr_players = "UPDATE game_session SET nbrplayers = nbrplayers + 1 WHERE id = '" . $id_curr_game_session . "'";
   $conn->query($update_nbr_players);
 };
@@ -42,6 +48,6 @@ mysqli_close($conn);
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="../css/theme.css">
-    <!-- <meta http-equiv = "refresh" content="0; get_player.php">  -->
+    <meta http-equiv = "refresh" content="0; get_player.php">
   </head>
 </html> 

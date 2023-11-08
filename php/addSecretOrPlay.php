@@ -64,7 +64,13 @@
                 </div>
                 <div class="body-main">
                     <div class="card">
-                        <div class="card-body">
+                        <div class="card-body" id="addSecretOrPlay-body">
+                            <div class="alert alert-primary alert-dismissable fade success_secret" data-dismiss="alert" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true" data-dismiss="alert">×</span>
+                                </button>
+                                <strong>Well done!</strong> You successfully read this important alert message.
+                            </div>
                             <h3 class="total_secrets">
                                 <script type="module">
                                     import { displayNbrTotalSecrets } from "../js/helper.js";
@@ -139,6 +145,7 @@
                     <ul class="text-primary list_secrets_body"></ul>
                 </div>
                 <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="btn_save_list_secrets">Enregister la liste de secrets</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                 </div>
             </div>

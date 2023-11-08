@@ -359,7 +359,7 @@
 
         $id_curr_game_session = $_SESSION['id_curr_game_session'];
 
-        $setMarker = "UPDATE mySecret, players SET mySecret.random_choice = 1 WHERE mySecret.discovered = 0 AND mySecret.id = players.id_secret AND players.logged = 1 AND players.id_game_session =" . $id_curr_game_session . " ORDER BY RAND() LIMIT 1";
+        $setMarker = "UPDATE mySecret, players SET mySecret.random_choice = 1 WHERE mySecret.discovered = 0 AND mySecret.id_player = players.id AND players.logged = 1 AND players.id_game_session =" . $id_curr_game_session . " ORDER BY RAND() LIMIT 1";
         $conn2->query($setMarker);
     }
 
@@ -487,7 +487,7 @@
         include "conn.php";
 
         $id_curr_player = get_curr_player()["id"];
-        $new_secret = $_POST["secret"];
+        $new_secret = htmlspecialchars($_POST["secret"], ENT_QUOTES);
 
         $request = "INSERT INTO mysecret (p_secret, id_player, discovered, random_choice) VALUES ('" . $new_secret . "', '". $id_curr_player ."', 0, 0)";
         $output = $conn->query($request);
@@ -509,6 +509,8 @@
 
     function set_message_as_discovered(){
         include "conn.php";
+
+        var_dump($_SESSION["secret_id"]);
 
         $secret_discovered = "UPDATE mysecret SET discovered = 1 WHERE id=" . $_SESSION["secret_id"];
         $conn->query($secret_discovered);

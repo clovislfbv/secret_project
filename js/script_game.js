@@ -182,9 +182,16 @@ $j(document).ready(function () {
       e.preventDefault();
       $j(".invalid-feedback").removeClass("d-none");
     } else {
-      addNewSecret();
-      $j("#mySecret").val("");
-      $j("#add_secret_modal").modal("hide");
+      if (addNewSecret()){
+        $j("#mySecret").val("");
+        $j("#add_secret_modal").modal("hide");
+        $j(".success_secret").addClass("show");
+        setTimeout(() => {
+          $j(".success_secret").removeClass("show");
+        }, 3000);
+      } else {
+        console.log("Erreur insertion secret");
+      }
     }
   })
 
@@ -194,7 +201,7 @@ $j(document).ready(function () {
     console.log(all_secrets);
 
     all_secrets.forEach(function(element){
-      output += "<li>" + element.p_secret + "</li>";
+      output += "<li><button type='button' class='btn btn-secondary secret' data-bs-toggle='button'>" + element.p_secret + "</button></li>";
     })
     $j(".list_secrets_body").html(output);
 

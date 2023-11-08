@@ -520,7 +520,7 @@ export function addNewSecret(){
     data: {action: "add_new_secret", secret: new_secret},
     success: function (res) {
       WasSecretadded = res
-    }
+    },
   })
   return WasSecretadded;
 }
@@ -737,7 +737,7 @@ export function showSecret() {
         "width" : $j("#secret_message").val().length * 9,
       })*/
       if ($j(".secret_id_played").val().length == 0){
-        $j(".secret_id_played").val(random_message["id_secret"]);
+        $j(".secret_id_played").val(random_message["0"]);
       }
   }, 1000) // NOUBLIE PAS DE CHANGER CETTE VALUE
   author = getAuthorRandomSecret();
