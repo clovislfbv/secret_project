@@ -13,6 +13,7 @@ var WasSecretadded; //a boolean from the addNewSecret function which says if a n
 var nbr_total_secrets; //an int from the getNbrTotalSecrets function that says the number of secrets that the user added to the game
 var all_secrets_stored;
 var wasSecretDeleted;
+var nbrSecretsEnabled;
 var isSecretDisabled; //boolean to say if a secret has successfully been set as disabled or not
 var isSecretEnabled; //boolean to say if a secret has successfully been set as enabled or not
 var all_players_logged = []; //array of all players currently online
@@ -803,6 +804,19 @@ export function deleteSecret(id_secret){
     }
   })
   return wasSecretDeleted;
+}
+
+export function getNbrSecretsEnabled(){
+  jQuery.ajax({
+    type:"POST",
+    url: "../php/helper.php",
+    data: {action: "get_nbr_secrets_enabled"},
+    async: false,
+    success: function(res) {
+      nbrSecretsEnabled = res
+    }
+  })
+  return nbrSecretsEnabled;
 }
 
 export function getLeaderboard() {

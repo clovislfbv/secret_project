@@ -107,6 +107,10 @@
             set_secret_as_enabled();
         }
 
+        if ($_POST["action"] == "get_nbr_secrets_enabled"){
+            get_nbr_secrets_enabled();
+        }
+
         if ($_POST["action"] == "delete_secret"){
             delete_secret();
         }
@@ -568,7 +572,7 @@
 
         $id_curr_player = get_curr_player()["id"];
 
-        $request = "SELECT COUNT(*) FROM mysecret WHERE disabled=0 AND id_player=" . $id_curr_player;
+        $request = "SELECT COUNT(*) FROM mysecret WHERE (disabled=0 OR disabled IS NULL) AND id_player=" . $id_curr_player;
         $output = $conn->query($request)->fetch_array();
 
         echo $output[0];

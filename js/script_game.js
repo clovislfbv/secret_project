@@ -1,4 +1,4 @@
-import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret} from "./helper.js";
+import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled} from "./helper.js";
 
 var $j = jQuery.noConflict();
 
@@ -203,9 +203,9 @@ $j(document).ready(function () {
     all_secrets.forEach(function(element){
       console.log(element);
       if (element.disabled == 1){
-        output += "<li id='" + element.id + "-secret'><button type='button' class='btn btn-secondary active secret-list-btn' id='" + element.id + "-secret' data-bs-toggle='button'>" + element.p_secret + "</button> <img class='poubelle' id='" + element.id + "' src='../images/bin.png' alt='bin-logo'> </li>";
+        output += "<li id='" + element.id + "-secret-line'><button type='button' class='btn btn-secondary active secret-list-btn' id='" + element.id + "-secret' data-bs-toggle='button'>" + element.p_secret + "</button> <img class='poubelle' id='" + element.id + "' src='../images/bin.png' alt='bin-logo'> </li>";
       } else {
-        output += "<li id='" + element.id + "-secret'><button type='button' class='btn btn-secondary secret-list-btn' id='" + element.id + "-secret' data-bs-toggle='button'>" + element.p_secret + "</button><img class='poubelle' id='" + element.id + "' src='../images/bin.png' alt='bin-logo'></li>";
+        output += "<li id='" + element.id + "-secret-line'><button type='button' class='btn btn-secondary secret-list-btn' id='" + element.id + "-secret' data-bs-toggle='button'>" + element.p_secret + "</button><img class='poubelle' id='" + element.id + "' src='../images/bin.png' alt='bin-logo'></li>";
       }
     })
     $j(".list_secrets_body").html(output);
@@ -213,22 +213,34 @@ $j(document).ready(function () {
     $j("#list_secrets_modal").modal("show");
 
     $j(".secret-list-btn").click(function(){
+      console.log(getNbrSecretsEnabled());
       console.log("freofreiurgh");
       let new_id = this.id.replace("-secret", "");
       if ($j(this).hasClass("active")){
-        setSecretAsDisabled(new_id);
+        if (getNbrSecretsEnabled()-1 > 0){
+          setSecretAsDisabled(new_id);
+        } else {
+          $j("#edits-not-saved").removeClass("d-none");
+          $j(this).removeClass("active");
+        }
       } else {
         setSecretAsEnabled(new_id);
       }
     });
 
     $j(".poubelle").click(function(e){
-      console.log("test");
-      $j("#" + this.id + "-secret").removeClass("active");
-      $j("#" + this.id + "-secret").addClass("d-none");
-      $j("#" + this.id).addClass("d-none");
-      console.log(this.id)
-      deleteSecret(this.id);
+      let value = "#" + this.id + "-secret";
+      console.log($j(value).hasClass("active") + " " + value);
+      if ($j(value).hasClass("active") || getNbrSecretsEnabled()-1 > 0){
+        console.log("test");
+        $j("#" + this.id + "-secret").removeClass("active");
+        $j("#" + this.id + "-secret-line").addClass("d-none");
+        $j("#" + this.id).addClass("d-none");
+        console.log(this.id)
+        deleteSecret(this.id);
+      } else {
+        $j("#edits-not-saved").removeClass("d-none");
+      }
     });
   });
 
@@ -432,6 +444,10 @@ $j(document).ready(function () {
         showSecret();
         shown = 1;
       }, 2500)
+    }
+
+    if (getNbrSecretsEnabled() > 1){
+      $j("#edits-not-saved").addClass("d-none");
     }
 
     /*if (window.location.pathname == "/secret_project/php/result.php" && getNbrSecretsNotDiscovered() == 0){
