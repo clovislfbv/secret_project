@@ -99,6 +99,18 @@
             set_message_as_discovered();
         }
 
+        if ($_POST["action"] == "set_secret_as_disabled"){
+            set_secret_as_disabled();
+        }
+        
+        if ($_POST["action"] == "set_secret_as_enabled"){
+            set_secret_as_enabled();
+        }
+
+        if ($_POST["action"] == "delete_secret"){
+            delete_secret();
+        }
+
         if ($_POST["action"] == "add_new_secret"){
             add_new_secret();
         }
@@ -510,10 +522,56 @@
     function set_message_as_discovered(){
         include "conn.php";
 
-        var_dump($_SESSION["secret_id"]);
-
         $secret_discovered = "UPDATE mysecret SET discovered = 1 WHERE id=" . $_SESSION["secret_id"];
         $conn->query($secret_discovered);
+    }
+
+    function set_secret_as_disabled(){
+        include "conn.php";
+
+        $secret_id = $_POST["id"];
+
+        $id_curr_player = get_curr_player()["id"];
+
+        $request = "UPDATE mysecret SET disabled=1 WHERE id=" . $secret_id . " AND id_player=" . $id_curr_player;
+        $output = $conn->query($request);
+
+        echo $output;
+    }
+
+    function set_secret_as_enabled(){
+        include "conn.php";
+
+        $secret_id = $_POST["id"];
+
+        $id_curr_player = get_curr_player()["id"];
+
+        $request = "UPDATE mysecret SET disabled=0 WHERE id=" . $secret_id . " AND id_player=" . $id_curr_player;
+        $output = $conn->query($request);
+
+        echo $output;
+    }
+
+    function delete_secret(){
+        include "conn.php";
+
+        $secret_id = $_POST["id"];
+
+        $request = "DELETE FROM mySecret WHERE id=" . $secret_id;
+        $output = $conn->query($request);
+
+        echo $output;
+    }
+
+    function get_nbr_secrets_enabled(){
+        include "conn.php";
+
+        $id_curr_player = get_curr_player()["id"];
+
+        $request = "SELECT COUNT(*) FROM mysecret WHERE disabled=0 AND id_player=" . $id_curr_player;
+        $output = $conn->query($request)->fetch_array();
+
+        echo $output[0];
     }
 
     function get_leaderboard(){

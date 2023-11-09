@@ -12,6 +12,9 @@ var player; //player returned by getPlayerById
 var WasSecretadded; //a boolean from the addNewSecret function which says if a new secret has successfuly been added or not
 var nbr_total_secrets; //an int from the getNbrTotalSecrets function that says the number of secrets that the user added to the game
 var all_secrets_stored;
+var wasSecretDeleted;
+var isSecretDisabled; //boolean to say if a secret has successfully been set as disabled or not
+var isSecretEnabled; //boolean to say if a secret has successfully been set as enabled or not
 var all_players_logged = []; //array of all players currently online
 var total_players_logged; //nbr of all players online
 var all_players_disconnected; //array of all players disconnected
@@ -518,6 +521,7 @@ export function addNewSecret(){
     type:"POST",
     url: "../php/helper.php",
     data: {action: "add_new_secret", secret: new_secret},
+    async: false,
     success: function (res) {
       WasSecretadded = res
     },
@@ -762,6 +766,43 @@ export function setMessageAsDiscovered(){
     url: "../php/helper.php",
     data: {action: "set_message_as_discovered"},
   })
+}
+
+export function setSecretAsDisabled(id_secret){
+  jQuery.ajax({
+    type:"POST",
+    url: "../php/helper.php",
+    data: {action: "set_secret_as_disabled", id: id_secret},
+    success: function (res) {
+      isSecretDisabled = res;
+    }
+  })
+  return isSecretDisabled;
+}
+
+export function setSecretAsEnabled(id_secret){
+  jQuery.ajax({
+    type:"POST",
+    url: "../php/helper.php",
+    data: {action: "set_secret_as_enabled", id: id_secret},
+    success: function (res) {
+      isSecretEnabled = res;
+    }
+  })
+  return isSecretEnabled;
+}
+
+export function deleteSecret(id_secret){
+  jQuery.ajax({
+    type:"POST",
+    url: "../php/helper.php",
+    data: {action: "delete_secret", id: id_secret},
+    success: function (res) {
+      console.log(res);
+      wasSecretDeleted = res;
+    }
+  })
+  return wasSecretDeleted;
 }
 
 export function getLeaderboard() {

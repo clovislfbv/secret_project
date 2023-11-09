@@ -69,7 +69,7 @@
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true" data-dismiss="alert">×</span>
                                 </button>
-                                <strong>Well done!</strong> You successfully read this important alert message.
+                                Vous avez enregistré votre secret avec succès !
                             </div>
                             <h3 class="total_secrets">
                                 <script type="module">
@@ -120,7 +120,7 @@
                     <div class="modal-body">
                     <p class="text-primary">
                         <textarea class="form-control border-primary" id="mySecret" name="mySecret" placeholder="Renseignez votre secret" aria-label="With textarea" onkeyup="success_secret()"></textarea>
-                        <div class="invalid-feedback d-none" style="display: block;">
+                        <div class="invalid-feedback d-none" id="secret-already-saved" style="display: block;">
                             Vous avez déjà enregistré ce secret.
                         </div>
                     </p>
@@ -143,6 +143,9 @@
                     </div>
                     <div class="modal-body">
                     <ul class="text-primary list_secrets_body"></ul>
+                    <div class="invalid-feedback d-none" id="edits-not-saved" style="display: block;">
+                        Vos modifications n'ont pas été enregistré car vous devez avoir au moins un secret actif pour jouer.
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" id="btn_save_list_secrets">Enregister la liste de secrets</button>

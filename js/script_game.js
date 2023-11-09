@@ -1,4 +1,4 @@
-import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored } from "./helper.js";
+import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret} from "./helper.js";
 
 var $j = jQuery.noConflict();
 
@@ -180,7 +180,7 @@ $j(document).ready(function () {
     let secretToCheck = $j("#mySecret").val();
     if (checkSecretAlreadyStored(secretToCheck)){
       e.preventDefault();
-      $j(".invalid-feedback").removeClass("d-none");
+      $j("#secret-already-saved").removeClass("d-none");
     } else {
       if (addNewSecret()){
         $j("#mySecret").val("");
@@ -201,11 +201,74 @@ $j(document).ready(function () {
     console.log(all_secrets);
 
     all_secrets.forEach(function(element){
-      output += "<li><button type='button' class='btn btn-secondary secret' data-bs-toggle='button'>" + element.p_secret + "</button></li>";
+      console.log(element);
+      if (element.disabled == 1){
+        output += "<li id='" + element.id + "-secret'><button type='button' class='btn btn-secondary active secret-list-btn' id='" + element.id + "-secret' data-bs-toggle='button'>" + element.p_secret + "</button> <img class='poubelle' id='" + element.id + "' src='../images/bin.png' alt='bin-logo'> </li>";
+      } else {
+        output += "<li id='" + element.id + "-secret'><button type='button' class='btn btn-secondary secret-list-btn' id='" + element.id + "-secret' data-bs-toggle='button'>" + element.p_secret + "</button><img class='poubelle' id='" + element.id + "' src='../images/bin.png' alt='bin-logo'></li>";
+      }
     })
     $j(".list_secrets_body").html(output);
 
     $j("#list_secrets_modal").modal("show");
+
+    $j(".secret-list-btn").click(function(){
+      console.log("freofreiurgh");
+      let new_id = this.id.replace("-secret", "");
+      if ($j(this).hasClass("active")){
+        setSecretAsDisabled(new_id);
+      } else {
+        setSecretAsEnabled(new_id);
+      }
+    });
+
+    $j(".poubelle").click(function(e){
+      console.log("test");
+      $j("#" + this.id + "-secret").removeClass("active");
+      $j("#" + this.id + "-secret").addClass("d-none");
+      $j("#" + this.id).addClass("d-none");
+      console.log(this.id)
+      deleteSecret(this.id);
+    });
+  });
+
+  // $j("#btn_save_list_secrets").click(function(e){
+  //   $j("#edits-not-saved").addClass("d-none");
+  //   let all_secrets = JSON.parse(getAllSecretsStored());
+  //   var actives = [];
+  //   var hiddens = [];
+
+  //   // Get all elements with the class 'my-class'
+  //   $j('.active').each(function() {
+  //       // Add each element to the 'elements' array
+  //       actives.push(this);
+  //   });
+
+  //   $j(".poubelle.d-none").each(function() {
+  //     hiddens.push(this);
+  //   })
+
+  //   console.log(hiddens);
+
+  //   if (actives.length + hiddens.length != all_secrets.length){
+  //     $j(".secret").each(function() {
+  //       console.log($j(this).hasClass('active'));
+  //       if ($j(this).hasClass('active')){
+  //         setSecretAsDisabled(this.id);
+  //       } else {
+  //         setSecretAsEnabled(this.id);
+  //       }
+  //     })
+  //     console.log("done");
+  //   } else {
+  //     $j("#edits-not-saved").removeClass("d-none");
+  //     console.log("error disable")
+  //   }
+  // })
+
+
+  $j("#list_secrets_modal").on("hide.bs.modal", function (e){
+    $j("#edits-not-saved").addClass("d-none");
   })
 
   $j(".start_game").click(function (e) {
