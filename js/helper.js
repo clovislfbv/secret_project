@@ -774,6 +774,7 @@ export function setSecretAsDisabled(id_secret){
     type:"POST",
     url: "../php/helper.php",
     data: {action: "set_secret_as_disabled", id: id_secret},
+    async: false,
     success: function (res) {
       isSecretDisabled = res;
     }
@@ -786,6 +787,7 @@ export function setSecretAsEnabled(id_secret){
     type:"POST",
     url: "../php/helper.php",
     data: {action: "set_secret_as_enabled", id: id_secret},
+    async: false,
     success: function (res) {
       isSecretEnabled = res;
     }

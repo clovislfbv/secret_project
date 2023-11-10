@@ -6,7 +6,7 @@
     <title>Discover my secret</title>
     <link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/theme.css">
-    <link rel="stylesheet" type="text/css" href="../css/not_logged.css">
+    <link rel="stylesheet" type="text/css" href="../css/addSecretOrPlay.css">
     <script src="../js/bootstrap/bootstrap.min.js"></script>
     <script src="../js/jquery.js"></script>
     <script src="../js/helper.js" type="module"></script>
@@ -63,32 +63,20 @@
                 </div>
                 </div>
                 <div class="body-main">
+                    <div class="alert alert-primary alert-dismissable fade success_secret" data-dismiss="alert" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true" data-dismiss="alert">×</span>
+                        </button>
+                        Votre nouveau secret a été enregistré avec succès !
+                    </div>
                     <div class="card">
                         <div class="card-body" id="addSecretOrPlay-body">
-                            <div class="alert alert-primary alert-dismissable fade success_secret" data-dismiss="alert" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true" data-dismiss="alert">×</span>
-                                </button>
-                                Vous avez enregistré votre secret avec succès !
-                            </div>
                             <h3 class="total_secrets">
                                 <script type="module">
                                     import { displayNbrTotalSecrets } from "../js/helper.js";
 
                                     displayNbrTotalSecrets();
                                 </script>
-                                <?php
-                                    // require_once("helper.php");
-                                    // $total = get_nbr_total_secrets();
-
-                                    // if ($total == 1){
-                                    //     echo "Vous avez " . $total . " secret. Que voulez-vous faire ?";     
-                                    // } else {
-                                    //     echo "Vous avez " . $total . " secrets. Que voulez-vous faire ?";
-                                    // }
-                                    // $user = $_SESSION["username"];
-                                    // $pswd = $_SESSION["password"];
-                                ?>
                             </h3>
                             <div class="add_secret">
                                 <button class="btn btn-lg btn-outline-primary" type="button" id="btn_add_secret">Ajouter un nouveau secret</button>
@@ -142,13 +130,21 @@
                     </button>
                     </div>
                     <div class="modal-body">
-                    <ul class="text-primary list_secrets_body"></ul>
+                    <div class="card zone-secrets-enabled border-primary">
+                        <div class="card-body zone-secrets-enabled-body">
+                            <table class="text-primary list_secrets_body_enabled"></table>
+                        </div>
+                    </div>
+                    <div class="card zone-secrets-disabled border-primary">
+                        <div class="card-body zone-secrets-disabled-body">
+                            <table class="text-primary list_secrets_body_disabled"></table>
+                        </div>
+                    </div>
                     <div class="invalid-feedback d-none" id="edits-not-saved" style="display: block;">
                         Vos modifications n'ont pas été enregistré car vous devez avoir au moins un secret actif pour jouer.
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" id="btn_save_list_secrets">Enregister la liste de secrets</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                 </div>
             </div>

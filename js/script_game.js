@@ -195,53 +195,60 @@ $j(document).ready(function () {
     }
   })
 
-  $j("#btn_list_secrets").click(function(e){
+  function display_player_secrets(){
     let all_secrets = JSON.parse(getAllSecretsStored());
-    let output = "";
-    console.log(all_secrets);
+    let output_enabled = "";
+    let output_disabled = ""
 
     all_secrets.forEach(function(element){
-      console.log(element);
       if (element.disabled == 1){
-        output += "<li id='" + element.id + "-secret-line'><button type='button' class='btn btn-secondary active secret-list-btn' id='" + element.id + "-secret' data-bs-toggle='button'>" + element.p_secret + "</button> <img class='poubelle' id='" + element.id + "' src='../images/bin.png' alt='bin-logo'> </li>";
+        output_disabled += "<tr id='" + element.id + "-secret-line'><td><button type='button' class='btn btn-secondary active secret-list-btn' id='" + element.id + "-secret' data-bs-toggle='button' style='width: 100%;white-space: inherit;word-break: break-word; text-align: justify;'>" + element.p_secret + "</button></td><td><img class='poubelle' id='" + element.id + "' src='../images/bin.png' alt='bin-logo'></td><td></td></tr>";
       } else {
-        output += "<li id='" + element.id + "-secret-line'><button type='button' class='btn btn-secondary secret-list-btn' id='" + element.id + "-secret' data-bs-toggle='button'>" + element.p_secret + "</button><img class='poubelle' id='" + element.id + "' src='../images/bin.png' alt='bin-logo'></li>";
+        output_enabled += "<tr id='" + element.id + "-secret-line'><td><button type='button' class='btn btn-secondary secret-list-btn' id='" + element.id + "-secret' data-bs-toggle='button' style='width: 100%;white-space: inherit;word-break: break-word; text-align: justify;'>" + element.p_secret + "</button></td><td><img class='poubelle' id='" + element.id + "' src='../images/bin.png' alt='bin-logo'></td><td></td></tr>";
       }
     })
-    $j(".list_secrets_body").html(output);
+    $j(".list_secrets_body_enabled").html(output_enabled);
+    $j(".list_secrets_body_disabled").html(output_disabled);
+  }
 
+  $j("#btn_list_secrets").click(function(e){
     $j("#list_secrets_modal").modal("show");
+    
+    display_player_secrets();
+  });
 
-    $j(".secret-list-btn").click(function(){
-      console.log(getNbrSecretsEnabled());
-      console.log("freofreiurgh");
-      let new_id = this.id.replace("-secret", "");
-      if ($j(this).hasClass("active")){
-        if (getNbrSecretsEnabled()-1 > 0){
-          setSecretAsDisabled(new_id);
-        } else {
-          $j("#edits-not-saved").removeClass("d-none");
-          $j(this).removeClass("active");
-        }
-      } else {
-        setSecretAsEnabled(new_id);
-      }
-    });
+  $j(document).on("click", ".poubelle", function(e){
+    let value = "#" + this.id + "-secret";
+    console.log($j(value).hasClass("active") + " " + value);
+    if ($j(value).hasClass("active") || getNbrSecretsEnabled()-1 > 0){
+      console.log("test");
+      $j("#" + this.id + "-secret").removeClass("active");
+      $j("#" + this.id + "-secret-line").addClass("d-none");
+      $j("#" + this.id).addClass("d-none");
+      console.log(this.id)
+      deleteSecret(this.id);
+    } else {
+      $j("#edits-not-saved").removeClass("d-none");
+    }
+  });
 
-    $j(".poubelle").click(function(e){
-      let value = "#" + this.id + "-secret";
-      console.log($j(value).hasClass("active") + " " + value);
-      if ($j(value).hasClass("active") || getNbrSecretsEnabled()-1 > 0){
-        console.log("test");
-        $j("#" + this.id + "-secret").removeClass("active");
-        $j("#" + this.id + "-secret-line").addClass("d-none");
-        $j("#" + this.id).addClass("d-none");
-        console.log(this.id)
-        deleteSecret(this.id);
+  $j(document).on("click", ".secret-list-btn", function(){
+    let new_id = this.id.replace("-secret", "");
+    console.log(new_id);
+    if ($j(this).hasClass("active")){
+      if (getNbrSecretsEnabled()-1 > 0){
+        setSecretAsDisabled(new_id);
+        console.log("disabled");
+        display_player_secrets();
       } else {
         $j("#edits-not-saved").removeClass("d-none");
+        $j(this).removeClass("active");
+        display_player_secrets();
       }
-    });
+    } else {
+      setSecretAsEnabled(new_id);
+      display_player_secrets();
+    }
   });
 
   // $j("#btn_save_list_secrets").click(function(e){

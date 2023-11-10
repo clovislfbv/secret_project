@@ -375,7 +375,7 @@
 
         $id_curr_game_session = $_SESSION['id_curr_game_session'];
 
-        $setMarker = "UPDATE mySecret, players SET mySecret.random_choice = 1 WHERE mySecret.discovered = 0 AND mySecret.id_player = players.id AND players.logged = 1 AND players.id_game_session =" . $id_curr_game_session . " ORDER BY RAND() LIMIT 1";
+        $setMarker = "UPDATE mySecret, players SET mySecret.random_choice = 1 WHERE mySecret.discovered = 0 AND mySecret.id_player = players.id AND players.logged = 1 AND mySecret.disabled = 0 AND players.id_game_session =" . $id_curr_game_session . " ORDER BY RAND() LIMIT 1";
         $conn2->query($setMarker);
     }
 
@@ -393,7 +393,7 @@
 
         $id_curr_game_session = get_current_game_session()["id"];
         
-        $getSecret = "SELECT * FROM mySecret, players WHERE mySecret.random_choice = 1 AND mySecret.id_player = players.id AND players.id_game_session = " . $id_curr_game_session;
+        $getSecret = "SELECT * FROM mySecret, players WHERE mySecret.random_choice = 1 AND mySecret.id_player = players.id AND mySecret.disabled = 0 AND players.id_game_session = " . $id_curr_game_session;
         $secret = $conn->query($getSecret);
         $check = $secret->fetch_array();
 
@@ -516,7 +516,7 @@
 
         $id_curr_game_session = get_current_game_session()["id"];
 
-        $request = "SELECT COUNT(*) FROM mySecret, players WHERE mySecret.discovered = 1 AND mySecret.id_player = players.id AND players.logged = 1 AND players.id_game_session =" . $id_curr_game_session;
+        $request = "SELECT COUNT(*) FROM mySecret, players WHERE mySecret.discovered = 1 AND mySecret.id_player = players.id AND players.logged = 1 AND mySecret.disabled = 0 AND players.id_game_session =" . $id_curr_game_session;
         $nbr_discovered = $conn->query($request);
         $nbr_discovered_array = $nbr_discovered->fetch_array();
 
@@ -598,7 +598,7 @@
 
         $id_curr_game_session = get_current_game_session()["id"];
 
-        $get_num_not_discovered = "SELECT COUNT(*) FROM mysecret, players WHERE mysecret.discovered = 0 AND players.id = mysecret.id_player AND players.id_game_session =" . $id_curr_game_session;
+        $get_num_not_discovered = "SELECT COUNT(*) FROM mysecret, players WHERE mysecret.discovered = 0 AND players.id = mysecret.id_player AND mySecret.disabled = 0 AND players.id_game_session =" . $id_curr_game_session;
         $length = $conn->query($get_num_not_discovered);
         $total = $length->fetch_array();
 
