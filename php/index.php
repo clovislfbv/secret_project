@@ -34,7 +34,7 @@
           <div class="col-6 right">
           <div class="card infos">
             <div class="card-body" id="infos-body">
-              <form name="secret_form" method="POST" action="insert_player.php">
+              <form name="secret_form" method="POST" action="#">
                 <div class="user_input input-group flex-nowrap username_input">
                   <span class="input-group-text bg-primary border-primary" id="addon-wrapping">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
@@ -52,11 +52,36 @@
                       <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
                     </svg>
                   </span>
-                  <textarea class="form-control border-primary" id="mySecret" name="mySecret" placeholder="Renseignez votre secret" aria-label="With textarea" onkeyup="success()"></textarea>
+                  <input type="text" class="form-control border-primary" id="password" name="password" placeholder="Renseignez votre mot de passe" aria-label="password" onkeyup="success()"/>
                 </div>
-
-                <div class="confirm">
-                  <button class="btn btn-lg btn-outline-primary" type="submit" id="btn_sendform">Continuer</button>
+                <div class="all_buttons">
+                  <div class="login">
+                    <button class="btn btn-lg btn-outline-primary" type="submit" id="btn_login" disabled>Se connecter</button>
+                  </div>
+                  <div class="register">
+                    <button class="btn btn-lg btn-outline-primary" type="button" id="btn_register" disabled>S'enregistrer</button>
+                  </div>
+                </div>
+                <div class="modal" id="secret_modal" data-keyboard="false" tabindex="-1" role="dialog">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="text-primary">Veuillez écrire un secret</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <p class="text-primary">
+                          <textarea class="form-control border-primary" id="mySecret" name="mySecret" placeholder="Renseignez votre secret" aria-label="With textarea" onkeyup="success_secret()"></textarea>
+                        </p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="btn_secret" disabled>Enregister le secret</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </form>
             </div>
@@ -70,13 +95,13 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Modal title</h5>
+            <h5 class="modal-title text-primary">Modal title</h5>
             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <p id="modal-body">Modal body text goes here.</p>
+            <p class="text-primary" id="modal-body">Modal body text goes here.</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

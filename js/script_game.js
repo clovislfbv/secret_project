@@ -41,13 +41,15 @@ $j(document).ready(function () {
       "height": "20vh",
       "text-align": "center",
     })
-    $j("#card-body").html("<div class='column-portrait' style='height: 100%;'><h1 class='text-primary' style='font-size: 3vh;display: flex;height: 50%;align-items: flex-end;'>Pour jouer, veuillez mettre votre écran en mode paysage</h1><div class='rotate' style='transform: rotate(-90deg);height: 100%;width: 100%;/* width: 0%; */display: flex;justify-content: center;align-items: center;'><dotlottie-player src='../lottie-player/phone_rotation/phone_rotation.lottie' background='transparent' speed='1' style='/* display: flex; */width: 100%;height: 100%;transform: rotateY(180deg);' loop='' autoplay=''></dotlottie-player></div></div>");
+    $j("#card-body").html("<div class='column-portrait' style='height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;'><h1 class='text-primary' style='font-size: 3vh;display: flex;height: 50%;align-items: flex-end;'>Pour jouer, veuillez mettre votre écran en mode paysage</h1><div class='rotate' style='transform: rotate(-90deg);height: 100%;width: 100%;/* width: 0%; */display: flex;justify-content: center;align-items: center;'><dotlottie-player src='../lottie-player/phone_rotation/phone_rotation.lottie' background='transparent' speed='1' style='/* display: flex; */width: 100%;height: 100%;transform: rotateY(180deg);' loop='' autoplay=''></dotlottie-player></div></div>");
     $j("h1").css({
       "font-size": "3vh",
     })
     if ($j(".whole_thing").css("background-image") != "none"){
       $j(".whole_thing").css({
         "background": "none",
+        "width": "100%",
+        "height": "51.5vh",
       })
       save_background = 1;
     }
@@ -63,13 +65,15 @@ $j(document).ready(function () {
         "height": "20vh",
         "text-align": "center",
       })
-      $j("#card-body").html("<div class='column-portrait' style='height: 100%;'><h1 class='text-primary' style='font-size: 3vh;display: flex;height: 50%;align-items: flex-end;'>Pour jouer, veuillez mettre votre écran en mode paysage</h1><div class='rotate' style='transform: rotate(-90deg);height: 100%;width: 100%;/* width: 0%; */display: flex;justify-content: center;align-items: center;'><dotlottie-player src='../lottie-player/phone_rotation/phone_rotation.lottie' background='transparent' speed='1' style='/* display: flex; */width: 100%;height: 100%;transform: rotateY(180deg);' loop='' autoplay=''></dotlottie-player></div></div>");
+      $j("#card-body").html("<div class='column-portrait' style='height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;'><h1 class='text-primary' style='font-size: 3vh;display: flex;height: 50%;align-items: flex-end;'>Pour jouer, veuillez mettre votre écran en mode paysage</h1><div class='rotate' style='transform: rotate(-90deg);height: 100%;width: 100%;/* width: 0%; */display: flex;justify-content: center;align-items: center;'><dotlottie-player src='../lottie-player/phone_rotation/phone_rotation.lottie' background='transparent' speed='1' style='/* display: flex; */width: 100%;height: 100%;transform: rotateY(180deg);' loop='' autoplay=''></dotlottie-player></div></div>");
       $j("h1").css({
         "font-size": "3vh",
       })
       if ($j(".whole_thing").css("background-image") != "none"){
         $j(".whole_thing").css({
           "background": "none",
+          "width": "100%",
+          "height": "51.5vh",
         })
         save_background = 1;
       }
@@ -229,6 +233,12 @@ $j(document).ready(function () {
       deleteSecret(this.id);
     } else {
       $j("#edits-not-saved").removeClass("d-none");
+      $j("#edits-not-saved").css({
+        "margin-bottom": "10%",
+      }),
+      $j(".zone-secrets-enabled").css({
+        "margin-bottom": "0",
+      })
     }
   });
 
@@ -242,6 +252,12 @@ $j(document).ready(function () {
         display_player_secrets();
       } else {
         $j("#edits-not-saved").removeClass("d-none");
+        $j("#edits-not-saved").css({
+          "margin-bottom": "10%",
+        }),
+        $j(".zone-secrets-enabled").css({
+          "margin-bottom": "0",
+        })
         $j(this).removeClass("active");
         display_player_secrets();
       }
@@ -288,6 +304,12 @@ $j(document).ready(function () {
 
   $j("#list_secrets_modal").on("hide.bs.modal", function (e){
     $j("#edits-not-saved").addClass("d-none");
+    $j("#edits-not-saved").css({
+      "margin-bottom": "0",
+    }),
+    $j(".zone-secrets-enabled").css({
+      "margin-bottom": "10%",
+    })
   })
 
   $j(".start_game").click(function (e) {
@@ -357,7 +379,7 @@ $j(document).ready(function () {
       killSession();
     }
     destroySessionVariable();
-    window.location.href = "../php/index.php";
+    window.location.href = "../php/addSecretOrPlay.php";
   })
 
   $j("form[name='start_game_form']").submit(function (e) {
@@ -455,6 +477,12 @@ $j(document).ready(function () {
 
     if (getNbrSecretsEnabled() > 1){
       $j("#edits-not-saved").addClass("d-none");
+      $j("#edits-not-saved").css({
+        "margin-bottom": "0",
+      }),
+      $j(".zone-secrets-enabled").css({
+        "margin-bottom": "10%",
+      })
     }
 
     /*if (window.location.pathname == "/secret_project/php/result.php" && getNbrSecretsNotDiscovered() == 0){

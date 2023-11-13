@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="../css/addSecretOrPlay.css">
     <script src="../js/bootstrap/bootstrap.min.js"></script>
     <script src="../js/jquery.js"></script>
+    <script src="../lottie-player/player/node_modules/@dotlottie/player-component/dist/dotlottie-player.js" type="module"></script> 
     <script src="../js/helper.js" type="module"></script>
     <script src="../js/script_game.js" type="module"></script>
     <script src="../js/disable-button.js"></script>
@@ -30,24 +31,32 @@
                             </svg>
                         </span>
                         <?php
-                            session_start();
                             include_once("conn.php");
                             require_once("helper.php");
+                            session_start();
 
                             if (isset($_SESSION["username"])){
                                 $player = $_SESSION["username"];
                                 $pass_word = $_SESSION["password"];
+                                $test = get_player_by_name_password($player, $pass_word);
+                                $_SESSION["player_id"] = $test["id"];
                             } else {
-                                $player = $_POST['username'];
-                                $pass_word = $_POST["password"];
-                                $_SESSION["username"] = $player;
-                                $_SESSION["password"] = $pass_word;
+                                if (isset($_POST['username'])){
+                                    $player = $_POST['username'];
+                                    $pass_word = $_POST["password"];
+                                    $_SESSION["username"] = $player;
+                                    $_SESSION["password"] = $pass_word;
+
+                                    $test = get_player_by_name_password($player, $pass_word);
+                                    $_SESSION["player_id"] = $test["id"];
+                                } else {
+                                    echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
+                                }
                             }
 
                             echo $player;
 
-                            $test = get_player_by_name_password($player, $pass_word);
-                            $_SESSION["player_id"] = $test["id"]
+                            
                         
                         ?>
                         </a>
@@ -69,26 +78,30 @@
                         </button>
                         Votre nouveau secret a été enregistré avec succès !
                     </div>
-                    <div class="card">
+                    <div class="card choices">
                         <div class="card-body" id="addSecretOrPlay-body">
-                            <h3 class="total_secrets">
-                                <script type="module">
-                                    import { displayNbrTotalSecrets } from "../js/helper.js";
+                            <div class="total-secrets">
+                                <h3 class="total_secrets">
+                                    <script type="module">
+                                        import { displayNbrTotalSecrets } from "../js/helper.js";
 
-                                    displayNbrTotalSecrets();
-                                </script>
-                            </h3>
-                            <div class="add_secret">
-                                <button class="btn btn-lg btn-outline-primary" type="button" id="btn_add_secret">Ajouter un nouveau secret</button>
+                                        displayNbrTotalSecrets();
+                                    </script>
+                                </h3>
                             </div>
-                            <div class="list_secrets">
-                                <button class="btn btn-lg btn-outline-primary" type="button" id="btn_list_secrets">Voir la liste de vos secrets déjà enregistré</button>
-                            </div>
-                            <form name="start_game_form" action="insert_player.php">
-                                <div class="play_game">
-                                    <button class="btn btn-lg btn-outline-primary" type="submit" id="btn_play_game">Jouer une partie</button>
+                            <div class="buttons-list">
+                                <div class="add_secret">
+                                    <button class="btn btn-lg btn-outline-primary" type="button" id="btn_add_secret">Ajouter un nouveau secret</button>
                                 </div>
-                            </form>
+                                <div class="list_secrets">
+                                    <button class="btn btn-lg btn-outline-primary" type="button" id="btn_list_secrets">Voir la liste de vos secrets déjà enregistré</button>
+                                </div>
+                                <form name="start_game_form" action="insert_player.php">
+                                    <div class="play_game">
+                                        <button class="btn btn-lg btn-outline-primary" type="submit" id="btn_play_game">Jouer une partie</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -124,24 +137,34 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="text-primary">Voici la liste des secrets que vous avez enregistré</h5>
+                    <!-- <h5 class="text-primary">Voici la liste des secrets que vous avez enregistré</h5> -->
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     </div>
                     <div class="modal-body">
+                    <div class="card border-primary">
+                        <div class="card-body">
+                            <h5 class="title-secrets-enabled text-primary">Les secrets ci-dessous seront les secrets qui seront utilisés à la prochaine partie</h5>
+                        </div>
+                    </div>
                     <div class="card zone-secrets-enabled border-primary">
                         <div class="card-body zone-secrets-enabled-body">
                             <table class="text-primary list_secrets_body_enabled"></table>
+                        </div>
+                    </div>
+                    <div class="invalid-feedback d-none" id="edits-not-saved" style="display: block;">
+                        Vos modifications n'ont pas été enregistré car vous devez avoir au moins un secret actif pour jouer.
+                    </div>
+                    <div class="card border-primary">
+                        <div class="card-body">
+                            <h5 class="title-secrets-disabled text-primary">Les secrets ci-dessous seront les secrets qui <strong style="text-decoration: underline;">NE</strong> seront <strong style="text-decoration: underline;">PAS</strong> utilisés à la prochaine partie</h5>
                         </div>
                     </div>
                     <div class="card zone-secrets-disabled border-primary">
                         <div class="card-body zone-secrets-disabled-body">
                             <table class="text-primary list_secrets_body_disabled"></table>
                         </div>
-                    </div>
-                    <div class="invalid-feedback d-none" id="edits-not-saved" style="display: block;">
-                        Vos modifications n'ont pas été enregistré car vous devez avoir au moins un secret actif pour jouer.
                     </div>
                 </div>
                 <div class="modal-footer">

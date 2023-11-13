@@ -104,7 +104,8 @@ body {
     flex-direction: row;
     align-items: stretch;
     padding-top: 5%;
-    height: 40%;
+    margin-top: 5%;
+    height: 30%;
 }
 
 .middle {
@@ -178,5 +179,13 @@ form {
     height: 7vh;
     display: flex;
     justify-content: center;
+    align-items: center;
+}
+
+.all_buttons {
+    display: flex;
+    flex-direction: row;
+    height: 45%;
+    justify-content: space-around;
     align-items: center;
 }

@@ -148,7 +148,7 @@
                       echo "<div class='scoreboard__podium-rank'>3</div></div></div></div></div>";
 
 
-                      echo "<div class='result_button output' id='res_button'><button type='button' class='btn btn-lg btn-outline-primary'>Quitter</button></div>";
+                      echo "<div class='result_button output' id='res_button'><button type='button' class='btn btn-lg btn-outline-primary'>Revenir au lobby</button></div>";
                     }
                   ?>
                   <!--<div class='wait4results'></div>-->
