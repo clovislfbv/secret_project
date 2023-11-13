@@ -145,7 +145,7 @@
                     <div class="modal-body">
                     <div class="card border-primary">
                         <div class="card-body">
-                            <h5 class="title-secrets-enabled text-primary">Les secrets ci-dessous seront les secrets qui seront utilisés à la prochaine partie</h5>
+                            <h5 class="title-secrets-enabled text-primary">Les secrets ci-dessous seront utilisés à la prochaine partie</h5>
                         </div>
                     </div>
                     <div class="card zone-secrets-enabled border-primary">
@@ -158,7 +158,7 @@
                     </div>
                     <div class="card border-primary">
                         <div class="card-body">
-                            <h5 class="title-secrets-disabled text-primary">Les secrets ci-dessous seront les secrets qui <strong style="text-decoration: underline;">NE</strong> seront <strong style="text-decoration: underline;">PAS</strong> utilisés à la prochaine partie</h5>
+                            <h5 class="title-secrets-disabled text-primary">Les secrets ci-dessous <strong style="text-decoration: underline;">NE</strong> seront <strong style="text-decoration: underline;">PAS</strong> utilisés à la prochaine partie</h5>
                         </div>
                     </div>
                     <div class="card zone-secrets-disabled border-primary">

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mar. 24 oct. 2023 à 15:22
+-- Généré le : lun. 13 nov. 2023 à 14:27
 -- Version du serveur : 10.10.2-MariaDB
 -- Version de PHP : 8.0.26
 
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `game_session` (
   `hasgamebegun` tinyint(4) DEFAULT NULL,
   `nbrplayers` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=225 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 -- --------------------------------------------------------
 
@@ -50,8 +50,9 @@ CREATE TABLE IF NOT EXISTS `mysecret` (
   `id_player` int(11) NOT NULL,
   `discovered` tinyint(1) NOT NULL,
   `random_choice` tinyint(1) DEFAULT NULL,
+  `disabled` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2148 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 -- --------------------------------------------------------
 
@@ -63,15 +64,17 @@ DROP TABLE IF EXISTS `players`;
 CREATE TABLE IF NOT EXISTS `players` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `p_name` varchar(255) NOT NULL,
+  `p_password` text NOT NULL,
   `id_secret` int(11) DEFAULT NULL,
   `logged` tinyint(1) NOT NULL,
   `score` int(11) DEFAULT NULL,
+  `time_spent` int(11) DEFAULT NULL,
   `p_played` tinyint(1) DEFAULT NULL,
   `continued` tinyint(4) DEFAULT NULL,
   `id_p_choice` int(11) DEFAULT NULL,
   `id_game_session` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2092 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

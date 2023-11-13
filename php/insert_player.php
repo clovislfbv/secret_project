@@ -2,7 +2,8 @@
 session_start();
 include_once("conn.php");
 require_once("helper.php");
-if (!(isset($_SESSION["player_id"])) || (is_logged() != '1')){
+
+if (!(isset($_SESSION["player_id"]))){
   echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
 } else {
   if (get_current_game_session() == null){
@@ -39,6 +40,9 @@ if (!(isset($_SESSION["player_id"])) || (is_logged() != '1')){
   
     $update_nbr_players = "UPDATE game_session SET nbrplayers = nbrplayers + 1 WHERE id = '" . $id_curr_game_session . "'";
     $conn->query($update_nbr_players);
+
+    $request = "UPDATE players SET score = 0 WHERE id= " . $player_id;
+    $conn->query($request);
   };
   
   mysqli_close($conn);
