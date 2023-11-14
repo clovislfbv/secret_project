@@ -87,10 +87,8 @@
                     $total = get_nbr_secrets_not_discovered();
 
                     if ($total == 0) {
-                      echo "<div class='end-title-comments'><div class='end card border-primary text-primary'><div class='card-body'><div class='id='end-title'><h2 class='comments'>Jeu terminé !</h2></div><h4 class='comments card-subtitle mb-2 text-muted'>Voici le classement finale !</h4></div></div></div>";
-                      echo "<div class='all_players'><div id='final_leaderboard' class='final_leaderboard text-primary'><div class='card-header leaderboard' style='background-color:black; border: 1px solid #FF550B;'><h1>classement finale des scores </h1></div><ul class='list-group list-group-flush'></ul></div></div>";
-                      echo "<div class='pagination-container'><div id='page-selection'></div></div>";
-
+                      echo "<div class='end card border-primary text-primary'><div class='card-body'><div class='id='end-title'><h2 class='comments'>Jeu terminé !</h2></div><h4 class='comments card-subtitle mb-2 text-muted'>Voici le classement finale !</h4></div></div>";
+                      echo "<div class='all_players'><div id='final_leaderboard' class='final_leaderboard text-primary'><div class='card-header leaderboard' style='background-color:black; border: 1px solid #FF550B;'><h1 class='final-leaderboard-title'>classement finale des scores </h1></div><div class='list-group list-group-flush list-players'></div></div><div class='pagination-container pagination-final-leaderboard'><div id='page-selection'></div></div></div>";
                     } else {
                       //echo "<form name='result_form' method='' action='get_player.php'>
                       echo "<div class='results border-primary card'><div class='results-card-body card-body'>";

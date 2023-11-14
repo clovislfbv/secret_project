@@ -28,6 +28,13 @@ body {
     padding: 20px;
 }
 
+#main_title {
+  width: 63%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 .left, .right {
     width: 50%;
     display: flex;
@@ -80,14 +87,16 @@ body {
     inset 0 0 0.2vw 0.2vw #FF550B,
     inset 0 0 0.25vw 0.2vw #C53C00;
 
-    width: 85vw;
-    height: 70vh;
+    width: 88vw;
+    height: 88vh;
 }
 
 #card-body {
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    height: 100%;
+    width: 100%;
 }
 
 .body-main {
@@ -105,11 +114,11 @@ body {
 }
 
 .not_shown{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding-right: 10%;
+  width: 37%;
+  display: flex;
+  justify-content: flex-start;
+  height: 100%;
+  align-items: flex-end;
 }
 
 .gain {
@@ -126,7 +135,7 @@ body {
 
 .main_title {
     text-decoration: none;
-    font-size: 1.5em;
+    font-size: 4vh;
 }
 
 .results {
@@ -424,5 +433,37 @@ body.dark-mode .scoreboard__bar {
 }
 
 .all_players {
+  width: 105%;
+  padding-left: 10%;
+}
+
+.end {
+  height: 25%;
+  width: 90%;
+  margin-top: 5%;
+  margin-bottom: 10%;
+  text-align: center;
+}
+
+.comments {
+  font-size: calc(2vh + 1vw);
+}
+
+.pagination-final-leaderboard {
+  height: 10%;
+}
+
+.final-leaderboard-title {
+  font-size: calc(2vh + 1vw);
+}
+
+.list-players {
   height: 70%;
+}
+
+.score {
+  display: flex;
+  font-size: calc(5px + 1vw);
+  height: 5vh;
+  align-items: center;
 }

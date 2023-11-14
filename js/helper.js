@@ -865,14 +865,14 @@ export function displayLeaderboard() {
     for (let i = min; i < max; i++){
       if (i < nbr_players){
         if (currPlayer["id"] == curr_leaderboard[i]["id"]){
-          output += "<li class='list-group-item score active' id='";
+          output += "<div class='list-group-item score active' id='";
         } else {
-          output += "<li class='list-group-item score' style='background-color: black; color: #FF550B;' id='";
+          output += "<div class='list-group-item score' style='background-color: black; color: #FF550B;' id='";
         }
 
         rank = i+1;
 
-        output += curr_leaderboard[i]["id"] + "'>" + rank + ". <span id='addon-wrapping'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'></path><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'></path></svg></span> " + curr_leaderboard[i]["p_name"] + " : " + curr_leaderboard[i]["score"] + " points </li>";
+        output += curr_leaderboard[i]["id"] + "'>" + rank + ". <span id='addon-wrapping'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'></path><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'></path></svg></span> " + curr_leaderboard[i]["p_name"] + " : " + curr_leaderboard[i]["score"] + " points </div>";
 
         if (nbrSecretsNotDiscovered == 0) {
           if (counter < 4) {
@@ -901,7 +901,7 @@ export function displayLeaderboard() {
           }
         }
       } else {
-        output += "<li class='list-group-item score' style='background-color: black; color: black;'>.</li>";
+        output += "<div class='list-group-item score' style='background-color: black; color: black;'>.</div>";
       }
     }
 

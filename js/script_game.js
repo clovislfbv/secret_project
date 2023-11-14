@@ -41,10 +41,7 @@ $j(document).ready(function () {
       "height": "20vh",
       "text-align": "center",
     })
-    $j("#card-body").html("<div class='column-portrait' style='height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;'><h1 class='text-primary' style='font-size: 3vh;display: flex;height: 50%;align-items: flex-end;'>Pour jouer, veuillez mettre votre écran en mode paysage</h1><div class='rotate' style='transform: rotate(-90deg);height: 100%;width: 100%;/* width: 0%; */display: flex;justify-content: center;align-items: center;'><dotlottie-player src='../lottie-player/phone_rotation/phone_rotation.lottie' background='transparent' speed='1' style='/* display: flex; */width: 100%;height: 100%;transform: rotateY(180deg);' loop='' autoplay=''></dotlottie-player></div></div>");
-    $j("h1").css({
-      "font-size": "3vh",
-    })
+    $j("#card-body").html("<div class='column-portrait' style='height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;'><h1 class='text-primary' style='font-size: 5vw;display: flex;height: 30%;align-items: flex-end;'>Pour jouer, veuillez mettre votre écran en mode paysage</h1><div class='rotate' style='transform: rotate(-90deg);height: 70%;width: 100%;/* width: 0%; */display: flex;justify-content: center;align-items: center;'><dotlottie-player src='../lottie-player/phone_rotation/phone_rotation.lottie' background='transparent' speed='1' style='/* display: flex; */width: 100%;height: 100%;transform: rotateY(180deg);' loop='' autoplay=''></dotlottie-player></div></div>");
     if ($j(".whole_thing").css("background-image") != "none"){
       $j(".whole_thing").css({
         "background": "none",
@@ -65,10 +62,7 @@ $j(document).ready(function () {
         "height": "20vh",
         "text-align": "center",
       })
-      $j("#card-body").html("<div class='column-portrait' style='height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;'><h1 class='text-primary' style='font-size: 3vh;display: flex;height: 50%;align-items: flex-end;'>Pour jouer, veuillez mettre votre écran en mode paysage</h1><div class='rotate' style='transform: rotate(-90deg);height: 100%;width: 100%;/* width: 0%; */display: flex;justify-content: center;align-items: center;'><dotlottie-player src='../lottie-player/phone_rotation/phone_rotation.lottie' background='transparent' speed='1' style='/* display: flex; */width: 100%;height: 100%;transform: rotateY(180deg);' loop='' autoplay=''></dotlottie-player></div></div>");
-      $j("h1").css({
-        "font-size": "3vh",
-      })
+      $j("#card-body").html("<div class='column-portrait' style='height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;'><h1 class='text-primary' style='font-size: 5vw;display: flex;height: 30%;align-items: flex-end;'>Pour jouer, veuillez mettre votre écran en mode paysage</h1><div class='rotate' style='transform: rotate(-90deg);height: 70%;width: 100%;/* width: 0%; */display: flex;justify-content: center;align-items: center;'><dotlottie-player src='../lottie-player/phone_rotation/phone_rotation.lottie' background='transparent' speed='1' style='/* display: flex; */width: 100%;height: 100%;transform: rotateY(180deg);' loop='' autoplay=''></dotlottie-player></div></div>");
       if ($j(".whole_thing").css("background-image") != "none"){
         $j(".whole_thing").css({
           "background": "none",
@@ -113,16 +107,16 @@ $j(document).ready(function () {
     for (let i = minimum; i < maximum; i++){
       if (i < nbr_players){
         if (currPlayer["id"] == curr_leaderboard[i]["id"]){
-          output += "<li class='list-group-item score active' id='";
+          output += "<div class='list-group-item score active' id='";
         } else {
-          output += "<li class='list-group-item score' style='background-color: black; color: #FF550B;' id='";
+          output += "<div class='list-group-item score' style='background-color: black; color: #FF550B;' id='";
         }
 
         rank = i+1;
 
-        output += curr_leaderboard[i]["id"] + "'>" + rank + ". <span id='addon-wrapping'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'></path><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'></path></svg></span> " + curr_leaderboard[i]["p_name"] + " : " + curr_leaderboard[i]["score"] + " points </li>";
+        output += curr_leaderboard[i]["id"] + "'>" + rank + ". <span id='addon-wrapping'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'></path><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'></path></svg></span> " + curr_leaderboard[i]["p_name"] + " : " + curr_leaderboard[i]["score"] + " points </div>";
       } else {
-        output += "<li class='list-group-item score' style='background-color: black; color: black;'>.</li>";
+        output += "<div class='list-group-item score' style='background-color: black; color: black;'>.</div>";
       }
     }
 
