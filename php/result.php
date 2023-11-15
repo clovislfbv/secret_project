@@ -97,8 +97,20 @@
                       $request = "SELECT p_name FROM players WHERE id = $author";
                       $name = $conn->query($request);
                       $name_array = $name->fetch_array();
+                      // $good_answer = false;
+                      // var_dump("avant : " . $good_answer);
+                      $bonus_score = 0;
 
                       if ($post_variables[1] === $name_array["p_name"]){
+                        $time_spent = get_curr_player()["time_spent"] / 1000;
+                        // $good_answer = 1;
+                        // var_dump("après : " . $good_answer);
+                        // if ($good_answer === 1 && $time_spent <= 5) {
+                        //   $bonus_score = 10;
+                        //   var_dump($bonus_score);
+                        // }
+                        $bonus_score = round(abs((1 - ($time_spent / 10 / 2)) * 10));
+                        
                         echo "<div class='result_message text-primary'><h1 class='card-title'>Bien joué !</h1><h3>Tu as trouvé la personne qui a écrite ce secret !</h3></div>";
                       } else {
                         echo "<div class='result_message text-primary card-title'><h1>Dommage !</h1><h3>Tu n'as pas réussi à trouver la personne qui a écrite ce secret !</h3></div>";
@@ -112,6 +124,9 @@
 
                       if ($post_variables[1] === $name_array["p_name"]){
                         echo "+ 20 points !";
+                        if ($time_spent >= 0 && $time_spent <= 20){
+                          echo $bonus_score;
+                        }
                       } else {
                         echo "+ 0 points !";
                       }

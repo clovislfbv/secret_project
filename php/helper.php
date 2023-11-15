@@ -612,17 +612,29 @@
     function update_score(){
         include "conn.php";
 
+        $bonus_score = 0;
+
         $id_chosen_player = $_POST["id_chosen_player"];
         $player_id = $_POST["player_id"];
         $id_curr_player = $_POST["curr_player_id"];
+        $time_spent = $_POST["time_player"];
         
         $sql_update = "UPDATE players SET p_played = 1, id_p_choice = $id_chosen_player WHERE id=" . $id_curr_player;
         $conn->query($sql_update);
 
+        $return_value = 2;
+
+        if ($time_spent >= 0 && $time_spent <= 20){
+            $bonus_score = round(abs((1 - (($time_spent / 10) / 2)) * 10));
+            $return_value = 1;
+        }
+
         if ($id_chosen_player == $player_id){
-            $sql_update = "UPDATE players SET score = score + 20, p_played = 1, id_p_choice = $id_chosen_player WHERE id=" . $id_curr_player; // update db
+            $sql_update = "UPDATE players SET score = score + 20 + $bonus_score, p_played = 1, id_p_choice = $id_chosen_player WHERE id=" . $id_curr_player; // update db
             $conn->query($sql_update);
         }
+
+        echo $bonus_score;
     }
 
     function has_game_begun(){

@@ -120,6 +120,7 @@ export function checkSeveralUsernames(){
  *******/
 export function updatePlayerWhenPlayed(choice) {
   let timeSpent = (new Date() - start_time);
+  console.log("temps joué : " + timeSpent)
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
@@ -647,6 +648,7 @@ export function getNbrMessagesDiscovered(){
 export function showSecret() {
   shown = 1;
   start_time = new Date();
+  console.log("le chronomètre a commencé")
   if (!($j(".start_game").hasClass("d-none"))){
     $j('.start_game').addClass('d-none');
   }
@@ -980,19 +982,22 @@ export function displayLeaderboard() {
   }, 2000);
 }
 
-export function updateScore(id_player, id_player_chosen, id_curr_player) {
+export function updateScore(id_player, id_player_chosen, id_curr_player, time_spent) {
+  let result;
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
-    data: {action: "update_score", player_id: id_player, id_chosen_player: id_player_chosen, curr_player_id: id_curr_player},
+    data: {action: "update_score", player_id: id_player, id_chosen_player: id_player_chosen, curr_player_id: id_curr_player, time_player: time_spent},
     async: false,
-    success: function () {
-      console.log("Score updated");
+    success: function (res) {
+      console.log(res);
+      result = res;
     },
     error: function (err) {
       console.log(err);
     }
   })
+  return result;
 }
 
 export function hasGameBegun(){

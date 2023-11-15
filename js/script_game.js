@@ -124,12 +124,13 @@ $j(document).ready(function () {
   });
 
   $j("#result_btn").click(function (e) {
-    updatePlayerContinued(JSON.parse(getcurrPlayer())["id"]);
+    let currPlayer = JSON.parse(getcurrPlayer());
+    updatePlayerContinued(currPlayer["id"]);
     author_random_message = getAuthorRandomSecret();
 
     let id_chosen_player = $j(".secret_id_played").val().split("-")[2];
-    console.log(id_chosen_player, author_random_message["id"], JSON.parse(getcurrPlayer())["id"]);
-    updateScore(id_chosen_player, author_random_message["id"], JSON.parse(getcurrPlayer())["id"]);
+    console.log(id_chosen_player, author_random_message["id"], currPlayer["id"], currPlayer["time_spent"]);
+    updateScore(id_chosen_player, author_random_message["id"], currPlayer["id"], currPlayer["time_spent"]/1000);
     shown = 0;
     result_clicked = 1;
     toto_clicked = 0;
