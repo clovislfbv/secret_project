@@ -27,12 +27,16 @@
             count_all_players_online();
         }
 
+        if ($_POST["action"] == "get_nbr_players_ingame"){
+            count_all_players_ingame();
+        }
+
         if ($_POST["action"] == "get_nbr_players_played"){
             get_nbr_players_played();
         }
 
-        if ($_POST["action"] == "get_all_players_online"){
-            get_all_players_online();
+        if ($_POST["action"] == "get_all_players_ingame"){
+            get_all_players_ingame();
         }
 
         if ($_POST["action"] == "get_all_players_disconnected"){
@@ -298,22 +302,21 @@
         }
     }
 
-    function get_all_players_online(){
+    function get_all_players_ingame(){
         include "conn.php";
-        
+
         $id_curr_game_session = get_current_game_session()["id"];
 
-        $request = "SELECT * FROM players WHERE logged = 1 AND id_game_session = " . $id_curr_game_session;
+        $request = "SELECT * FROM players WHERE logged = 1 AND ingame = 1 AND id_game_session = " . $id_curr_game_session;
         $elements = $conn->query($request);
 
-        $all_players_logged = $elements->fetch_all(MYSQLI_ASSOC);
-        echo json_encode($all_players_logged);
-        //var_dump($all_players_logged);
+        $all_players_ingame = $elements->fetch_all(MYSQLI_ASSOC);
+        echo json_encode($all_players_ingame);
     }
 
     function get_all_players_disconnected(){
         include "conn.php";
-        $request = "SELECT * FROM players WHERE logged = 0";
+        $request = "SELECT * FROM players WHERE logged = 0 OR ingame = 0";
         $elements = $conn->query($request);
 
         $all_players_disconnected = $elements->fetch_all(MYSQLI_ASSOC);
@@ -332,12 +335,23 @@
         echo $all[0]["count(*)"];
     }
 
+    function count_all_players_ingame(){
+        include "conn.php";
+
+        $id_curr_game_session = get_current_game_session()["id"];
+
+        $request = "SELECT count(*) FROM players WHERE logged = 1 AND ingame = 1 AND id_game_session = " . $id_curr_game_session;
+        $elements = $conn->query($request);
+        $all = $elements->fetch_all(MYSQLI_ASSOC);
+        echo $all[0]["count(*)"];
+    }
+
     function get_nbr_players_played(){
         include "conn.php";
 
         $id_curr_game_session = get_current_game_session()["id"];
         
-        $request = "SELECT * FROM players WHERE p_played = 1 AND logged = 1 AND id_game_session = " . $id_curr_game_session;
+        $request = "SELECT * FROM players WHERE p_played = 1 AND logged = 1 AND ingame = 1 AND id_game_session = " . $id_curr_game_session;
         $elements = $conn->query($request);
 
         $all_players_played = count($elements->fetch_all(MYSQLI_ASSOC));
@@ -393,10 +407,10 @@
         $identifiant = $_POST["id"];
         $id_curr_game_session = get_current_game_session()["id"];
 
-        $nbr_persons_played = "SELECT COUNT(*) FROM players WHERE p_played = 1 AND logged = 1 AND continued = 1 AND id_game_session = " . $id_curr_game_session;
+        $nbr_persons_played = "SELECT COUNT(*) FROM players WHERE p_played = 1 AND logged = 1 AND ingame = 1 AND continued = 1 AND id_game_session = " . $id_curr_game_session;
 
         if ($conn->query($nbr_persons_played)->fetch_array()[0] != '0'){
-            $request = "UPDATE players SET time_spent = 0, p_played = 0 WHERE logged = 1 AND continued = 1"; /*id=" . $identifiant;*/
+            $request = "UPDATE players SET time_spent = 0, p_played = 0 WHERE logged = 1 AND ingame = 1 AND continued = 1"; /*id=" . $identifiant;*/
             $conn->query($request);
         }
     }
@@ -428,7 +442,7 @@
 
         $id_curr_game_session = $_SESSION['id_curr_game_session'];
 
-        $setMarker = "UPDATE mySecret, players SET mySecret.random_choice = 1 WHERE mySecret.discovered = 0 AND mySecret.id_player = players.id AND players.logged = 1 AND mySecret.disabled = 0 AND players.id_game_session =" . $id_curr_game_session . " ORDER BY RAND() LIMIT 1";
+        $setMarker = "UPDATE mySecret, players SET mySecret.random_choice = 1 WHERE mySecret.discovered = 0 AND mySecret.id_player = players.id AND players.logged = 1 AND players.ingame = 1 AND mySecret.disabled = 0 AND players.id_game_session =" . $id_curr_game_session . " ORDER BY RAND() LIMIT 1";
         $conn2->query($setMarker);
     }
 
@@ -507,7 +521,7 @@
 
         $id_curr_game_session = get_current_game_session()["id"];
 
-        $request = "SELECT COUNT(*) FROM players WHERE continued = 1 AND logged = 1 AND id_game_session =" . $id_curr_game_session;
+        $request = "SELECT COUNT(*) FROM players WHERE continued = 1 AND logged = 1 AND ingame = 1 AND id_game_session =" . $id_curr_game_session;
         $players_continued = $conn->query($request);
         echo $players_continued->fetch_array()[0];
     }
@@ -565,7 +579,7 @@
 
         $id_curr_game_session = get_current_game_session()["id"];
 
-        $request = "SELECT COUNT(*) FROM mySecret, players WHERE mySecret.discovered = 1 AND mySecret.id_player = players.id AND players.logged = 1 AND mySecret.disabled = 0 AND players.id_game_session =" . $id_curr_game_session;
+        $request = "SELECT COUNT(*) FROM mySecret, players WHERE mySecret.discovered = 1 AND mySecret.id_player = players.id AND players.logged = 1 AND players.ingame = 1 AND mySecret.disabled = 0 AND players.id_game_session =" . $id_curr_game_session;
         $nbr_discovered = $conn->query($request);
         $nbr_discovered_array = $nbr_discovered->fetch_array();
 

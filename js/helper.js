@@ -3,6 +3,7 @@ var $j = jQuery.noConflict();
 var doesPlayerExist; //a boolean from the checkPlayerExist function which says if a player exists or not
 var isUsernameUnique; //return a boolean which says if the username given by the user is already used by someone or not
 var totalPlayersOnline = 0; //return value nbr all players currently online for the function getNbrPlayersOnline
+var totalPlayersIngame = 0
 var totalPlayersPlayed = 0; //return value nbr all players who already played for the function getNbrPlayersPlayed
 var progressbarValue; //current progressbar's value
 var test; //array of all players currently online
@@ -166,6 +167,19 @@ export function getNbrPlayersOnline(){
   return totalPlayersOnline;
 }
 
+export function getNbrPlayersIngame(){
+  jQuery.ajax({
+    type:"POST",
+    url: "../php/helper.php",
+    data: {action: "get_nbr_players_ingame"},
+    async: false,
+    success: function (nbr) {
+      totalPlayersIngame = nbr;
+    }
+  });
+  return totalPlayersIngame;
+}
+
 /*******
  * get the number of players who already played during the turn
  *******/
@@ -187,7 +201,7 @@ export function getNbrPlayersPlayed(){
  *******/
 export function updateProgressBar(){
   var totalPlayersPlayed2 = getNbrPlayersPlayed();
-  var totalPlayersOnline2 = getNbrPlayersOnline();
+  var totalPlayersOnline2 = getNbrPlayersIngame();
 
   progressbarValue = (totalPlayersPlayed2 / totalPlayersOnline2) * 100;
   if (totalPlayersOnline2 > 1){
@@ -235,11 +249,11 @@ export function getNbrPlayersOnline2(){
 /*******
  * return an array of all players who are currently playing the game
  *******/
-function getAllPlayersOnline() {
+function getAllPlayersIngame() {
     jQuery.ajax({
     type:"POST", 
     url: "../php/helper.php",
-    data: {action: "get_all_players_online"},
+    data: {action: "get_all_players_ingame"},
     async: false,
     dataType: "json",
     success: function (result){
@@ -357,7 +371,7 @@ export function loading(){
     });
 
     nbr_messages_discovered = getNbrMessagesDiscovered();
-    total_players_logged = getNbrPlayersOnline();
+    total_players_logged = getNbrPlayersIngame();
 
     if (total_players_logged < 2) {
       setTimeout(function() {
@@ -618,7 +632,7 @@ export function getNbrPlayersContinued(){
 export function displayContinueButton(){
   setInterval(function() {
     let nbr_continued = getNbrPlayersContinued();
-    let nbr_online = getNbrPlayersOnline();
+    let nbr_online = getNbrPlayersIngame();
     if (nbr_continued == nbr_online){
       $j(".continue_button").removeClass("d-none");
       $j(".wait4result").addClass("d-none");
@@ -1074,10 +1088,10 @@ export function displayAllPlayersOnline(){
     setInterval(function() {
       let value = $j(".secret_id_played").val().split("-");
 
-      all_players_logged = getAllPlayersOnline();
+      all_players_logged = getAllPlayersIngame();
       
       nbr_messages_discovered = getNbrMessagesDiscovered();
-      total_players_logged = getNbrPlayersOnline();
+      total_players_logged = getNbrPlayersIngame();
 
       if (total_players_logged > 0){
         $j(".spinner-border").addClass("d-none");

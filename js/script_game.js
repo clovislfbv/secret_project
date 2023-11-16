@@ -403,7 +403,7 @@ $j(document).ready(function () {
     let currPlayer = JSON.parse(getcurrPlayer());
     disconnectPlayer(currPlayer["id"]);
     setTimeout(function () {
-      NbrPlayersOnline = getNbrPlayersOnline();
+      NbrPlayersOnline = getNbrPlayersIngame();
       if (NbrPlayersOnline == 0){
         killSession();
       }
