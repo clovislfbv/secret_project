@@ -62,9 +62,6 @@
                             }
 
                             echo $player;
-
-                            
-                        
                         ?>
                         </a>
                     </li>

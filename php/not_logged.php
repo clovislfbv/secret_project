@@ -50,6 +50,14 @@
                         </div>
                     </div>
                 </div>
+                <?php
+                    leave_ingame();
+                ?>
+                <script type="module">
+                    import { disconnectPlayer, getcurrPlayer } from "../js/helper.js";
+
+                    disconnectPlayer(getcurrPlayer()["id"]);
+                </script>
           </div>
         </div>
       </div>
