@@ -1,4 +1,4 @@
-import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled} from "./helper.js";
+import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame} from "./helper.js";
 
 var $j = jQuery.noConflict();
 
@@ -144,6 +144,7 @@ $j(document).ready(function () {
     if (checkPlayerExist() != 0){
       $j("form[name='secret_form']").attr('action', "addSecretOrPlay.php");
       $j("form[name='secret_form']").submit();
+      //ConnectCurrPlayer();
       window.location.href = "addSecretOrPlay.php";
     } else {
       $j("#connModal").modal("show")
@@ -346,6 +347,7 @@ $j(document).ready(function () {
     console.log("title CLICKED");
     getAuthorRandomSecret();
     disconnectPlayer(JSON.parse(getcurrPlayer())["id"]);
+    leaveInGame();
     NbrPlayersOnline = getNbrPlayersOnline();
     main_title = 1;
     if (NbrPlayersOnline == 0){
@@ -368,12 +370,11 @@ $j(document).ready(function () {
     var current_player_id = JSON.parse(current_player)["id"];
     console.log("id:"+current_player_id);
 
-    disconnectPlayer(current_player_id);
+    leaveInGame();
     NbrPlayersOnline = getNbrPlayersOnline();
     if (NbrPlayersOnline == 0){
       killSession();
     }
-    destroySessionVariable();
     window.location.href = "../php/addSecretOrPlay.php";
   })
 
@@ -435,10 +436,6 @@ $j(document).ready(function () {
   window.onbeforeunload = function (event) {
     if (toto_clicked == 0){
       ConfirmLeave();
-      NbrPlayersOnline = getNbrPlayersOnline();
-      if (NbrPlayersOnline == 0){
-        killSession();
-      }
     }
     /*$j(document).keydown(function (e) {
       currentKey = e.key.toUpperCase();

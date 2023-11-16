@@ -23,7 +23,7 @@ if (!(isset($_SESSION["player_id"])) || (is_logged() != '1')){
   
   $hash_password = md5($pass_word);
   
-  $create_player = "INSERT INTO players (p_name, p_password, id_secret, logged, score, time_spent, p_played, continued, id_p_choice, id_game_session) VALUES ('" . $player . "', '" . $hash_password . "', 0, 1, 0, 0, 0, 0, 0, 0)";
+  $create_player = "INSERT INTO players (p_name, p_password, id_secret, logged, ingame, score, time_spent, p_played, continued, id_p_choice, id_game_session) VALUES ('" . $player . "', '" . $hash_password . "', 0, 1, 0, 0, 0, 0, 0, 0, 0)";
   
   if ($conn->query($create_player)){
       $id_player = $conn->insert_id;

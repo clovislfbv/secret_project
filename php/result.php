@@ -1,9 +1,9 @@
 <?php
   session_start();
   require_once("helper.php");
-  if (!(isset($_SESSION["player_id"])) || (is_logged() != '1')){
-    echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
-  }
+  // if (is_ingame()){
+  //   echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
+  // }
 ?>
 
 <!doctype html>
@@ -137,8 +137,7 @@
                 <div class="col-6 right">
                   <?php
                     if ($total > 0){
-                      echo "<div class='leaderboard-container'><div class='card-header text-primary border-primary leaderboard' style='background-color:black; border: 1px solid #FF550B; height: auto'><h1>classement actuel des scores </h1></div><ul class='list-group list-group-flush'></ul></div>";
-                      echo "<div class='pagination-container'><div id='page-selection'></div></div>";
+                      echo "<div class='leaderboard-container'><div class='card-header text-primary border-primary leaderboard' style='background-color:black; border: 1px solid #FF550B; height: auto'><h1>classement actuel des scores </h1></div><ul class='list-group list-group-flush'></ul><div class='pagination-container'><div id='page-selection'></div></div></div>";
                       echo "<div class='wait4result text-primary'><div class='loader-container'><span class='wait4results spinner-border' role='status'></span></div><h4 class='waiting4results'>En attente du résultat de tous les joueurs</h4></div>";
                       echo '<div class="continue_button d-none"><button id="continue_btn" class="pressToto btn btn-outline-primary" type="button">Continuer</button></div>';
                     } else {

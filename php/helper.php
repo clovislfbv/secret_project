@@ -132,7 +132,7 @@
         }
 
         if ($_POST["action"] == "has_game_begun"){
-            has_game_begun();
+            has_game_begun_js();
         }
 
         if ($_POST["action"] == "start_game"){
@@ -148,11 +148,15 @@
         }
 
         if ($_POST["action"] == "kill_session"){
-            kill_session();
+            kill_session_js();
         }
 
         if ($_POST["action"] == "end_game"){
             end_game();
+        }
+
+        if ($_POST["action"] == "leave_ingame"){
+            leave_ingame();
         }
 
         if ($_POST["action"] == "destroy_session_variable"){
@@ -186,9 +190,52 @@
     function is_logged(){
         include "conn.php";
 
-        $id_curr_game_session = $_SESSION["id_curr_game_session"];
+        //$id_curr_game_session = $_SESSION["id_curr_game_session"];
 
-        $request = "SELECT isalive FROM game_session WHERE id=" . $id_curr_game_session;
+        //$request = "SELECT isalive FROM game_session WHERE id=" . $id_curr_game_session;
+
+        $id_curr_player = get_curr_player()["id"];
+        $request = "SELECT logged FROM players WHERE id=" . $id_curr_player;
+        $output = $conn->query($request)->fetch_array();
+
+        return $output[0];
+    }
+
+    function is_ingame(){
+        include "conn.php";
+
+        $id_curr_player = get_curr_player()["id"];
+
+        $request = "SELECT ingame FROM players WHERE id=" . $id_curr_player;
+        $output = $conn->query($request)->fetch_array();
+
+        return $output[0];
+    }
+
+    function insert_ingame(){
+        include "conn.php";
+
+        $id_curr_player = get_curr_player()["id"];
+
+        $request = "UPDATE players SET ingame = 1 WHERE id=" . $id_curr_player;
+        $conn->query($request);
+    }
+
+    function leave_ingame(){
+        include "conn.php";
+
+        $id_curr_player = get_curr_player()["id"];
+
+        $request = "UPDATE players SET ingame = 0 WHERE id=" . $id_curr_player;
+        $output = $conn->query($request);
+
+        return $output;
+    }
+
+    function get_nbr_players_ingame(){
+        include "conn.php";
+
+        $request = "SELECT COUNT(*) FROM players WHERE ingame=1";
         $output = $conn->query($request)->fetch_array();
 
         return $output[0];
@@ -203,8 +250,14 @@
 
         $request = "UPDATE players SET logged = 1 WHERE id=" . $player_id;
         $conn->query($request);
-    
-        $request = "UPDATE game_session SET isalive = 1 WHERE $id_curr_game_session";
+        
+        
+        $request = "SELECT COUNT(*) FROM players WHERE ingame = 1 AND id_game_session=" . $id_curr_game_session;
+        $output = $conn->query($request)->fetch_array();
+        if ($output[0]){
+            $request = "UPDATE game_session SET isalive = 1 WHERE id=" . $id_curr_game_session;
+            echo $conn->query($request);
+        }
     }
 
     function update_player_when_played(){
@@ -470,10 +523,6 @@
         if ($status[0] == '1'){
             $reset = "UPDATE players SET logged = 0 WHERE id=" . $player_id;
             $conn->query($reset);
-            
-            $id_curr_game_session = get_current_game_session()["id"];
-            $request = "SELECT COUNT(*) FROM players WHERE logged = 1 AND id_game_session = " . $id_curr_game_session;
-            $counter = $conn->query($request)->fetch_array();
         }
     }
 
@@ -640,6 +689,15 @@
     function has_game_begun(){
         $curr_game_session = get_current_game_session();
         if ($curr_game_session != null){
+            return $curr_game_session["hasgamebegun"];
+        } else {
+            return 0;
+        }
+    }
+
+    function has_game_begun_js(){
+        $curr_game_session = get_current_game_session();
+        if ($curr_game_session != null){
             echo $curr_game_session["hasgamebegun"];
         } else {
             echo 0;
@@ -696,7 +754,25 @@
 
     function kill_session(){
         include "conn.php";
-        session_start();
+
+        if(!isset($_SESSION)) 
+        { 
+            session_start();
+        }
+
+        $id_curr_game_session = $_SESSION['id_curr_game_session'];
+
+        $kill_session = "UPDATE game_session SET isalive = 0 AND hasgamebegun = 0 WHERE id=" . $id_curr_game_session;
+        return $conn->query($kill_session);
+    }
+
+    function kill_session_js(){
+        include "conn.php";
+
+        if(!isset($_SESSION)) 
+        { 
+            session_start();
+        }
 
         $id_curr_game_session = $_SESSION['id_curr_game_session'];
 

@@ -53,6 +53,13 @@
                                     echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
                                 }
                             }
+                            if (is_ingame()){
+                                leave_ingame();
+                            }
+                            
+                            if (get_nbr_players_ingame() == '0'){
+                                kill_session();
+                            }
 
                             echo $player;
 

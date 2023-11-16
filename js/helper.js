@@ -324,6 +324,14 @@ function endGame(){
   })
 }
 
+export function leaveInGame(p_id){
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "leave_ingame", player_id: p_id},
+  })
+}
+
 export function killSession(){
   jQuery.ajax({
     type:"POST",

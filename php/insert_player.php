@@ -6,13 +6,15 @@ require_once("helper.php");
 if (!(isset($_SESSION["player_id"]))){
   echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
 } else {
+  var_dump(get_current_game_session());
   if (get_current_game_session() == null){
+    echo "test";
     create_game_session();
   };
   
   $curr_game_session = get_current_game_session();
   $id_curr_game_session = $curr_game_session["id"];
-  
+
   $player = $_SESSION["username"];
   $player_id = $_SESSION["player_id"];
   
@@ -43,6 +45,8 @@ if (!(isset($_SESSION["player_id"]))){
 
     $request = "UPDATE players SET score = 0 WHERE id= " . $player_id;
     $conn->query($request);
+
+    insert_ingame();
   };
   
   mysqli_close($conn);
