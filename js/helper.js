@@ -1103,6 +1103,7 @@ export function displayAllPlayersOnline(){
       let value = $j(".secret_id_played").val().split("-");
 
       all_players_logged = getAllPlayersIngame();
+      console.log(all_players_logged);
       
       nbr_messages_discovered = getNbrMessagesDiscovered();
       total_players_logged = getNbrPlayersIngame();

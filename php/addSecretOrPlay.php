@@ -23,7 +23,7 @@
                 <div class="not_shown">
                     <ul class="nav nav-tabs">
                     <li class="nav-item">
-                        <a class="nav-link current text-primary disabled" href="#" data-toggle="tab">
+                        <a class="nav-link current text-primary disabled" data-toggle="tab">
                         <span id="addon-wrapping">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16" style="color: #FF550B;">
                             <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
@@ -63,10 +63,6 @@
 
                             echo $player;
                         ?>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link current_score text-primary disabled" href="#" data-toggle="tab">
                         </a>
                     </li>
                     </ul>
@@ -117,7 +113,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="text-primary">Veuillez écrire un secret</h5>
+                    <h1 class="title-write-secret text-primary">Veuillez écrire un secret</h1>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -149,7 +145,7 @@
                     <div class="modal-body">
                     <div class="card border-primary">
                         <div class="card-body">
-                            <h5 class="title-secrets-enabled text-primary">Les secrets ci-dessous seront utilisés à la prochaine partie</h5>
+                            <h1 class="title-secrets-enabled text-primary">Les secrets ci-dessous seront utilisés à la prochaine partie</h1>
                         </div>
                     </div>
                     <div class="card zone-secrets-enabled border-primary">
@@ -162,7 +158,7 @@
                     </div>
                     <div class="card border-primary">
                         <div class="card-body">
-                            <h5 class="title-secrets-disabled text-primary">Les secrets ci-dessous <strong style="text-decoration: underline;">NE</strong> seront <strong style="text-decoration: underline;">PAS</strong> utilisés à la prochaine partie</h5>
+                            <h1 class="title-secrets-disabled text-primary">Les secrets ci-dessous <strong style="text-decoration: underline;">NE</strong> seront <strong style="text-decoration: underline;">PAS</strong> utilisés à la prochaine partie</h1>
                         </div>
                     </div>
                     <div class="card zone-secrets-disabled border-primary">

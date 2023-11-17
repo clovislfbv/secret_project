@@ -73,26 +73,26 @@
                       </div>
                       <div class='players-list'>
                         <script type="module">
-                          import { displayAllPlayersOnline, resetPlayedPlayer, resetPlayerContinued, loading, getcurrPlayer, disconnectPlayer, getNbrPlayersOnline, actionMobileInit} from "../js/helper.js"
+                          import { displayAllPlayersOnline, resetPlayedPlayer, resetPlayerContinued, loading, getcurrPlayer, disconnectPlayer, getNbrPlayersIngame, actionMobileInit} from "../js/helper.js"
                           var $j = jQuery.noConflict();
 
                           actionMobileInit();
 
                           loading();
+
+                          // let nbr_players = getNbrPlayersIngame();
+
+                          // console.log(nbr_players);
+
+                          // if (nbr_players > 0){ 
+                          let currPlayer = JSON.parse(getcurrPlayer());
+                          console.log(currPlayer);
+                          let currPlayerId = currPlayer["id"];
                           
-                          let nbr_players = getNbrPlayersOnline();
-
-                          console.log(nbr_players);
-
-                          if (nbr_players > 0){ 
-                            let currPlayer = JSON.parse(getcurrPlayer());
-                            console.log(currPlayer);
-                            let currPlayerId = currPlayer["id"];
-                            
-                            resetPlayedPlayer(currPlayerId);
-                            resetPlayerContinued(currPlayerId);
-                            displayAllPlayersOnline();
-                          };
+                          resetPlayedPlayer(currPlayerId);
+                          resetPlayerContinued(currPlayerId);
+                          displayAllPlayersOnline();
+                          //};
                         </script>
                       </div>
                     </div>

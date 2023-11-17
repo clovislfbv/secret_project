@@ -398,7 +398,12 @@ $j(document).ready(function () {
 
   $j("#btn_play_game").click(function (e) {
     let now = Date.now();
-    let tooOld = now - getDateGameSessionCreated() > 3600000;
+    let tooOld;
+    if (getDateGameSessionCreated()){
+      tooOld = now - getDateGameSessionCreated() > 3600000;
+    } else {
+      tooOld = null;
+    }
     console.log(now);
     console.log(getDateGameSessionCreated());
     if (hasGameBegun() == 1){
@@ -425,7 +430,7 @@ $j(document).ready(function () {
   })
 
   function ConfirmLeave(){
-
+    console.log("deconnecte partiellement")
     let currPlayer = JSON.parse(getcurrPlayer());
     disconnectPlayer(currPlayer["id"]);
     setTimeout(function () {
@@ -440,19 +445,30 @@ $j(document).ready(function () {
     }, 5000);
   }
 
+  function realDisconnect(){
+    console.log("real disconnect");
+    // NbrPlayersOnline = getNbrPlayersIngame();
+    // if (NbrPlayersOnline == 1){
+    //   killSession();
+    // }
+    let currPlayer = JSON.parse(getcurrPlayer());
+    disconnectPlayer(currPlayer["id"]);
+    destroySessionVariable();
+  }
+
   var prevKey="";
   $j(document).keydown(function (e) {            
     /*if (e.key=="F5") {
       window.onbeforeunload = ConfirmLeave;
     }*/
     if (e.key.toUpperCase() == "W" && prevKey == "CONTROL") {                
-      window.onbeforeunload = ConfirmLeave;   
+      window.onbeforeunload = realDisconnect;   
     }
     /*else if (e.key.toUpperCase() == "R" && prevKey == "CONTROL") {
       window.onbeforeunload = ConfirmLeave;
     }*/
     else if (e.key.toUpperCase() == "F4" && (prevKey == "ALT" || prevKey == "CONTROL")) {
-      window.onbeforeunload = ConfirmLeave;
+      window.onbeforeunload = realDisconnect;
     }
     prevKey = e.key.toUpperCase();
     //console.log("key:"+prevKey);
@@ -461,7 +477,18 @@ $j(document).ready(function () {
   var currentKey;
   window.onbeforeunload = function (event) {
     if (toto_clicked == 0){
-      ConfirmLeave();
+      if (event) {
+        $j(document).keydown(function (e) {
+          currentKey = e.key.toUpperCase();
+        })
+        console.log("disconnecting  " + prevKey + "  " + currentKey);
+        if (checkCloseX == 1 || ((prevKey == "CONTROL" || prevKey == "ALT") && (currentKey != "R" && currentKey != "F5"))){
+          main_title = 1;
+          realDisconnect()
+        } else {
+          ConfirmLeave();
+        }
+      }
     }
     /*$j(document).keydown(function (e) {
       currentKey = e.key.toUpperCase();

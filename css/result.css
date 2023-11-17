@@ -16,14 +16,6 @@ body {
   vertical-align: middle;
 }
 
-.container {
-  /* position: absolute;
-  left: 15%;
-  top: 15%;
-  width: 80%;
-  height: 100%; */
-}
-
 .real_message_author {
     padding: 20px;
 }

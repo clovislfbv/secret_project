@@ -225,6 +225,8 @@
 
         $id_curr_player = get_curr_player()["id"];
 
+        $_SESSION["ingame"] = 1;
+
         $request = "UPDATE players SET ingame = 1 WHERE id=" . $id_curr_player;
         $conn->query($request);
     }
@@ -233,6 +235,8 @@
         include "conn.php";
 
         $id_curr_player = get_curr_player()["id"];
+
+        $_SESSION["ingame"] = 0;
 
         $request = "UPDATE players SET ingame = 0 WHERE id=" . $id_curr_player;
         $output = $conn->query($request);
@@ -253,10 +257,15 @@
         include "conn.php";
         session_start();
 
+        $is_ingame = $_SESSION["ingame"];
         $id_curr_game_session = $_SESSION["id_curr_game_session"];
         $player_id = $_SESSION["player_id"];
 
-        $request = "UPDATE players SET logged = 1 WHERE id=" . $player_id;
+        if ($is_ingame){
+            $request = "UPDATE players SET logged = 1, ingame = 1 WHERE id=" . $player_id;
+        } else {
+            $request = "UPDATE players SET logged = 1 WHERE id=" . $player_id;
+        }
         $conn->query($request);
         
         
@@ -380,7 +389,13 @@
         include "conn.php";
 
         $request = "SELECT datecreation FROM game_session WHERE isalive = 1";
-        echo strtotime($conn->query($request)->fetch_array()[0]);
+        $output = $conn->query($request)->fetch_array();
+
+        if ($output){
+            echo strtotime($output[0]);
+        } else {
+            echo null;
+        }
     }
 
     function get_curr_player_js(){
@@ -546,7 +561,7 @@
         $status = $conn->query($request)->fetch_array();
 
         if ($status[0] == '1'){
-            $reset = "UPDATE players SET logged = 0 WHERE id=" . $player_id;
+            $reset = "UPDATE players SET logged = 0, ingame = 0 WHERE id=" . $player_id;
             $conn->query($reset);
         }
     }
@@ -767,6 +782,10 @@
         $result = $conn->query($request);
         $result_array = $result->fetch_array();
 
+        if ($result_array){
+            $_SESSION["id_curr_game_session"] = $result_array["id"];
+        }
+
         return $result_array;
     }
 
@@ -788,7 +807,7 @@
         $id_curr_game_session = $_SESSION['id_curr_game_session'];
 
         $kill_session = "UPDATE game_session SET isalive = 0 AND hasgamebegun = 0 WHERE id=" . $id_curr_game_session;
-        return $conn->query($kill_session)->fetch_array()[0];
+        return $conn->query($kill_session);
     }
 
     function kill_session_js(){

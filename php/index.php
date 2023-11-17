@@ -27,7 +27,7 @@
                     Tooltip on the left
                   </div>
                 </div>
-                <h3 class="card-title gameTitle"><a class="main_title text-primary" href="index.php">Discover my secret</a></h3>
+                <h1 class="card-title gameTitle"><a class="main_title text-primary" href="index.php">Discover my secret</a></h1>
               </div>
             </div>
           </div>
