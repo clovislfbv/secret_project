@@ -1,4 +1,4 @@
-import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame} from "./helper.js";
+import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated} from "./helper.js";
 
 var $j = jQuery.noConflict();
 
@@ -35,12 +35,21 @@ $j(document).ready(function () {
 
   const portrait = window.matchMedia("(orientation: portrait)").matches;
   if (portrait){
-    $j("#card-body").css({
-      "align-items": "center",
-      "justify-content": "center",
-      "height": "20vh",
-      "text-align": "center",
-    })
+    if (window.location.pathname != "/secret_project/php/get_player.php"){
+      $j("#card-body").css({
+        "align-items": "center",
+        "justify-content": "center",
+        "height": "20vh",
+        "text-align": "center",
+      })
+    } else {
+      $j("#card-body").css({
+        "align-items": "center",
+        "justify-content": "center",
+        "height": "44vh",
+        "text-align": "center",
+      })
+    }
     $j("#card-body").html("<div class='column-portrait' style='height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;'><h1 class='text-primary' style='font-size: 5vw;display: flex;height: 30%;align-items: flex-end;'>Pour jouer, veuillez mettre votre écran en mode paysage</h1><div class='rotate' style='transform: rotate(-90deg);height: 70%;width: 100%;/* width: 0%; */display: flex;justify-content: center;align-items: center;'><dotlottie-player src='../lottie-player/phone_rotation/phone_rotation.lottie' background='transparent' speed='1' style='/* display: flex; */width: 100%;height: 100%;transform: rotateY(180deg);' loop='' autoplay=''></dotlottie-player></div></div>");
     if ($j(".whole_thing").css("background-image") != "none"){
       $j(".whole_thing").css({
@@ -56,12 +65,21 @@ $j(document).ready(function () {
     const portrait = e.matches;
     console.log(screen.orientation.type);
     if (portrait){
-      $j("#card-body").css({
-        "align-items": "center",
-        "justify-content": "center",
-        "height": "20vh",
-        "text-align": "center",
-      })
+      if (window.location.pathname != "/secret_project/php/get_player.php"){
+        $j("#card-body").css({
+          "align-items": "center",
+          "justify-content": "center",
+          "height": "20vh",
+          "text-align": "center",
+        })
+      } else {
+        $j("#card-body").css({
+          "align-items": "center",
+          "justify-content": "center",
+          "height": "44vh",
+          "text-align": "center",
+        })
+      }
       $j("#card-body").html("<div class='column-portrait' style='height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;'><h1 class='text-primary' style='font-size: 5vw;display: flex;height: 30%;align-items: flex-end;'>Pour jouer, veuillez mettre votre écran en mode paysage</h1><div class='rotate' style='transform: rotate(-90deg);height: 70%;width: 100%;/* width: 0%; */display: flex;justify-content: center;align-items: center;'><dotlottie-player src='../lottie-player/phone_rotation/phone_rotation.lottie' background='transparent' speed='1' style='/* display: flex; */width: 100%;height: 100%;transform: rotateY(180deg);' loop='' autoplay=''></dotlottie-player></div></div>");
       if ($j(".whole_thing").css("background-image") != "none"){
         $j(".whole_thing").css({
@@ -378,12 +396,20 @@ $j(document).ready(function () {
     window.location.href = "../php/addSecretOrPlay.php";
   })
 
-  $j("form[name='start_game_form']").submit(function (e) {
+  $j("#btn_play_game").click(function (e) {
+    let now = Date.now();
+    let tooOld = now - getDateGameSessionCreated() > 3600000;
+    console.log(now);
+    console.log(getDateGameSessionCreated());
     if (hasGameBegun() == 1){
-      e.preventDefault();
-      $j("#connModal").modal("show")
-      $j(".modal-title").text("Erreur d'insertion de joueur")
-      $j("#modal-body").text("Une partie a déjà commencé veuillez attendre qu'elle se termine avant d'en rejoindre une nouvelle")
+      if (tooOld){
+        killSession();
+      } else {
+        e.preventDefault();
+        $j("#connModal").modal("show")
+        $j(".modal-title").text("Erreur d'insertion de joueur")
+        $j("#modal-body").text("Une partie a déjà commencé veuillez attendre qu'elle se termine avant d'en rejoindre une nouvelle")
+      }
     }
   })
 

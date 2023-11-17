@@ -57,7 +57,7 @@
                                 leave_ingame();
                             }
                             
-                            if (get_nbr_players_ingame() == '0'){
+                            if (get_current_game_session() && get_nbr_players_ingame() == '0'){
                                 kill_session();
                             }
 
@@ -174,6 +174,24 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="connModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-primary" id="modal-body">
+                <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer text-primary">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
             </div>
         </div>
     </div>

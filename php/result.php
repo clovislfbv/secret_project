@@ -117,20 +117,16 @@
                       }
                       
                       echo "<h3 class='real_message_author text-primary'>L'auteur du message était : " . $name_array["p_name"] . "</h3>";
-                      echo "</div></div><h5 class='gain text-primary'>";
-
-                      $time_spent = get_curr_player()["time_spent"];
-                      echo "Voici le temps que vous avez mis pour trouver le propriétaire de ce secret : " . $time_spent/1000 . " secondes.<br/>";
+                      echo "</div></div><h6 class='gain text-primary'>";
 
                       if ($post_variables[1] === $name_array["p_name"]){
-                        echo "+ 20 points !";
                         if ($time_spent >= 0 && $time_spent <= 20){
-                          echo $bonus_score;
+                          echo "+ 20 points pour bonne réponse + " . $bonus_score . " points de temps bonus = + " . 20 + $bonus_score . " points !";
                         }
                       } else {
                         echo "+ 0 points !";
                       }
-                      echo "</h5><p class='comments-leaderboard card-subtitle mb-2 text-muted'></p>";
+                      echo "</h6><p class='comments-leaderboard card-subtitle mb-2 text-muted'></p>";
                     }
                   ?>
                 </div>

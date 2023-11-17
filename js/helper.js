@@ -41,6 +41,7 @@ var min = 0; //min pour le leeaderboard
 var max = 5; //max pour le leaderboard
 var enable = 0;
 var start_time = 0;
+var date_game_session_created;
 
 export function actionMobileInit() {
   document.addEventListener("touchstart", touchHandler, true);
@@ -284,6 +285,19 @@ function getAllPlayersDisconnected() {
     }
     });
     return test2;
+}
+
+export function getDateGameSessionCreated(){
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "get_date_game_session_created"},
+    async: false,
+    success: function (output) {
+      date_game_session_created = output;
+    }
+  })
+  return date_game_session_created;
 }
 
 export function getcurrPlayer() {

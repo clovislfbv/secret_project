@@ -123,6 +123,7 @@ body {
 
 .gain {
     height: 10%;
+    width: 90%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -158,7 +159,7 @@ body {
 }
 
 .leaderboard-container {
-    height: 60%;
+    height: 75%;
     margin-bottom: 6%;
 }
 

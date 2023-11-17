@@ -47,6 +47,10 @@
             get_curr_player_js();
         }
 
+        if ($_POST["action"] == "get_date_game_session_created"){
+            get_date_game_session_created();
+        }
+
         if ($_POST["action"] == "get_curr_player_name"){
             get_curr_player_name();
         }
@@ -256,12 +260,12 @@
         $conn->query($request);
         
         
-        $request = "SELECT COUNT(*) FROM players WHERE ingame = 1 AND id_game_session=" . $id_curr_game_session;
-        $output = $conn->query($request)->fetch_array();
-        if ($output[0]){
-            $request = "UPDATE game_session SET isalive = 1 WHERE id=" . $id_curr_game_session;
-            echo $conn->query($request);
-        }
+        // $request = "SELECT COUNT(*) FROM players WHERE ingame = 1 AND id_game_session=" . $id_curr_game_session;
+        // $output = $conn->query($request)->fetch_array();
+        // if ($output[0]){
+        //     $request = "UPDATE game_session SET isalive = 1 WHERE id=" . $id_curr_game_session;
+        //     echo $conn->query($request);
+        // }
     }
 
     function update_player_when_played(){
@@ -370,6 +374,13 @@
         $currPlayer = $conn->query($request);
         $curr_player = $currPlayer->fetch_array();
         return $curr_player;        
+    }
+
+    function get_date_game_session_created(){
+        include "conn.php";
+
+        $request = "SELECT datecreation FROM game_session WHERE isalive = 1";
+        echo strtotime($conn->query($request)->fetch_array()[0]);
     }
 
     function get_curr_player_js(){
@@ -777,7 +788,7 @@
         $id_curr_game_session = $_SESSION['id_curr_game_session'];
 
         $kill_session = "UPDATE game_session SET isalive = 0 AND hasgamebegun = 0 WHERE id=" . $id_curr_game_session;
-        return $conn->query($kill_session);
+        return $conn->query($kill_session)->fetch_array()[0];
     }
 
     function kill_session_js(){
