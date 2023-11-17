@@ -51,7 +51,12 @@
                     </div>
                 </div>
                 <?php
-                    leave_ingame();
+                    require_once "helper.php";
+                    session_start();
+
+                    if (isset($_SESSION["player_id"])){
+                        leave_ingame();   
+                    }
                 ?>
                 <script type="module">
                     import { disconnectPlayer, getcurrPlayer } from "../js/helper.js";

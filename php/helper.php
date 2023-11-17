@@ -377,12 +377,17 @@
         { 
             session_start();
         }
-        $player_id = $_SESSION["player_id"];
+
+        if (isset($_SESSION["player_id"])){
+            $player_id = $_SESSION["player_id"];
         
-        $request = "SELECT * FROM players WHERE id=" . $player_id;
-        $currPlayer = $conn->query($request);
-        $curr_player = $currPlayer->fetch_array();
-        return $curr_player;        
+            $request = "SELECT * FROM players WHERE id=" . $player_id;
+            $currPlayer = $conn->query($request);
+            $curr_player = $currPlayer->fetch_array();
+            return $curr_player; 
+        } else {
+            return null;
+        }  
     }
 
     function get_date_game_session_created(){

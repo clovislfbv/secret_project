@@ -530,6 +530,13 @@ $j(document).ready(function () {
       })
     }
 
+    let currPlayer = getcurrPlayer();
+
+    if (window.location.pathname == "/secret_project/php/index.php" && currPlayer){
+      disconnectPlayer(JSON.parse(currPlayer["id"]));
+      destroySessionVariable();
+    }
+
     /*if (window.location.pathname == "/secret_project/php/result.php" && getNbrSecretsNotDiscovered() == 0){
 
     }*/
