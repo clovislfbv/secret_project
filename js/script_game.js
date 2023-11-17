@@ -1,4 +1,4 @@
-import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated} from "./helper.js";
+import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated, getPlayerByNamePassword} from "./helper.js";
 
 var $j = jQuery.noConflict();
 
@@ -160,10 +160,18 @@ $j(document).ready(function () {
   $j("#btn_login").click(function (e, t){
     console.log(e,t);
     if (checkPlayerExist() != 0){
-      $j("form[name='secret_form']").attr('action', "addSecretOrPlay.php");
-      $j("form[name='secret_form']").submit();
-      //ConnectCurrPlayer();
-      window.location.href = "addSecretOrPlay.php";
+      let name = $j("#username").val();
+      let password = $j("#password").val();
+      if (JSON.parse(getPlayerByNamePassword(name, password))["logged"] == 0){
+        $j("form[name='secret_form']").attr('action', "addSecretOrPlay.php");
+        $j("form[name='secret_form']").submit();
+        window.location.href = "addSecretOrPlay.php";
+      } else {
+        $j("#connModal").modal("show")
+        $j(".modal-title").text("Erreur de connexion")
+        $j("#modal-body").text("Ce nom d'utilisateur est déjà connecté au jeu")
+        e.preventDefault();
+      }
     } else {
       $j("#connModal").modal("show")
       $j(".modal-title").text("Erreur de connexion")

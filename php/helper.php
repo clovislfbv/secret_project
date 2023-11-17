@@ -87,6 +87,14 @@
             unset_new_random_secret();
         }
 
+        if ($_POST["action"] == "is_logged"){
+            is_logged();
+        }
+
+        if ($_POST["action"] == "get_player_by_name_password"){
+            get_player_by_name_password_js();
+        }
+
         if ($_POST["action"] == "disconnect_player"){
             disconnect_player();
         }
@@ -431,6 +439,13 @@
         $player = $conn->query($request)->fetch_array();
         
         return $player;
+    }
+
+    function get_player_by_name_password_js(){
+        $name = $_POST["name"];
+        $pass_word = $_POST["pass_word"];
+
+        echo json_encode(get_player_by_name_password($name, $pass_word));
     }
     
     function reset_played_player(){

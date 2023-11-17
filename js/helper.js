@@ -117,6 +117,34 @@ export function checkSeveralUsernames(){
   return isUsernameUnique;
 }
 
+export function isLogged(){
+  let is_logged;
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "is_logged"},
+    async: false,
+    success: function (res){
+      is_logged = res;
+    }
+  })
+  return is_logged;
+}
+
+export function getPlayerByNamePassword(playerName, password){
+  let player;
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "get_player_by_name_password", name: playerName, pass_word: password},
+    async: false,
+    success: function (res){
+      player = res;
+    }
+  })
+  return player;
+}
+
 /*******
  * update the played variable if a player drags a button to the dropper
  *******/
