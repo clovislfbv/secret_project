@@ -88,7 +88,7 @@
                     $total = get_nbr_secrets_not_discovered();
 
                     if ($total == 0) {
-                      echo "<div class='end card border-primary text-primary'><div class='card-body'><div class='id='end-title'><h2 class='comments'>Jeu terminé !</h2></div><h4 class='comments card-subtitle mb-2 text-muted'>Voici le classement finale !</h4></div></div>";
+                      echo "<div class='end card border-primary text-primary'><div class='card-body' id='game-finished-body'><div class='id='end-title'><h2 class='comments'>Jeu terminé !</h2></div><h4 class='comments card-subtitle mb-2 text-muted'>Voici le classement finale !</h4></div></div>";
                       echo "<div class='all_players'><div id='final_leaderboard' class='final_leaderboard text-primary'><div class='card-header leaderboard' style='background-color:black; border: 1px solid #FF550B;'><h1 class='final-leaderboard-title'>classement finale des scores </h1></div><div class='list-group list-group-flush list-players'></div></div><div class='pagination-container pagination-final-leaderboard'><div id='page-selection'></div></div></div>";
                     } else {
                       //echo "<form name='result_form' method='' action='get_player.php'>
@@ -112,7 +112,7 @@
                         // }
                         $bonus_score = round(abs((1 - ($time_spent / 10 / 2)) * 10));
                         
-                        echo "<div class='result_message text-primary'><h1 class='card-title'>Bien joué !</h1><h3>Tu as trouvé la personne qui a écrite ce secret !</h3></div>";
+                        echo "<div class='result_message text-primary'><h1 class='card-title' id='results-answer'>Bien joué !</h1><h3 class='message-found'>Tu as trouvé la personne qui a écrite ce secret !</h3></div>";
                       } else {
                         echo "<div class='result_message text-primary card-title'><h1>Dommage !</h1><h3>Tu n'as pas réussi à trouver la personne qui a écrite ce secret !</h3></div>";
                       }

@@ -103,6 +103,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 4.5vh;
 }
 
 .error-title {
@@ -112,6 +113,7 @@ body {
 }
 
 .error-chars {
+    font-size: 50vh;
     line-height: 50%;
 }
 

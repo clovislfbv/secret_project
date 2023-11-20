@@ -16,8 +16,16 @@ body {
   vertical-align: middle;
 }
 
-.real_message_author {
+/* .real_message_author {
     padding: 20px;
+} */
+
+.real_message_author, #results-answer, .message-found{
+  font-size: 5vh;
+}
+
+.real_message_author {
+  font-size: 4vh;
 }
 
 #main_title {
@@ -141,8 +149,8 @@ body {
 .results-card-body {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     background-color: black;
+    height: 100%;
 }
 
 .active {
@@ -200,7 +208,7 @@ h1 {
   margin: 0 auto;
   /*padding: 3rem 50px;*/
   flex-direction: column;
-  padding-bottom: 20%;
+  padding-bottom: 5%;
 }
 .scoreboard__item {
   display: flex;
@@ -269,8 +277,9 @@ h1 {
   flex-direction: row;
   justify-content: space-around;
   /*margin: 20px auto 100px auto;*/
-  min-height: 350px;
+  min-height: 310px;
 }
+
 .scoreboard__podiums .scoreboard__podium {
   /*margin: 0 20px;*/
   display: flex;
@@ -419,6 +428,12 @@ body.dark-mode .scoreboard__bar {
 
 .score {
   width: 90%;
+}
+
+#game-finished-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .end-title-comments {

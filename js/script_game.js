@@ -1,4 +1,4 @@
-import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated, getPlayerByNamePassword} from "./helper.js";
+import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated, getPlayerByNamePassword, getNbrPlayersIngame} from "./helper.js";
 
 var $j = jQuery.noConflict();
 
@@ -411,7 +411,7 @@ $j(document).ready(function () {
     console.log("id:"+current_player_id);
 
     leaveInGame();
-    NbrPlayersOnline = getNbrPlayersOnline();
+    NbrPlayersOnline = getNbrPlayersIngame();
     if (NbrPlayersOnline == 0){
       killSession();
     }
@@ -427,9 +427,9 @@ $j(document).ready(function () {
       tooOld = null;
     }
     console.log(now);
-    console.log(getDateGameSessionCreated());
+    console.log(tooOld);
     if (hasGameBegun() == 1){
-      if (tooOld){
+      if (tooOld || (getNbrPlayersIngame() <= 1 && hasGameBegun())){
         killSession();
       } else {
         e.preventDefault();
@@ -562,6 +562,34 @@ $j(document).ready(function () {
     if (window.location.pathname == "/secret_project/php/index.php" && currPlayer){
       disconnectPlayer(JSON.parse(currPlayer["id"]));
       destroySessionVariable();
+    }
+
+    if (!($j("#cadenas").hasClass("d-none"))){
+      if (!($j(".start_game").hasClass("d-none"))){
+        $j("#cadenas").css({
+          "height": "80%",
+        });
+        $j(".start_game").css({
+          "height": "20%",
+        })
+        $j("#secret_and_progress").css({
+          "height": "0",
+        })
+      } else {
+        $j("#cadenas").css({
+          "height": "80%",
+        });
+        $j("#secret_and_progress").css({
+          "height": "0",
+        })
+      }
+    } else {
+      $j("#cadenas").css({
+        "height": "0",
+      });
+      $j("#secret_and_progress").css({
+        "height": "100%",
+      })
     }
 
     /*if (window.location.pathname == "/secret_project/php/result.php" && getNbrSecretsNotDiscovered() == 0){
