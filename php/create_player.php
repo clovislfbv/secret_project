@@ -1,11 +1,12 @@
 <?php
-session_start();
-include_once("conn.php");
-require_once("helper.php");
+  session_start();
+  include_once("conn.php");
+  require_once("helper.php");
 
-if (!(isset($_SESSION["player_id"])) || (is_logged() != '1')){
-  echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
-} else {
+  if (!(isset($_POST['username']))){
+    echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
+  }
+
   if (get_current_game_session() == null){
     create_game_session();
   };
@@ -41,7 +42,6 @@ if (!(isset($_SESSION["player_id"])) || (is_logged() != '1')){
   }
   
   mysqli_close($conn);
-}
 ?>
 
 <!doctype html>

@@ -1,7 +1,7 @@
 <?php
   session_start();
   require_once("helper.php");
-  
+
   if (!(isset($_SESSION["player_id"])) || !(is_ingame())){
     echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
   }

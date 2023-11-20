@@ -167,10 +167,24 @@ $j(document).ready(function () {
         $j("form[name='secret_form']").submit();
         window.location.href = "addSecretOrPlay.php";
       } else {
-        $j("#connModal").modal("show")
-        $j(".modal-title").text("Erreur de connexion")
-        $j("#modal-body").text("Ce nom d'utilisateur est déjà connecté au jeu")
-        e.preventDefault();
+        let now = Date.now();
+        let tooOld;
+        if (getDateGameSessionCreated()){
+          tooOld = now - getDateGameSessionCreated() > 3600000;
+        } else {
+          tooOld = null;
+        }
+        if (tooOld) {
+          disconnectPlayer(getcurrPlayer()["id"]);
+          $j("form[name='secret_form']").attr('action', "addSecretOrPlay.php");
+          $j("form[name='secret_form']").submit();
+          window.location.href = "addSecretOrPlay.php";
+        } else {
+          $j("#connModal").modal("show")
+          $j(".modal-title").text("Erreur de connexion")
+          $j("#modal-body").text("Ce nom d'utilisateur est déjà connecté au jeu")
+          e.preventDefault();
+        }
       }
     } else {
       $j("#connModal").modal("show")
@@ -441,16 +455,16 @@ $j(document).ready(function () {
     console.log("deconnecte partiellement")
     let currPlayer = JSON.parse(getcurrPlayer());
     disconnectPlayer(currPlayer["id"]);
-    setTimeout(function () {
-      NbrPlayersOnline = getNbrPlayersIngame();
-      if (NbrPlayersOnline == 0){
-        killSession();
-      }
-      currPlayer = JSON.parse(getcurrPlayer());
-      if (currPlayer["logged"] == 0){
-        destroySessionVariable();
-      }
-    }, 5000);
+    // setTimeout(function () {
+    //   NbrPlayersOnline = getNbrPlayersIngame();
+    //   if (NbrPlayersOnline == 0){
+    //     killSession();
+    //   }
+    //   currPlayer = JSON.parse(getcurrPlayer());
+    //   if (currPlayer["logged"] == 0){
+    //     destroySessionVariable();
+    //   }
+    // }, 10000);
   }
 
   function realDisconnect(){
@@ -459,9 +473,10 @@ $j(document).ready(function () {
     // if (NbrPlayersOnline == 1){
     //   killSession();
     // }
+    leaveInGame();
     let currPlayer = JSON.parse(getcurrPlayer());
-    disconnectPlayer(currPlayer["id"]);
     destroySessionVariable();
+    disconnectPlayer(currPlayer["id"]);
   }
 
   var prevKey="";
@@ -484,6 +499,7 @@ $j(document).ready(function () {
 
   var currentKey;
   window.onbeforeunload = function (event) {
+    console.log(checkCloseX);
     if (toto_clicked == 0){
       if (event) {
         $j(document).keydown(function (e) {
@@ -494,6 +510,9 @@ $j(document).ready(function () {
           main_title = 1;
           realDisconnect()
         } else {
+          if (currentKey == "R" || currentKey == "F5"){
+            resetPlayedPlayer(JSON.parse(getcurrPlayer())["id"]);
+          }
           ConfirmLeave();
         }
       }

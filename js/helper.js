@@ -78,6 +78,7 @@ export function ConnectCurrPlayer() {
     url: "../php/helper.php",
     data: {action: "connect_curr_player"},
   });
+  console.log(isIngame());
 }
 
 export function destroySessionVariable(){
@@ -129,6 +130,20 @@ export function isLogged(){
     }
   })
   return is_logged;
+}
+
+function isIngame(){
+  let is_ingame;
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "is_ingame"},
+    async: false,
+    success: function (res) {
+      is_ingame = res;
+    }
+  })
+  return is_ingame;
 }
 
 export function getPlayerByNamePassword(playerName, password){

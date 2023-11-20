@@ -91,6 +91,10 @@
             is_logged();
         }
 
+        if ($_POST["action"] == "is_ingame"){
+            is_ingame_js();
+        }
+
         if ($_POST["action"] == "get_player_by_name_password"){
             get_player_by_name_password_js();
         }
@@ -228,8 +232,17 @@
         return $output[0];
     }
 
+    function is_ingame_js(){
+        $is_ingame = is_ingame();
+        echo $is_ingame;
+    }
+
     function insert_ingame(){
         include "conn.php";
+
+        if (!isset($_SESSION)){
+            session_start();
+        }
 
         $id_curr_player = get_curr_player()["id"];
 
@@ -581,7 +594,7 @@
         $status = $conn->query($request)->fetch_array();
 
         if ($status[0] == '1'){
-            $reset = "UPDATE players SET logged = 0, ingame = 0 WHERE id=" . $player_id;
+            $reset = "UPDATE players SET logged = 0 WHERE id=" . $player_id;
             $conn->query($reset);
         }
     }
