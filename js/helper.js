@@ -132,6 +132,35 @@ export function isLogged(){
   return is_logged;
 }
 
+export function setDateLastLogged(player_id){
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "set_date_last_logged", p_id: player_id},
+    async: false,
+    success: function (success){
+      console.log(success);
+    },
+    error: function (err){
+      console.log(err);
+    }
+  })
+}
+
+export function getDateLastLogged(player_id){
+  let date_last_logged;
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "get_date_last_logged", p_id: player_id},
+    async: false,
+    success: function(res){
+      date_last_logged = res;
+    }
+  })
+  return date_last_logged;
+}
+
 function isIngame(){
   let is_ingame;
   jQuery.ajax({

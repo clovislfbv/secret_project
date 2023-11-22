@@ -91,6 +91,14 @@
             is_logged();
         }
 
+        if ($_POST["action"] == "set_date_last_logged"){
+            set_date_last_logged();
+        }
+
+        if ($_POST["action"] == "get_date_last_logged"){
+            get_date_last_logged();
+        }
+
         if ($_POST["action"] == "is_ingame"){
             is_ingame_js();
         }
@@ -219,6 +227,28 @@
         $output = $conn->query($request)->fetch_array();
 
         return $output[0];
+    }
+
+    function set_date_last_logged(){
+        include "conn.php";
+        
+        date_default_timezone_set('Europe/Paris');
+        $now = date("Y-m-d H:i:s");
+        $player_id = $_POST["p_id"];
+
+        $request = "UPDATE players SET date_last_logged = '" . $now . "' WHERE id=" . $player_id;
+        $output = $conn->query($request);
+
+        echo $output;
+    }
+
+    function get_date_last_logged(){
+        include "conn.php";
+
+        $player_id = $_POST["p_id"];
+
+        $request = "SELECT date_last_logged FROM players WHERE id=" . $player_id;
+        echo strtotime($conn->query($request)->fetch_array()[0])*1000;
     }
 
     function is_ingame(){
