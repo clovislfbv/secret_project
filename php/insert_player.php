@@ -7,9 +7,11 @@ if (!(isset($_SESSION["player_id"]))){
   echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
 } else {
   var_dump(get_current_game_session());
+  $_SESSION["first"] = 0;
   if (get_current_game_session() == null){
-    echo "test";
+    echo "test   11 1 11 1 1 1 1 1 1 11 1";
     create_game_session();
+    $_SESSION["first"] = 1;
   };
   
   $curr_game_session = get_current_game_session();

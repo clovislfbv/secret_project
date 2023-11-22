@@ -103,6 +103,10 @@
             is_ingame_js();
         }
 
+        if ($_POST["action"] == "has_arrived_first"){
+            has_arrived_first();
+        }
+
         if ($_POST["action"] == "get_player_by_name_password"){
             get_player_by_name_password_js();
         }
@@ -448,7 +452,7 @@
         $output = $conn->query($request)->fetch_array();
 
         if ($output){
-            echo strtotime($output[0]);
+            echo strtotime($output[0])*1000;
         } else {
             echo null;
         }
@@ -496,10 +500,10 @@
         $identifiant = $_POST["id"];
         $id_curr_game_session = get_current_game_session()["id"];
 
-        $nbr_persons_played = "SELECT COUNT(*) FROM players WHERE p_played = 1 AND logged = 1 AND ingame = 1 AND continued = 1 AND id_game_session = " . $id_curr_game_session;
+        $nbr_persons_played = "SELECT COUNT(*) FROM players WHERE p_played = 1 AND logged = 1 AND ingame = 1 AND id_game_session = " . $id_curr_game_session;
 
         if ($conn->query($nbr_persons_played)->fetch_array()[0] != '0'){
-            $request = "UPDATE players SET time_spent = 0, p_played = 0 WHERE logged = 1 AND ingame = 1 AND continued = 1"; /*id=" . $identifiant;*/
+            $request = "UPDATE players SET time_spent = 0, p_played = 0 WHERE logged = 1 AND ingame = 1"; /*id=" . $identifiant;*/
             $conn->query($request);
         }
     }
@@ -531,7 +535,7 @@
 
         $id_curr_game_session = $_SESSION['id_curr_game_session'];
 
-        $setMarker = "UPDATE mySecret, players SET mySecret.random_choice = 1 WHERE mySecret.discovered = 0 AND mySecret.id_player = players.id AND players.logged = 1 AND players.ingame = 1 AND mySecret.disabled = 0 AND players.id_game_session =" . $id_curr_game_session . " ORDER BY RAND() LIMIT 1";
+        $setMarker = "UPDATE mySecret, players SET mySecret.random_choice = 1 WHERE mySecret.discovered = 0 AND mySecret.id_player = players.id AND players.logged = 1 AND players.ingame = 1 AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session =" . $id_curr_game_session . " ORDER BY RAND() LIMIT 1";
         $conn2->query($setMarker);
     }
 
@@ -549,7 +553,7 @@
 
         $id_curr_game_session = get_current_game_session()["id"];
         
-        $getSecret = "SELECT * FROM mySecret, players WHERE mySecret.random_choice = 1 AND mySecret.id_player = players.id AND mySecret.disabled = 0 AND players.id_game_session = " . $id_curr_game_session;
+        $getSecret = "SELECT * FROM mySecret, players WHERE mySecret.random_choice = 1 AND mySecret.id_player = players.id AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session = " . $id_curr_game_session;
         $secret = $conn->query($getSecret);
         $check = $secret->fetch_array();
 
@@ -668,7 +672,7 @@
 
         $id_curr_game_session = get_current_game_session()["id"];
 
-        $request = "SELECT COUNT(*) FROM mySecret, players WHERE mySecret.discovered = 1 AND mySecret.id_player = players.id AND players.logged = 1 AND players.ingame = 1 AND mySecret.disabled = 0 AND players.id_game_session =" . $id_curr_game_session;
+        $request = "SELECT COUNT(*) FROM mySecret, players WHERE mySecret.discovered = 1 AND mySecret.id_player = players.id AND players.logged = 1 AND players.ingame = 1 AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session =" . $id_curr_game_session;
         $nbr_discovered = $conn->query($request);
         $nbr_discovered_array = $nbr_discovered->fetch_array();
 
@@ -750,7 +754,7 @@
 
         $id_curr_game_session = get_current_game_session()["id"];
 
-        $get_num_not_discovered = "SELECT COUNT(*) FROM mysecret, players WHERE mysecret.discovered = 0 AND players.id = mysecret.id_player AND mySecret.disabled = 0 AND players.id_game_session =" . $id_curr_game_session;
+        $get_num_not_discovered = "SELECT COUNT(*) FROM mysecret, players WHERE mysecret.discovered = 0 AND players.id = mysecret.id_player AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session =" . $id_curr_game_session;
         $length = $conn->query($get_num_not_discovered);
         $total = $length->fetch_array();
 
@@ -805,6 +809,11 @@
         } else {
             echo 0;
         }
+    }
+
+    function has_arrived_first(){
+        session_start();
+        echo $_SESSION["first"];
     }
 
     function start_game(){

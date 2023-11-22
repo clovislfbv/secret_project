@@ -433,7 +433,7 @@ $j(document).ready(function () {
       tooOld = null;
     }
     console.log(now);
-    console.log(tooOld);
+    console.log(getDateGameSessionCreated() + " " + getNbrPlayersIngame() + " " + hasGameBegun());
     if (hasGameBegun() == 1){
       if (tooOld || (getNbrPlayersIngame() <= 1 && hasGameBegun())){
         killSession();
@@ -460,6 +460,11 @@ $j(document).ready(function () {
   function ConfirmLeave(){
     console.log("deconnecte partiellement")
     let currPlayer = JSON.parse(getcurrPlayer());
+    console.log(window.location.pathname);
+    if (window.location.pathname == "/secret_project/php/get_player.php"){
+      console.log("reset");
+      resetPlayedPlayer(JSON.parse(getcurrPlayer())["id"])
+    }
     disconnectPlayer(currPlayer["id"]);
     // setTimeout(function () {
     //   NbrPlayersOnline = getNbrPlayersIngame();
@@ -505,20 +510,17 @@ $j(document).ready(function () {
 
   var currentKey;
   window.onbeforeunload = function (event) {
-    console.log(checkCloseX);
     if (toto_clicked == 0){
       if (event) {
         $j(document).keydown(function (e) {
           currentKey = e.key.toUpperCase();
         })
         console.log("disconnecting  " + prevKey + "  " + currentKey);
+        console.log(checkCloseX);
         if (checkCloseX == 1 || ((prevKey == "CONTROL" || prevKey == "ALT") && (currentKey != "R" && currentKey != "F5"))){
           main_title = 1;
           realDisconnect()
         } else {
-          if (currentKey == "R" || currentKey == "F5"){
-            resetPlayedPlayer(JSON.parse(getcurrPlayer())["id"]);
-          }
           ConfirmLeave();
         }
       }

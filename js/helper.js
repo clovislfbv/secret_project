@@ -278,20 +278,16 @@ export function updateProgressBar(){
 
   progressbarValue = (totalPlayersPlayed2 / totalPlayersOnline2) * 100;
   if (totalPlayersOnline2 > 1){
-    if (!($j("result_button").hasClass("d-none"))){
-      $j("#progress-bar-players").css("width", progressbarValue + "%");
-      $j(".progress-bar").text(totalPlayersPlayed2 + "/" + totalPlayersOnline2 + " joueurs");
-    }
+    $j("#progress-bar-players").css("width", progressbarValue + "%");
+    $j(".progress-bar").text(totalPlayersPlayed2 + "/" + totalPlayersOnline2 + " joueurs");
     
-    if (progressbarValue === 100 && !($j("result_button").hasClass("d-none")) && $j(".result_button").hasClass("d-none")){
+    if (progressbarValue === 100 && $j(".result_button").hasClass("d-none")){
       setTimeout(function () {
         $j(".result_button").removeClass("d-none");
         $j("#progress-players").addClass("d-none");
       }, 4000);
     } else if (progressbarValue < 100 && $j(".start_button").hasClass("d-none") && $j("#cadenas").hasClass("d-none")){
-      if ($j(".secret_id_played").val().length == 1){
-        $j(".result_button").addClass("d-none");
-      }
+      $j(".result_button").addClass("d-none");
       $j("#progress-players").removeClass("d-none");
     }
 
@@ -447,6 +443,24 @@ export function killSession(){
   })
 }
 
+export function hasArrivedFirst(){
+  let output;
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "has_arrived_first"},
+    async: false,
+    success: function (res){
+      console.log(res);
+      output = res;
+    },
+    error: function (err){
+      console.log(err);
+    }
+  })
+  return output;
+}
+
 export function loading(){
   let output = "";
   var save = 0;
@@ -563,7 +577,12 @@ export function loading(){
           /*$j("#main_title").css({
             "margin-bottom": "0%",
           })*/
-          $j(".start_game").removeClass("d-none");
+          console.log(hasArrivedFirst());
+          if (hasArrivedFirst() == 1){
+            $j(".start_game").removeClass("d-none");
+          } else {
+            $j(".start_game").addClass("d-none");
+          }
         }
       }
       $j(".waiting-players").addClass("d-none");
@@ -854,6 +873,10 @@ export function showSecret() {
       if ($j(".secret_id_played").val().length == 0){
         $j(".secret_id_played").val(random_message["0"]);
       }
+
+      $j(".start_game").css({
+        "height": "0",
+      })
   }, 1000) // NOUBLIE PAS DE CHANGER CETTE VALUE
   author = getAuthorRandomSecret();
 }
