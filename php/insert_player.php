@@ -6,19 +6,20 @@ require_once("helper.php");
 if (!(isset($_SESSION["player_id"]))){
   echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
 } else {
+  $player = $_SESSION["username"];
+  $player_id = $_SESSION["player_id"];
+
   var_dump(get_current_game_session());
   $_SESSION["first"] = 0;
   if (get_current_game_session() == null){
     echo "test   11 1 11 1 1 1 1 1 1 11 1";
     create_game_session();
-    $_SESSION["first"] = 1;
+    $request = "UPDATE players SET first_ingame=1 WHERE id=" . $player_id;
+    $conn->query($request);
   };
   
   $curr_game_session = get_current_game_session();
-  $id_curr_game_session = $curr_game_session["id"];
-
-  $player = $_SESSION["username"];
-  $player_id = $_SESSION["player_id"];
+  $id_curr_game_session = $curr_game_session["id"];  
   
   if (isset($_SESSION["random"])) {
     unset($_SESSION["random"]);

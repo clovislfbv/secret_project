@@ -36,7 +36,7 @@
         }
 
         if ($_POST["action"] == "get_all_players_ingame"){
-            get_all_players_ingame();
+            get_all_players_ingame_js();
         }
 
         if ($_POST["action"] == "get_all_players_disconnected"){
@@ -52,7 +52,7 @@
         }
 
         if ($_POST["action"] == "get_curr_player_name"){
-            get_curr_player_name();
+            get_curr_player_name_js();
         }
 
         if ($_POST["action"] == "get_player_by_id"){
@@ -379,7 +379,11 @@
         $elements = $conn->query($request);
 
         $all_players_ingame = $elements->fetch_all(MYSQLI_ASSOC);
-        echo json_encode($all_players_ingame);
+        return($all_players_ingame);
+    }
+
+    function get_all_players_ingame_js(){
+        echo json_encode(get_all_players_ingame());
     }
 
     function get_all_players_disconnected(){
@@ -465,7 +469,11 @@
 
     function get_curr_player_name(){
         session_start();
-        echo $_SESSION["username"];
+        return $_SESSION["username"];
+    }
+
+    function get_curr_player_name_js(){
+        echo get_curr_player_name();
     }
 
     function get_player_by_id() {
@@ -812,8 +820,21 @@
     }
 
     function has_arrived_first(){
-        session_start();
-        echo $_SESSION["first"];
+        include "conn.php";
+
+        $player = get_curr_player();
+        $id_curr_game_session = get_current_game_session()["id"];
+
+        $request = "SELECT COUNT(*) FROM players WHERE first_ingame=1 AND ingame=1 AND logged = 1 AND id_game_session='" . $id_curr_game_session . "'";
+        $output = $conn->query($request)->fetch_array()[0];
+
+        if ($output == "0"){
+            $request = "UPDATE players SET first_ingame=1 WHERE id=" . $player["id"];
+            $output = $conn->query($request)->fetch_array()[0];
+            echo $output;
+        } else {
+            echo $player["first_ingame"];
+        }
     }
 
     function start_game(){
