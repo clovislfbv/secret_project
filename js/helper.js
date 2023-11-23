@@ -940,6 +940,41 @@ export function deleteSecret(id_secret){
   return wasSecretDeleted;
 }
 
+export function OverlayOn(){
+  $j("#overlay").css({
+    "position": "fixed", /* Sit on top of the page content */
+    "display": "block", /* Hidden by default */
+    "width": "100%", /* Full width (cover the whole page) */
+    "height": "100%", /* Full height (cover the whole page) */
+    "top": "0",
+    "left": "0",
+    "right": "0",
+    "bottom": "0",
+    "background-color": "rgba(0,0,0,0.5)", /* Black background with opacity */
+    "z-index": "2", /* Specify a stack order in case you're using a different order for other elements */
+    "cursor": "pointer", /* Add a pointer on hover */
+  })
+
+  $j("#loader_start").removeClass("d-none")
+}
+
+export function OverlayOff(){
+  $j("#overlay").css({
+    "position": "fixed", /* Sit on top of the page content */
+    "display": "none", /* Hidden by default */
+    "width": "100%", /* Full width (cover the whole page) */
+    "height": "100%", /* Full height (cover the whole page) */
+    "top": "0",
+    "left": "0",
+    "right": "0",
+    "bottom": "0",
+    "background-color": "rgba(0,0,0,0.5)", /* Black background with opacity */
+    "z-index": "2", /* Specify a stack order in case you're using a different order for other elements */
+    "cursor": "pointer", /* Add a pointer on hover */
+  })
+  $j("#loader_start").addClass("d-none")
+}
+
 export function getNbrSecretsEnabled(){
   jQuery.ajax({
     type:"POST",

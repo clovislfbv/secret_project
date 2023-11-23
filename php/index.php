@@ -14,6 +14,12 @@
     <title>Discover my secret</title>
   </head>
   <body>
+    <div id="overlay">
+      <div class="body-players" id="loading-body">
+        <div class="d-flex d-none" id="loader_start">
+        </div>
+      </div>
+    </div>
     <div class="container">
     <div class="row">
       <div class="card whole_thing border-primary big-box">
@@ -31,6 +37,10 @@
               </div>
             </div>
           </div>
+          <script type="module">
+            import { OverlayOff } from "../js/helper.js"
+            OverlayOff();
+          </script>
           <div class="col-6 right">
           <div class="card infos">
             <div class="card-body" id="infos-body">

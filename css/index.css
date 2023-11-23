@@ -189,3 +189,57 @@ form {
     justify-content: space-around;
     align-items: center;
 }
+
+#overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+    cursor: pointer;
+}
+
+@keyframes progress-mbj53w {
+    33% {
+        background-position: 0% 33% ,100% 33% ,200% 33%;
+    }
+
+    66% {
+        background-position: -100%  66%,0%   66% ,100% 66%;
+    }
+
+    100% {
+        background-position: 0% 100%,100% 100%,200% 100%;
+    }
+} 
+
+#loader_start {
+    display: flex;
+    justify-content: center;
+    --r1: 154%;
+    --r2: 68.5%;
+    width: 10%;
+    height: 10%;
+    border-radius: 50%;
+    background: radial-gradient(var(--r1) var(--r2) at top   ,#0000 79.5%,#f87d0b 80%) center left,
+         radial-gradient(var(--r1) var(--r2) at bottom,#f87d0b 79.5%,#0000 80%) center center,
+         radial-gradient(var(--r1) var(--r2) at top   ,#0000 79.5%,#f87d0b 80%) center right,
+         #eeb355;
+    background-size: 50.5% 220%;
+    background-position: -100% 0%,0% 0%,100% 0%;
+    background-repeat: no-repeat;
+    animation: progress-mbj53w 2.8s infinite linear;
+}
+
+#loading-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
