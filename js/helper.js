@@ -78,7 +78,6 @@ export function ConnectCurrPlayer() {
     url: "../php/helper.php",
     data: {action: "connect_curr_player"},
   });
-  console.log(isIngame());
 }
 
 export function destroySessionVariable(){
@@ -180,8 +179,8 @@ export function getPlayerByNamePassword(playerName, password){
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
-    data: {action: "get_player_by_name_password", name: playerName, pass_word: password},
     async: false,
+    data: {action: "get_player_by_name_password", name: playerName, pass_word: password},
     success: function (res){
       player = res;
     }

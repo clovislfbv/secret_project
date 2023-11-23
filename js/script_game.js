@@ -164,7 +164,7 @@ $j(document).ready(function () {
     if (checkPlayerExist() != 0){
       let name = $j("#username").val();
       let password = $j("#password").val();
-      let player = JSON.parse(getPlayerByNamePassword(name, password));
+      var player = JSON.parse(getPlayerByNamePassword(name, password));
       console.log(player["date_last_logged"])
       if (player["logged"] == 0){
         setDateLastLogged(player["id"])
@@ -172,27 +172,26 @@ $j(document).ready(function () {
         $j("form[name='secret_form']").submit();
         window.location.href = "addSecretOrPlay.php";
       } else {
-        let now = Date.now();
-        let tooOld;
-        let test_times = now-getDateLastLogged(player["id"]) > 3600000;
-        if (test_times){
-          tooOld = test_times;
-        } else {
-          tooOld = null;
-        }
-        console.log(tooOld);
-        if (tooOld) {
-          disconnectPlayer(player["id"]);
-          setDateLastLogged(player["id"])
-          $j("form[name='secret_form']").attr('action', "addSecretOrPlay.php");
-          $j("form[name='secret_form']").submit();
-          window.location.href = "addSecretOrPlay.php";
-        } else {
-          $j("#connModal").modal("show")
-          $j(".modal-title").text("Erreur de connexion")
-          $j("#modal-body").text("Cet utilisateur est déjà connecté au jeu")
-          e.preventDefault();
-        }
+        player = JSON.parse(getPlayerByNamePassword(name, password));
+        console.log(player);
+        disconnectPlayer(player["id"]);
+        console.log("COUUUUUUCOUUUUUUU");
+
+        console.log(name, password)
+        setTimeout(function (){
+          player = JSON.parse(getPlayerByNamePassword(name, password))
+          console.log(player);
+          if (player["logged"] == 1){
+            console.log("already_logged")
+            $j("#connModal").modal("show")
+            $j(".modal-title").text("Erreur de connexion")
+            $j("#modal-body").text("Cet utilisateur est déjà connecté au jeu")
+            e.preventDefault();
+          } else {
+            console.log("logging");
+          }
+        }, 1500)
+        e.preventDefault();
       }
     } else {
       $j("#connModal").modal("show")
@@ -221,7 +220,7 @@ $j(document).ready(function () {
   })
 
   $j("form[name='secret_form']").submit(function(){
-    $j("#btn_secret").prop(disabled, true);
+    $j("#btn_secret").prop("disabled", true);
   })
 
   $j("#btn_add_secret").click(function (e){

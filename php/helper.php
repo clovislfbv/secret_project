@@ -293,7 +293,7 @@
 
         $_SESSION["ingame"] = 0;
 
-        $request = "UPDATE players SET ingame = 0 WHERE id=" . $id_curr_player;
+        $request = "UPDATE players SET ingame = 0, first_ingame = 0 WHERE id=" . $id_curr_player;
         $output = $conn->query($request);
 
         return $output;
@@ -500,7 +500,9 @@
         $name = $_POST["name"];
         $pass_word = $_POST["pass_word"];
 
-        echo json_encode(get_player_by_name_password($name, $pass_word));
+        $player = get_player_by_name_password($name, $pass_word);
+
+        echo json_encode($player);
     }
     
     function reset_played_player(){
