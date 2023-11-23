@@ -16,6 +16,8 @@ $j(document).ready(function () {
 
   let save_body = $j("#card-body").html();
   let save_background = 0;
+  let btn_login_clicked = 0;
+  let btn_register_clicked = 0;
 
   if ($j("#connModal").length){
     $j("#connModal").modal("hide");
@@ -212,10 +214,14 @@ $j(document).ready(function () {
     }
   })
 
-  $j("#btn_secret").click(function (e, t){
+  $j("#btn_secret").one('click',function(event){
     $j("form[name='secret_form']").attr('action', "create_player.php");
     $j("form[name='secret_form']").submit();
     window.location.href = "create_player.php";
+  })
+
+  $j("form[name='secret_form']").submit(function(){
+    $j("#btn_secret").prop(disabled, true);
   })
 
   $j("#btn_add_secret").click(function (e){
@@ -461,10 +467,12 @@ $j(document).ready(function () {
     console.log("deconnecte partiellement")
     let currPlayer = JSON.parse(getcurrPlayer());
     console.log(window.location.pathname);
-    if (window.location.pathname == "/secret_project/php/get_player.php"){
-      console.log("reset");
-      resetPlayedPlayer(JSON.parse(getcurrPlayer())["id"])
-    }
+    setTimeout(function (){
+      if (window.location.pathname == "/secret_project/php/get_player.php"){
+        console.log("reset");
+        resetPlayedPlayer(JSON.parse(getcurrPlayer())["id"])
+      }
+    }, 3000)
     disconnectPlayer(currPlayer["id"]);
     // setTimeout(function () {
     //   NbrPlayersOnline = getNbrPlayersIngame();
@@ -539,6 +547,10 @@ $j(document).ready(function () {
   setInterval(function() {
     if ((main_title == 0) && (window.location.pathname != "/secret_project/php/index.php")){
       ConnectCurrPlayer();
+    }
+
+    if (window.location.pathname == "/secret_project/php/index.php" && $j("#btn_login").prop('disabled')){
+      success();
     }
 
     if (hasGameBegun() == 1 && shown == 0 && $j("#cadenas").length && !($j("#cadenas").hasClass("d-none"))){

@@ -151,6 +151,7 @@ body {
     flex-direction: column;
     background-color: black;
     height: 100%;
+    justify-content: space-evenly;
 }
 
 .active {

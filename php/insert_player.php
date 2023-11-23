@@ -4,7 +4,7 @@ include_once("conn.php");
 require_once("helper.php");
 
 if (!(isset($_SESSION["player_id"]))){
-  echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
+  // echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
 } else {
   $player = $_SESSION["username"];
   $player_id = $_SESSION["player_id"];
