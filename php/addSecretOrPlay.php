@@ -50,7 +50,7 @@
                                     $test = get_player_by_name_password($player, $pass_word);
                                     $_SESSION["player_id"] = $test["id"];
                                 } else {
-                                    echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
+                                    // echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
                                 }
                             }
                             if (is_ingame()){

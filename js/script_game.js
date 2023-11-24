@@ -1,4 +1,4 @@
-import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated, getPlayerByNamePassword, getNbrPlayersIngame, getDateLastLogged, setDateLastLogged, OverlayOn, OverlayOff} from "./helper.js";
+import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated, getPlayerByNamePassword, getNbrPlayersIngame, getDateLastLogged, setDateLastLogged, OverlayOn, OverlayOff, SaveNamePassword} from "./helper.js";
 
 var $j = jQuery.noConflict();
 
@@ -159,7 +159,7 @@ $j(document).ready(function () {
     }, 1500);
   })
 
-  $j("#btn_login").on("click", function (e, t){
+  $j("#btn_login").click(function (e, t){
     console.log(e,t);
     if (checkPlayerExist() != 0){
       let name = $j("#username").val();
@@ -184,21 +184,25 @@ $j(document).ready(function () {
           player = JSON.parse(getPlayerByNamePassword(name, password))
           console.log(player);
           if (player["logged"] == 1){
+            e.preventDefault();
             console.log("already_logged")
             OverlayOff();
             $j("#connModal").modal("show")
             $j(".modal-title").text("Erreur de connexion")
             $j("#modal-body").text("Cet utilisateur est déjà connecté au jeu")
-            e.preventDefault();
           } else {
+            e.preventDefault();
             setDateLastLogged(player["id"])
             OverlayOff();
+            console.log(name);
+            console.log(password);
+            SaveNamePassword(name, password);
             $j("form[name='secret_form']").attr('action', "addSecretOrPlay.php");
             $j("form[name='secret_form']").submit();
             window.location.href = "addSecretOrPlay.php";
             console.log("logging");
           }
-        }, 1500)
+        }, 2000)
         if (player["logged"] == 1){
           e.preventDefault();
         }
@@ -539,7 +543,8 @@ $j(document).ready(function () {
         })
         console.log("disconnecting  " + prevKey + "  " + currentKey);
         console.log(checkCloseX);
-        if (checkCloseX == 1 || ((prevKey == "CONTROL" || prevKey == "ALT") && (currentKey != "R" && currentKey != "F5"))){
+        if (checkCloseX == 1 || ((prevKey == "CONTROL" || prevKey == "ALT") && (typeof currentKey != "undefined" && currentKey != "R" && currentKey != "F5"))){
+          console.log((prevKey == "CONTROL" || prevKey == "ALT") && (typeof currentKey != "undefined" && currentKey != "R" && currentKey != "F5"));
           main_title = 1;
           realDisconnect()
         } else {

@@ -188,6 +188,21 @@ export function getPlayerByNamePassword(playerName, password){
   return player;
 }
 
+export function SaveNamePassword(playerName, password){
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    async: false,
+    data: {action: "save_name_password", name: playerName, pass_word: password},
+    success: function(res) {
+      console.log(res);
+    },
+    error: function(err) {
+      console.log(err);
+    }
+  })
+}
+
 /*******
  * update the played variable if a player drags a button to the dropper
  *******/

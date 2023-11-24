@@ -111,6 +111,10 @@
             get_player_by_name_password_js();
         }
 
+        if ($_POST["action"] == "save_name_password"){
+            save_name_password();
+        }
+
         if ($_POST["action"] == "disconnect_player"){
             disconnect_player();
         }
@@ -503,6 +507,16 @@
         $player = get_player_by_name_password($name, $pass_word);
 
         echo json_encode($player);
+    }
+
+    function save_name_password(){
+        session_start();
+
+        $name = $_POST["name"];
+        $pass_word = $_POST["pass_word"];
+
+        $_SESSION["username"] = $name;
+        $_SESSION["password"] = $pass_word;
     }
     
     function reset_played_player(){

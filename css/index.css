@@ -223,7 +223,7 @@ form {
     justify-content: center;
     --r1: 154%;
     --r2: 68.5%;
-    width: 10%;
+    width: 5%;
     height: 10%;
     border-radius: 50%;
     background: radial-gradient(var(--r1) var(--r2) at top   ,#0000 79.5%,#f87d0b 80%) center left,
