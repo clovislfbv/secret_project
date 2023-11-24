@@ -559,7 +559,10 @@
 
         $id_curr_game_session = $_SESSION['id_curr_game_session'];
 
-        $setMarker = "UPDATE mySecret, players SET mySecret.random_choice = 1 WHERE mySecret.discovered = 0 AND mySecret.id_player = players.id AND players.logged = 1 AND players.ingame = 1 AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session =" . $id_curr_game_session . " ORDER BY RAND() LIMIT 1";
+        $request = "SELECT mysecret.id FROM mySecret, players WHERE mySecret.random_choice = 0 AND mySecret.id_player = players.id AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session = '" . $id_curr_game_session . "' ORDER BY RAND() LIMIT 1";
+        $idSecret = $conn->query($request)->fetch_array()[0];
+
+        $setMarker = "UPDATE mySecret SET random_choice = 1 WHERE id='" . $idSecret . "'";
         $conn2->query($setMarker);
     }
 
