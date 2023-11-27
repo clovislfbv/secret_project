@@ -60,7 +60,7 @@
         }
 
         if ($_POST["action"] == "reset_played_player"){
-            reset_played_player();
+            reset_single_played_player();
         }
 
         if ($_POST["action"] == "choose_random_secret"){
@@ -532,6 +532,15 @@
         }
     }
 
+    function reset_single_played_player(){
+        include "conn.php";
+        $identifiant = $_POST["id"];
+        $id_curr_game_session = get_current_game_session()["id"];
+
+        $request = "UPDATE players SET time_spent = 0, p_played = 0 WHERE logged = 1 AND ingame = 1 AND id_game_session=" . $id_curr_game_session . " AND id=" . $identifiant; /*id=" . $identifiant;*/
+        echo $conn->query($request);
+    }
+
     function uniqidReal($lenght = 13) {
         // uniqid gives 13 chars, but you could adjust it to your needs.
         if (function_exists("random_bytes")) {
@@ -559,7 +568,7 @@
 
         $id_curr_game_session = $_SESSION['id_curr_game_session'];
 
-        $request = "SELECT mysecret.id FROM mySecret, players WHERE mySecret.random_choice = 0 AND mySecret.id_player = players.id AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session = '" . $id_curr_game_session . "' ORDER BY RAND() LIMIT 1";
+        $request = "SELECT mysecret.id FROM mySecret, players WHERE players.ingame = 1 AND mySecret.random_choice = 0 AND mySecret.discovered = 0 AND mySecret.id_player = players.id AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session = '" . $id_curr_game_session . "' ORDER BY RAND() LIMIT 1";
         $idSecret = $conn->query($request)->fetch_array()[0];
 
         $setMarker = "UPDATE mySecret SET random_choice = 1 WHERE id='" . $idSecret . "'";
@@ -571,8 +580,8 @@
 
         $id_curr_game_session = $_SESSION['id_curr_game_session'];
 
-        $unsetMarker = "UPDATE mySecret SET mySecret.random_choice = 0 WHERE mySecret.discovered = 1"; /*AND mySecret.id = players.id_secret AND players.id_game_session =" . $id_curr_game_session;*/
-        $conn->query($unsetMarker);
+        $unsetMarker = "UPDATE mySecret, players SET mySecret.random_choice = 0 WHERE mySecret.discovered = 1";
+        $conn2->query($unsetMarker);
     }
 
     function choose_random_secret(){
@@ -580,7 +589,7 @@
 
         $id_curr_game_session = get_current_game_session()["id"];
         
-        $getSecret = "SELECT * FROM mySecret, players WHERE mySecret.random_choice = 1 AND mySecret.id_player = players.id AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session = " . $id_curr_game_session;
+        $getSecret = "SELECT * FROM mySecret, players WHERE players.ingame = 1 AND mySecret.random_choice = 1 AND mySecret.id_player = players.id AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session = " . $id_curr_game_session;
         $secret = $conn->query($getSecret);
         $check = $secret->fetch_array();
 
@@ -781,7 +790,7 @@
 
         $id_curr_game_session = get_current_game_session()["id"];
 
-        $get_num_not_discovered = "SELECT COUNT(*) FROM mysecret, players WHERE mysecret.discovered = 0 AND players.id = mysecret.id_player AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session =" . $id_curr_game_session;
+        $get_num_not_discovered = "SELECT COUNT(*) FROM mysecret, players WHERE mysecret.discovered = 0 AND players.id = mysecret.id_player AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.ingame = 1 AND players.id_game_session =" . $id_curr_game_session;
         $length = $conn->query($get_num_not_discovered);
         $total = $length->fetch_array();
 
@@ -848,6 +857,9 @@
         $output = $conn->query($request)->fetch_array()[0];
 
         if ($output == "0"){
+            $reset_everyone = "UPDATE players SET first_ingame = 0";
+            $conn2->query($reset_everyone);
+
             $request = "UPDATE players SET first_ingame=1 WHERE id=" . $player["id"];
             $output = $conn->query($request)->fetch_array()[0];
             echo $output;

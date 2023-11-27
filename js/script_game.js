@@ -167,6 +167,11 @@ $j(document).ready(function () {
       var player = JSON.parse(getPlayerByNamePassword(name, password));
       console.log(player["date_last_logged"])
       if (player["logged"] == 0){
+        let second_player = getcurrPlayer();
+        if (second_player != null){
+          disconnectPlayer(JSON.parse(second_player));
+          destroySessionVariable();
+        }
         setDateLastLogged(player["id"])
         $j("form[name='secret_form']").attr('action', "addSecretOrPlay.php");
         $j("form[name='secret_form']").submit();

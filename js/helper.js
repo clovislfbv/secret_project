@@ -316,6 +316,9 @@ export function resetPlayedPlayer(identifiant){
     type:"POST",
     url: "../php/helper.php",
     data: {action: "reset_played_player", id: identifiant},
+    success: function (res){
+      console.log(res);
+    },
     error: function (err) {
       console.log(err);
     }
@@ -766,10 +769,10 @@ export function disconnectPlayer(player_id){
     data: {action: "disconnect_player", p_id: player_id},
     /*success: function () {
       console.log("player has been successfuly disconnected"); 
-    },
+    },*/
     error: function (err) {
       console.log(err);
-    }*/
+    }
   });
 }
 
@@ -1099,8 +1102,7 @@ export function displayLeaderboard() {
       console.log($j(".comments-leaderboard").html());
   
       if (rank_previous != null && $j(".comments-leaderboard").html() != "Tu es actuellement au rang " + rank + " au classement actuel avec un score de " + curr_leaderboard[rank-1]["score"] + " points.<br>Tu es juste derrière " + rank_previous["p_name"] + " qui a un score de " + rank_previous["score"] + " points."){
-        $j(".comments-leaderboard").html("Tu es actuellement au rang " + rank + " au classement actuel avec un score de " + curr_leaderboard[rank-1]["score"] + " points.<br>");
-        $j(".comments-leaderboard").html($j(".comments-leaderboard").html() + "Tu es juste derrière " + rank_previous["p_name"] + " qui a un score de " + rank_previous["score"] + " points.");
+        $j(".comments-leaderboard").html("Tu es actuellement au rang " + rank + " au classement actuel avec un score de " + curr_leaderboard[rank-1]["score"] + " points.<br>Tu es juste derrière " + rank_previous["p_name"] + " qui a un score de " + rank_previous["score"] + " points.");
         first_test = 0;
       } else if ($j(".comments-leaderboard").html() != "Tu es actuellement au rang " + rank + " au classement actuel avec un score de " + curr_leaderboard[rank-1]["score"] + " points." && first_test){
         $j(".comments-leaderboard").html("Tu es actuellement au rang " + rank + " au classement actuel avec un score de " + curr_leaderboard[rank-1]["score"] + " points.");

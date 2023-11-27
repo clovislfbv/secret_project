@@ -25,7 +25,7 @@ body {
 }
 
 .real_message_author {
-  font-size: 4vh;
+  font-size: calc(2.5vh + 1vw);
 }
 
 #main_title {
@@ -119,11 +119,11 @@ body {
   display: flex;
   justify-content: flex-start;
   height: 100%;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .gain {
-    height: 10%;
+    height: 5%;
     width: 90%;
     display: flex;
     justify-content: center;
@@ -131,13 +131,13 @@ body {
 }
 
 .comments-leaderboard {
-    height: 10%;
+    height: 25%;
     width: 90%;
 }
 
 .main_title {
     text-decoration: none;
-    font-size: 4vh;
+    font-size: 6vh;
 }
 
 .results {
@@ -152,7 +152,12 @@ body {
     flex-direction: column;
     background-color: black;
     height: 100%;
+    width: 100%;
     justify-content: space-evenly;
+}
+
+h1, h3 {
+  font-size: calc(2.5vh + 1vw);
 }
 
 .active {
@@ -161,8 +166,9 @@ body {
 }
 
 .leaderboard-container {
-    height: 75%;
+    height: 65%;
     margin-bottom: 6%;
+    width: 100%;
 }
 
 #page-selection {
@@ -476,4 +482,16 @@ body.dark-mode .scoreboard__bar {
   font-size: calc(5px + 1vw);
   height: 5vh;
   align-items: center;
+}
+
+@media screen and (max-width: 900px) {
+  .scoreboard {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .scoreboard {
+    width: 50%;
+  }
 }
