@@ -138,10 +138,10 @@ export function setDateLastLogged(player_id){
     data: {action: "set_date_last_logged", p_id: player_id},
     async: false,
     success: function (success){
-      console.log(success);
+      //console.log(success);
     },
     error: function (err){
-      console.log(err);
+      //console.log(err);
     }
   })
 }
@@ -195,10 +195,10 @@ export function SaveNamePassword(playerName, password){
     async: false,
     data: {action: "save_name_password", name: playerName, pass_word: password},
     success: function(res) {
-      console.log(res);
+      //console.log(res);
     },
     error: function(err) {
-      console.log(err);
+      //console.log(err);
     }
   })
 }
@@ -208,7 +208,7 @@ export function SaveNamePassword(playerName, password){
  *******/
 export function updatePlayerWhenPlayed(choice) {
   let timeSpent = (new Date() - start_time);
-  console.log("temps joué : " + timeSpent)
+  //console.log("temps joué : " + timeSpent)
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
@@ -317,10 +317,10 @@ export function resetPlayedPlayer(identifiant){
     url: "../php/helper.php",
     data: {action: "reset_played_player", id: identifiant},
     success: function (res){
-      console.log(res);
+      //console.log(res);
     },
     error: function (err) {
-      console.log(err);
+      //console.log(err);
     }
   })
 }
@@ -346,7 +346,7 @@ function getAllPlayersIngame() {
         test = result;
     },
     error: function (err) {
-        console.log(err);
+        //console.log(err);
     }
     });
     return test;
@@ -366,7 +366,7 @@ function getAllPlayersDisconnected() {
         test2 = res;
     },
     error: function (err) {
-        console.log(err);
+        //console.log(err);
     }
     });
     return test2;
@@ -409,7 +409,7 @@ export function getCurrPlayerName () {
     async: false,  
     success: function (result) {
       test3 = result;
-      console.log("Received curr player's name");
+      //console.log("Received curr player's name");
     }
   })
   return test3;
@@ -437,6 +437,19 @@ function endGame(){
   })
 }
 
+var initialCount = 60;
+var count = initialCount;
+export function timer_game() {
+  count = count - 1;
+  if (count <= -1) {
+      count = initialCount;
+      var el = $j(".circle-timer");
+      el.before( el.clone(true) ).remove();
+  }
+
+  $j(".count").text(count);
+}
+
 export function leaveInGame(p_id){
   jQuery.ajax({
     type: "POST",
@@ -452,9 +465,25 @@ export function killSession(){
     data: {action: "kill_session"},
     async: false,
     success: function (res){
-      console.log(res);
+      //console.log(res);
     },
     error: function (err){
+      //console.log(err);
+    }
+  })
+}
+
+export function getCurrentGameSession(){
+  let game_session;
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "get_current_game_session"},
+    async: false,
+    success: function (res){
+      game_session = res;
+    },
+    error: function(err){
       console.log(err);
     }
   })
@@ -468,11 +497,11 @@ export function hasArrivedFirst(){
     data: {action: "has_arrived_first"},
     async: false,
     success: function (res){
-      console.log(res);
+      //console.log(res);
       output = res;
     },
     error: function (err){
-      console.log(err);
+      //console.log(err);
     }
   })
   return output;
@@ -531,7 +560,7 @@ export function loading(){
         }
       }, 5000);
     }
-    console.log(total_players_logged, animation_finished, hasGameBegun());
+    //console.log(total_players_logged, animation_finished, hasGameBegun());
     if (total_players_logged > 1 && animation_finished == 0 && hasGameBegun()){
       if (nbr_messages_discovered > 0){
         LottiePlayer.setSpeed(1);
@@ -594,7 +623,7 @@ export function loading(){
           /*$j("#main_title").css({
             "margin-bottom": "0%",
           })*/
-          console.log(hasArrivedFirst());
+          //console.log(hasArrivedFirst());
           if (hasArrivedFirst() == 1){
             $j(".start_game").removeClass("d-none");
           } else {
@@ -604,7 +633,7 @@ export function loading(){
       }
       $j(".waiting-players").addClass("d-none");
     }
-  }, 3000)
+  }, 5000)
 }
 
 export function getAllSecretsStored(){
@@ -697,7 +726,7 @@ export function unsetNewRandomSecret() {
       window.location.href = "../php/get_player.php";
     },
     error: function (err) {
-      console.log(err);
+      //console.log(err);
     }
   })
 }
@@ -710,7 +739,7 @@ export function chooseRandomSecret(){
     data: {action: "choose_random_secret"},
     async: false,
     success: function (result) {
-      console.log(result);
+      //console.log(result);
       if (random_secret != result){
         changed = 1;
         random_secret = result;
@@ -759,7 +788,7 @@ export function displayContinueButton(){
       $j(".continue_button").removeClass("d-none");
       $j(".wait4result").addClass("d-none");
     }
-  }, 3000);
+  }, 5000);
 }
 
 export function disconnectPlayer(player_id){
@@ -768,12 +797,26 @@ export function disconnectPlayer(player_id){
     url: "../php/helper.php",
     data: {action: "disconnect_player", p_id: player_id},
     /*success: function () {
-      console.log("player has been successfuly disconnected"); 
+      //console.log("player has been successfuly disconnected"); 
     },*/
     error: function (err) {
-      console.log(err);
+      //console.log(err);
     }
   });
+}
+
+export function disconnectAllOtherPlayers(){
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "disconnect_all_other_players"},
+    success: function () {
+      //console.log("All other players disconnected");
+    },
+    error: function (err) {
+      //console.log(err);
+    }
+  })
 }
 
 export function getNbrMessagesDiscovered(){
@@ -792,10 +835,12 @@ export function getNbrMessagesDiscovered(){
 export function showSecret() {
   shown = 1;
   start_time = new Date();
-  console.log("le chronomètre a commencé")
+  let timerLottie = document.getElementById("timerLottie");
+  //console.log("le chronomètre a commencé")
   if (!($j(".start_game").hasClass("d-none"))){
     $j('.start_game').addClass('d-none');
   }
+
   $j(".player").draggable({revert: true});
 
   $j("#droppable-player").droppable({
@@ -878,23 +923,48 @@ export function showSecret() {
   $j(".secret_and_progress").removeClass('d-none');
   $j('#start_button').addClass('d-none');
 
-  setInterval(function() {
-      let random_message = JSON.parse(chooseRandomSecret());
-      $j("#secret_message").text(decodeSecret(random_message["p_secret"]));
-      $j("#secret_message").css({
-        "height" : $j("#secret_message").scrollHeight + "px",
-      })
-      /*$j("#secret_message").css({
-        "width" : $j("#secret_message").val().length * 9,
-      })*/
-      if ($j(".secret_id_played").val().length == 0){
-        $j(".secret_id_played").val(random_message["0"]);
-      }
+  timerLottie.seek(0);
 
-      $j(".start_game").css({
-        "height": "0",
-      })
-  }, 1000) // NOUBLIE PAS DE CHANGER CETTE VALUE
+  timerLottie.addEventListener("complete", function(){
+
+    let currPlayer = JSON.parse(getcurrPlayer());
+    updatePlayerContinued(currPlayer["id"]);
+
+    if ($j(".secret_id_played").val().split("-").length == 1){
+      let value = $j(".secret_id_played").val();
+      $j(".secret_id_played").val(value + "-0-0");
+    } else {
+      author = getAuthorRandomSecret();
+
+      let id_chosen_player = $j(".secret_id_played").val().split("-")[2];
+      console.log(id_chosen_player, author["id"], currPlayer["id"], currPlayer["time_spent"]);
+      updateScore(id_chosen_player, author["id"], currPlayer["id"], currPlayer["time_spent"]/1000);
+    }
+
+    shown = 0;
+
+    console.log("time's up !!!!!!!!!!!!")
+    $j("#result_form").submit();
+    timerLottie.removeEventListener("complete", submit_choice);
+  });
+
+  setInterval(function() {
+    let random_message = JSON.parse(chooseRandomSecret());
+    $j("#secret_message").text(decodeSecret(random_message["p_secret"]));
+    $j("#secret_message").css({
+      "height" : $j("#secret_message").scrollHeight + "px",
+    })
+    /*$j("#secret_message").css({
+      "width" : $j("#secret_message").val().length * 9,
+    })*/
+    if ($j(".secret_id_played").val().length == 0){
+      $j(".secret_id_played").val(random_message["0"]);
+    }
+
+    $j(".start_game").css({
+      "height": "0",
+    })
+  }, 1500) // NOUBLIE PAS DE CHANGER CETTE VALUE
   author = getAuthorRandomSecret();
 }
 
@@ -951,7 +1021,7 @@ export function deleteSecret(id_secret){
     url: "../php/helper.php",
     data: {action: "delete_secret", id: id_secret},
     success: function (res) {
-      console.log(res);
+      //console.log(res);
       wasSecretDeleted = res;
     }
   })
@@ -1029,10 +1099,10 @@ export function displayLeaderboard() {
   let first_test = 1;
   setInterval(function() {
     var curr_leaderboard = JSON.parse(getLeaderboard());
-    console.log(curr_leaderboard)
+    //console.log(curr_leaderboard)
     let currPlayer = JSON.parse(getcurrPlayer());
     let nbr_players = curr_leaderboard.length;
-    console.log(nbr_players);
+    //console.log(nbr_players);
     let nbrSecretsNotDiscovered = getNbrSecretsNotDiscovered();
     let counter = 1;
     var output = "";
@@ -1099,7 +1169,7 @@ export function displayLeaderboard() {
         rank++;
       }
   
-      console.log($j(".comments-leaderboard").html());
+      //console.log($j(".comments-leaderboard").html());
   
       if (rank_previous != null && $j(".comments-leaderboard").html() != "Tu es actuellement au rang " + rank + " au classement actuel avec un score de " + curr_leaderboard[rank-1]["score"] + " points.<br>Tu es juste derrière " + rank_previous["p_name"] + " qui a un score de " + rank_previous["score"] + " points."){
         $j(".comments-leaderboard").html("Tu es actuellement au rang " + rank + " au classement actuel avec un score de " + curr_leaderboard[rank-1]["score"] + " points.<br>Tu es juste derrière " + rank_previous["p_name"] + " qui a un score de " + rank_previous["score"] + " points.");
@@ -1134,7 +1204,7 @@ export function displayLeaderboard() {
         setTimeout( function(){ 
         third.addClass('is-visible');
         var h = third.data('height');
-        console.log(h);
+        //console.log(h);
         third.find('.scoreboard__podium-base').css('height', h).addClass('is-expanding');
           }, time);
         time += 1000;
@@ -1145,7 +1215,7 @@ export function displayLeaderboard() {
         setTimeout( function(){ 
         second.addClass('is-visible');
         var h = second.data('height');
-        console.log(h);
+        //console.log(h);
         second.find('.scoreboard__podium-base').css('height', h).addClass('is-expanding');
           }, time);
         time += 1750;
@@ -1156,12 +1226,12 @@ export function displayLeaderboard() {
         setTimeout( function(){ 
         first.addClass('is-visible');
         var h = first.data('height');
-        console.log(h);
+        //console.log(h);
         first.find('.scoreboard__podium-base').css('height', h).addClass('is-expanding');
           }, time);
       };
     }
-  }, 2000);
+  }, 3000);
 }
 
 export function updateScore(id_player, id_player_chosen, id_curr_player, time_spent) {
@@ -1172,11 +1242,11 @@ export function updateScore(id_player, id_player_chosen, id_curr_player, time_sp
     data: {action: "update_score", player_id: id_player, id_chosen_player: id_player_chosen, curr_player_id: id_curr_player, time_player: time_spent},
     async: false,
     success: function (res) {
-      console.log(res);
+      //console.log(res);
       result = res;
     },
     error: function (err) {
-      console.log(err);
+      //console.log(err);
     }
   })
   return result;
@@ -1201,7 +1271,7 @@ export function startGame(){
     url: "../php/helper.php",
     data: {action: "start_game"},
     success: function (res) {
-      console.log("game_started");
+      //console.log("game_started");
     }
   })
 }
@@ -1249,7 +1319,7 @@ export function displayAllPlayersOnline(){
       let value = $j(".secret_id_played").val().split("-");
 
       all_players_logged = getAllPlayersIngame();
-      console.log(all_players_logged);
+      //console.log(all_players_logged);
       
       nbr_messages_discovered = getNbrMessagesDiscovered();
       total_players_logged = getNbrPlayersIngame();
@@ -1312,7 +1382,7 @@ export function displayAllPlayersOnline(){
         })
       }
 
-      if (nbr_messages_discovered > 0 && $j(".secret_and_progress").hasClass("d-none") && $j("#cadenas").hasClass("d-none")){
+      if (nbr_messages_discovered > 0 && shown == 0 && $j(".secret_and_progress").hasClass("d-none") && $j("#cadenas").hasClass("d-none")){
         showSecret()
       }
       
@@ -1324,9 +1394,9 @@ export function displayAllPlayersOnline(){
           setTimeout(function(){
             let all_players_disconnected_2 = getAllPlayersDisconnected();
             let index;
-            for (index = all_players_disconnected_2.length-1; index > 0 && element["id"] < all_players_disconnected_2[index]["id"]; index--){
-              console.log(all_players_disconnected_2[index]);
-            }
+            // for (index = all_players_disconnected_2.length-1; index > 0 && element["id"] < all_players_disconnected_2[index]["id"]; index--){
+               //console.log(all_players_disconnected_2[index]);
+            // }
             if (all_players_disconnected_2[index]["id"] == element["id"]){
               if (!($j("#"+element["p_name"]+"-"+element["id"]).hasClass("d-none"))){
                 $j("#"+element["p_name"]+"-"+element["id"]).addClass("d-none");
@@ -1359,7 +1429,7 @@ export function displayAllPlayersOnline(){
         }
         
       })
-      if (total_players_logged == 1 || (hasGameBegun() && !($j("#cadenas").hasClass("d-none")))){
+      if (total_players_logged >= 1 || (hasGameBegun() && !($j("#cadenas").hasClass("d-none")))){
         animation_finished = 0;
       }
 

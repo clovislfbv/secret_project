@@ -116,7 +116,19 @@
                           <div class="container-guess-secret">
                             <div class="wrapper">
                               <div class="container-secret-message text-primary">
-                                <div class="question-guess">A qui appartient ce secret ?</div>
+                                <!-- <div class="timer">
+                                  <div class="circle-timer">
+                                    <div class="timer-slot">
+                                      <div class="timer-lt"></div>
+                                    </div>
+                                    <div class="timer-slot">
+                                      <div class="timer-rt"></div>
+                                    </div>
+                                    <div class="count"></div>
+                                  </div>
+                                </div> -->
+                                <div class="question-guess">Vous avez une minute pour trouver à qui appartient ce secret</div>
+                                <dotlottie-player id="timerLottie" src="../lottie-player/timer/timer.lottie" background="transparent" speed="2" direction="1" mode="normal" autoplay></dotlottie-player>
                                 <div class="text-secret border-primary" id="secret_message"></div>
                               </div>
                             </div>

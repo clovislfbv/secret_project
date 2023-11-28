@@ -119,6 +119,10 @@
             disconnect_player();
         }
 
+        if ($_POST["action"] == "disconnect_all_other_players"){
+            disconnect_all_other_players();
+        }
+
         if ($_POST["action"] == "get_nbr_message_discovered"){
             get_nbr_message_discovered();
         }
@@ -197,6 +201,10 @@
 
         if ($_POST["action"] == "destroy_session_variable"){
             destroy_session_variable();
+        }
+
+        if ($_POST["action"] == "get_current_game_session"){
+            get_current_game_session();
         }
     }
 
@@ -667,6 +675,19 @@
             $reset = "UPDATE players SET logged = 0 WHERE id=" . $player_id;
             $conn->query($reset);
         }
+    }
+
+    function disconnect_all_other_players() {
+        include "conn.php";
+        session_start();
+
+        $id_curr_game_session = get_current_game_session()["id"];
+        $player_id = get_curr_player()["id"];
+
+        $request = "UPDATE players SET logged=0, ingame=0 WHERE id_game_session=" . $id_curr_game_session . " AND id !=" . $player_id;
+        $disconnect = $conn->query($request);
+
+        echo $disconnect;
     }
 
     function get_all_secrets_stored(){

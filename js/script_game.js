@@ -1,4 +1,4 @@
-import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated, getPlayerByNamePassword, getNbrPlayersIngame, getDateLastLogged, setDateLastLogged, OverlayOn, OverlayOff, SaveNamePassword} from "./helper.js";
+import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated, getPlayerByNamePassword, getNbrPlayersIngame, getDateLastLogged, setDateLastLogged, OverlayOn, OverlayOff, SaveNamePassword, timer_game, getCurrentGameSession} from "./helper.js";
 
 var $j = jQuery.noConflict();
 
@@ -587,6 +587,7 @@ $j(document).ready(function () {
           "margin-bottom": "13%",
         })*/
         showSecret();
+        // setInterval(timer_game, 1000);
         shown = 1;
       }, 2500)
     }
@@ -606,6 +607,11 @@ $j(document).ready(function () {
     if (window.location.pathname == "/secret_project/php/index.php" && currPlayer){
       disconnectPlayer(JSON.parse(currPlayer["id"]));
       destroySessionVariable();
+      currGameSession = getCurrentGameSession();
+      nbr_players_ingame = getNbrPlayersIngame();
+      if (currGameSession != null && nbr_players_ingame == 0){
+        killSession();
+      }
     }
 
     if (!($j("#cadenas").hasClass("d-none"))){
@@ -656,5 +662,5 @@ $j(document).ready(function () {
         $j("#result_form").submit();
       }, 1500);
     }*/
-  }, 1500);
+  }, 3000);
 })
