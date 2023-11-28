@@ -836,6 +836,7 @@ export function showSecret() {
   shown = 1;
   start_time = new Date();
   let timerLottie = document.getElementById("timerLottie");
+  console.log("test_show_SECRET");
   //console.log("le chronomètre a commencé")
   if (!($j(".start_game").hasClass("d-none"))){
     $j('.start_game').addClass('d-none');
@@ -945,6 +946,7 @@ export function showSecret() {
 
     console.log("time's up !!!!!!!!!!!!")
     $j("#result_form").submit();
+    check_only_one_time = 0
     timerLottie.removeEventListener("complete", submit_choice);
   });
 
@@ -1312,9 +1314,10 @@ export function setAnimationFinished(value){
 /*******
  * show all players on the web page thanks to buttons and also manage how the progress bar is displayed
  *******/
+var check_only_one_time = 0
 export function displayAllPlayersOnline(){
     var colors = ["btn-secondary", "btn-info", "btn-danger", "btn-success", "btn-warning", "btn-light", "btn-primary"]
-    var index_colors = 0; 
+    var index_colors = 0;
     setInterval(function() {
       let value = $j(".secret_id_played").val().split("-");
 
@@ -1382,9 +1385,10 @@ export function displayAllPlayersOnline(){
         })
       }
 
-      if (nbr_messages_discovered > 0 && shown == 0 && $j(".secret_and_progress").hasClass("d-none") && $j("#cadenas").hasClass("d-none")){
-        showSecret()
-      }
+      // if (nbr_messages_discovered > 0 && check_only_one_time == 0 && shown == 0 && $j(".secret_and_progress").hasClass("d-none") && $j("#cadenas").hasClass("d-none")){
+      //   showSecret()
+      //   check_only_one_time = 1; 
+      // }
       
       updateProgressBar();
 

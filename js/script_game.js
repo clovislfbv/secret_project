@@ -18,6 +18,7 @@ $j(document).ready(function () {
   let save_background = 0;
   let btn_login_clicked = 0;
   let btn_register_clicked = 0;
+  let start_button_clicked = 0;
 
   if ($j("#connModal").length){
     $j("#connModal").modal("hide");
@@ -383,7 +384,7 @@ $j(document).ready(function () {
     })
   })
 
-  $j(".start_game").click(function (e) {
+  $j(".start_game").one("click", function (e) {
     if (shown == 0){
       startGame();
       LottiePlayer.setSpeed(1);
@@ -395,6 +396,7 @@ $j(document).ready(function () {
           "margin-bottom": "13%",
         })*/
         showSecret();
+        start_button_clicked = 1;
         shown = 1;
       }, 2500)
     }
@@ -577,19 +579,25 @@ $j(document).ready(function () {
       success();
     }
 
-    if (hasGameBegun() == 1 && shown == 0 && $j("#cadenas").length && !($j("#cadenas").hasClass("d-none"))){
-      LottiePlayer.setSpeed(1);
-      LottiePlayer.play();
-      setTimeout(function () {
-        setAnimationFinished(1);
-        $j("#cadenas").addClass("d-none");
-        /*$j("#main_title").css({
-          "margin-bottom": "13%",
-        })*/
-        showSecret();
-        // setInterval(timer_game, 1000);
-        shown = 1;
-      }, 2500)
+    if (hasGameBegun() == 1 && shown == 0 && start_button_clicked == 0 && $j("#cadenas").length && !($j("#cadenas").hasClass("d-none"))){
+      console.log("truc secret");
+      setTimeout(function(){
+        if (start_button_clicked == 0){
+          LottiePlayer.setSpeed(1);
+          LottiePlayer.play();
+          setTimeout(function () {
+            setAnimationFinished(1);
+            $j("#cadenas").addClass("d-none");
+            /*$j("#main_title").css({
+              "margin-bottom": "13%",
+            })*/
+            console.log("test SECRET");
+            showSecret();
+            // setInterval(timer_game, 1000);
+            shown = 1;
+          }, 2500)
+        }
+      }, 2000)
     }
 
     if (getNbrSecretsEnabled() > 1){
