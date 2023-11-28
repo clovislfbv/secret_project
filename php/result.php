@@ -68,6 +68,8 @@
                     include_once("conn.php");
                     require_once("helper.php");
 
+                    disconnect_all_players_inactive();
+
                     $_SESSION["on_get"] = 0;
                     if (isset($_SESSION["random"])){
                       unset($_SESSION['random']);

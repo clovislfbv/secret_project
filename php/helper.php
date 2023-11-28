@@ -119,8 +119,8 @@
             disconnect_player();
         }
 
-        if ($_POST["action"] == "disconnect_all_other_players"){
-            disconnect_all_other_players();
+        if ($_POST["action"] == "disconnect_all_players_inactive"){
+            disconnect_all_players_inactive_js();
         }
 
         if ($_POST["action"] == "get_nbr_message_discovered"){
@@ -677,16 +677,19 @@
         }
     }
 
-    function disconnect_all_other_players() {
+    function disconnect_all_players_inactive() {
         include "conn.php";
-        session_start();
 
         $id_curr_game_session = get_current_game_session()["id"];
-        $player_id = get_curr_player()["id"];
 
-        $request = "UPDATE players SET logged=0, ingame=0 WHERE id_game_session=" . $id_curr_game_session . " AND id !=" . $player_id;
+        $request = "UPDATE players SET logged=0, ingame=0 WHERE id_game_session=" . $id_curr_game_session . " AND id_p_choice = 0";
         $disconnect = $conn->query($request);
 
+        return $disconnect;
+    }
+
+    function disconnect_all_players_inactive_js(){
+        $disconnect = disconnect_all_players_inactive();
         echo $disconnect;
     }
 

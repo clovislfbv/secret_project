@@ -361,7 +361,6 @@ function getAllPlayersDisconnected() {
     url: "../php/helper.php",
     data: {action: "get_all_players_disconnected"},
     async: false,
-    dataType: "json",
     success: function (res){
         test2 = res;
     },
@@ -805,16 +804,16 @@ export function disconnectPlayer(player_id){
   });
 }
 
-export function disconnectAllOtherPlayers(){
+export function disconnectAllPlayersInactive(){
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
-    data: {action: "disconnect_all_other_players"},
+    data: {action: "disconnect_all_players_inactive"},
     success: function () {
-      //console.log("All other players disconnected");
+      console.log("All players inactive disconnected");
     },
     error: function (err) {
-      //console.log(err);
+      console.log(err);
     }
   })
 }
@@ -947,7 +946,6 @@ export function showSecret() {
     console.log("time's up !!!!!!!!!!!!")
     $j("#result_form").submit();
     check_only_one_time = 0
-    timerLottie.removeEventListener("complete", submit_choice);
   });
 
   setInterval(function() {
@@ -1392,11 +1390,11 @@ export function displayAllPlayersOnline(){
       
       updateProgressBar();
 
-      all_players_disconnected = getAllPlayersDisconnected();
+      all_players_disconnected = JSON.parse(getAllPlayersDisconnected());
       all_players_disconnected.forEach(function(element){
         if ($j("#"+element["p_name"]+"-"+element["id"]).length > 0){
           setTimeout(function(){
-            let all_players_disconnected_2 = getAllPlayersDisconnected();
+            let all_players_disconnected_2 = JSON.parse(getAllPlayersDisconnected());
             let index;
             // for (index = all_players_disconnected_2.length-1; index > 0 && element["id"] < all_players_disconnected_2[index]["id"]; index--){
                //console.log(all_players_disconnected_2[index]);
