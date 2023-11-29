@@ -8,11 +8,10 @@ Lors de son inscription, chaque joueur donne un secret au jeu qu'il souhaite par
 
 #### Bug du double-clique sur Mozilla Firefox
 Il m'est arrivé de rencontrer le problème où mon navigateur m'obligeait à double-cliquer chaque fois que je voulais intéragir avec le jeu. Pour résoudre ce problème, veuillez suivre ces étapes:
-                                                                    - écrivez dans votre barre de recherche internet *_about:config_*
-                                                                    
-                                                                    - Cela va vous montrer une page vous indiquant d'agir avec précaution lorsque vous modifiez les paramètres de votre navigateur. Cliquez sur le bouton accepter
-                                                                    - Ensuite recherchez le paramètre : *_browser.urlbar.clickSelectsAll_*
-                                                                    
-                                                                    - double clickez sur ce paramètre pour le mettre sur *true*
-                                                                    
-                                                                    - Redémarrez votre navigateur et le bug est réparé !
+                <ul>
+                <li> Ecrivez dans votre barre de recherche internet <strong>about:config</strong></li>
+                <li> Cela va vous montrer une page vous indiquant d'agir avec précaution lorsque vous modifiez les paramètres de votre navigateur. Cliquez sur le bouton accepter </li>
+                <li> Ensuite recherchez le paramètre : <strong>browser.urlbar.clickSelectsAll</strong> </li>
+                <li> Double-clickez sur ce paramètre pour le mettre sur true </li>
+                <li> Redémarrez votre navigateur et le bug est réparé ! </li>
+                </ul>
