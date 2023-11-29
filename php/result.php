@@ -45,9 +45,19 @@
                   </li>
                   <li class="nav-item">
                     <a class="nav-link current_score text-primary disabled" href="#" data-toggle="tab">
+                      <script type="module">
+                        import { getcurrPlayer } from "../js/helper.js";
+
+                        var $j = jQuery.noConflict();
+
+                        setInterval(function(){
+                          $j(".current_score").text(JSON.parse(getcurrPlayer())["score"] + " points");
+                          console.log($j(".current_score").text());
+                        }, 1500)
+                      </script>
                       <?php
-                        require_once("helper.php"); 
-                        echo get_curr_player()["score"] . " points";
+                        // require_once("helper.php"); 
+                        // echo get_curr_player()["score"] . " points";
                       ?>
                     </a>
                   </li>
@@ -62,7 +72,9 @@
                   <script type="module">
                     import { displayContinueButton } from "../js/helper.js";
                     //var $j = jQuery.noConflict();
-                    displayContinueButton();
+                    setTimeout(() => {
+                      displayContinueButton();
+                    }, 2000);
                   </script>
                   <?php
                     include_once("conn.php");
@@ -141,17 +153,17 @@
                       echo "<div class='scoreboard'>";
                       echo "<div class='scoreboard__podiums'>";
 
-                      echo "<div class='scoreboard__podium js-podium column-second' data-height='200px'>";
+                      echo "<div class='scoreboard__podium js-podium column-second' data-height='150px'>";
                       echo "<div class='scoreboard__podium-number second text-primary'>Bar de Wever<small><span class='js-podium-data-second text-primary'>160</span></small></div>";
                       echo "<div class='scoreboard__podium-base scoreboard__podium-base--second'>";
                       echo "<div class='scoreboard__podium-rank'>2</div></div></div>";
                       
-                      echo "<div class='scoreboard__podium js-podium column-first' data-height='250px'>";
+                      echo "<div class='scoreboard__podium js-podium column-first' data-height='200px'>";
                       echo "<div class='scoreboard__podium-number first text-primary'>Charles Michel<small><span class='js-podium-data-first text-primary'>195</span></small></div>";
                       echo "<div class='scoreboard__podium-base scoreboard__podium-base--first'>";
                       echo "<div class='scoreboard__podium-rank'>1</div></div></div>"; 
                       
-                      echo "<div class='scoreboard__podium js-podium column-third' data-height='150px'>";
+                      echo "<div class='scoreboard__podium js-podium column-third' data-height='100px'>";
                       echo "<div class='scoreboard__podium-number third text-primary'>Jan Jambon<small><span class='js-podium-data-third text-primary'>100</span></small></div>";
                       echo "<div class='scoreboard__podium-base scoreboard__podium-base--third'>";
                       echo "<div class='scoreboard__podium-rank'>3</div></div></div></div></div>";

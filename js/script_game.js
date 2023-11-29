@@ -65,6 +65,17 @@ $j(document).ready(function () {
     }
   }
 
+  const little_screen = window.matchMedia("(max-width: 900px)").matches;
+  if (little_screen){
+    $j(".column-second").data("height", "150px");
+    $j(".column-first").data("height", "200px");
+    $j(".column-third").data("height", "100px");
+  } else {
+    $j(".column-second").data("height", "200px");
+    $j(".column-first").data("height", "250px");
+    $j(".column-third").data("height", "150px");
+  }
+
   window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
     const portrait = e.matches;
     console.log(screen.orientation.type);
@@ -107,6 +118,19 @@ $j(document).ready(function () {
         save_background = 0;
       }
       $j("#card-body").html(save_body);
+    }
+  })
+
+  window.matchMedia("(max-width: 900px)").addEventListener("change", e => {
+    const little_screen = e.matches;
+    if (little_screen){
+      $j(".column-second").data("height", "150px");
+      $j(".column-first").data("height", "200px");
+      $j(".column-third").data("height", "100px");
+    } else {
+      $j(".column-second").data("height", "200px");
+      $j(".column-first").data("height", "250px");
+      $j(".column-third").data("height", "150px");
     }
   })
 
@@ -585,9 +609,9 @@ $j(document).ready(function () {
     console.log("hasgamebegun=" + hasGameBegun() + " shown=" + shown + " start_button_clicked=" + start_button_clicked);
 
     if (hasGameBegun() == 1 && shown == 0 && start_button_clicked == 0 && $j("#cadenas").length && !($j("#cadenas").hasClass("d-none"))){
-      console.log("truc secret");
-      setTimeout(function(){
-        if (start_button_clicked == 0 && $j("#cadenas").length && !($j("#cadenas").hasClass("d-none"))){
+      // console.log("truc secret");
+      // setTimeout(function(){
+      //   if (start_button_clicked == 0 && $j("#cadenas").length && !($j("#cadenas").hasClass("d-none"))){
           console.log("truc secret 2")
           LottiePlayer.setSpeed(1);
           LottiePlayer.play();
@@ -602,8 +626,8 @@ $j(document).ready(function () {
             // setInterval(timer_game, 1000);
             shown = 1;
           }, 2500)
-        }
-      }, 3000)
+      //  }
+      //}, 3000)
     }
 
     if (getNbrSecretsEnabled() > 1){

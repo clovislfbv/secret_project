@@ -559,8 +559,11 @@ export function loading(){
         }
       }, 5000);
     }
-    //console.log(total_players_logged, animation_finished, hasGameBegun());
+    console.log(total_players_logged, animation_finished, hasGameBegun());
     if (total_players_logged > 1 && animation_finished == 0 && hasGameBegun()){
+      if ($j(".start_game").hasClass("d-none") && getNbrMessagesDiscovered() > 0){
+        startGame();
+      }
       if (nbr_messages_discovered > 0){
         LottiePlayer.setSpeed(1);
         LottiePlayer.play();
@@ -783,7 +786,8 @@ export function displayContinueButton(){
   setInterval(function() {
     let nbr_continued = getNbrPlayersContinued();
     let nbr_online = getNbrPlayersIngame();
-    if (nbr_continued == nbr_online){
+    console.log(hasArrivedFirst());
+    if (nbr_continued == nbr_online && hasArrivedFirst() == 1){
       $j(".continue_button").removeClass("d-none");
       $j(".wait4result").addClass("d-none");
     }
@@ -1464,35 +1468,39 @@ export function displayAllPlayersOnline(){
           setTimeout(function(){
             let all_players_disconnected_2 = JSON.parse(getAllPlayersDisconnected());
             let index;
-            // for (index = all_players_disconnected_2.length-1; index > 0 && element["id"] < all_players_disconnected_2[index]["id"]; index--){
-               //console.log(all_players_disconnected_2[index]);
-            // }
-            if (all_players_disconnected_2[index]["id"] == element["id"]){
-              if (!($j("#"+element["p_name"]+"-"+element["id"]).hasClass("d-none"))){
-                $j("#"+element["p_name"]+"-"+element["id"]).addClass("d-none");
+            for (index = all_players_disconnected_2.length-1; index > 0 && element["id"] <= all_players_disconnected_2[index]["id"]; index--){
+              console.log(all_players_disconnected_2[index]);
+            
+              if (all_players_disconnected_2[index]["id"] == element["id"]){
+                if (!($j("#"+element["p_name"]+"-"+element["id"]).hasClass("d-none"))){
+                  console.log(element["p_name"]+"-"+element["id"]);
+                  $j("#"+element["p_name"]+"-"+element["id"]).addClass("d-none");
 
-                if (changed == 1 && value.length > 1 && ((value[1] == element["p_name"] && value[2] == element["id"]) || (author["p_name"] == element["p_name"] && author["id"] == element["id"]))){
-                
-                    changed = 0;
-                    getAuthorRandomSecret();
-                    $j(".secret_id_played").val($j(".secret_id_played").val().replace("-"+value[1]+"-"+value[2], ""));
-                    $j("#"+value[1]+"-"+value[2]).css({
-                      'top': '0px',
-                      'left': '0px',
-                      'position': 'relative'
+                  if (changed == 1 && value.length > 1 && ((value[1] == element["p_name"] && value[2] == element["id"]) || (author["p_name"] == element["p_name"] && author["id"] == element["id"]))){
+                  
+                      changed = 0;
+                      getAuthorRandomSecret();
+                      $j(".secret_id_played").val($j(".secret_id_played").val().replace("-"+value[1]+"-"+value[2], ""));
+                      $j("#"+value[1]+"-"+value[2]).css({
+                        'top': '0px',
+                        'left': '0px',
+                        'position': 'relative'
+                      });
+                      $j("#" + value[1] + "-" + value[2]).addClass("d-none");
+                      updatePlayerWhenClicked();
+                      $j(".wait4").addClass("d-none");
+                      $j("#droppable-player").removeClass("correct");
+                      $j("#droppable-player").addClass("normal text-primary");
+                      $j("#"+value[1]+"-"+value[2]).draggable({revert : true})
+                  }
+                    /*else {
+                    $j("#"+value[1]+"-"+value[2]).position({
+                      my: "center",
+                      at: "center",
+                      of: $j("#"+value[1]+"-"+value[2]),
                     });
-                    updatePlayerWhenClicked();
-                    $j(".wait4").addClass("d-none");
-                    $j("#droppable-player").removeClass("correct");
-                    $j("#droppable-player").addClass("normal text-primary");
-                    $j("#"+value[1]+"-"+value[2]).draggable({revert : true})
-                } /*else {
-                  $j("#"+value[1]+"-"+value[2]).position({
-                    my: "center",
-                    at: "center",
-                    of: $j("#"+value[1]+"-"+value[2]),
-                  });
-                }*/
+                  }*/
+                }
               }
             }
           }, 2500);

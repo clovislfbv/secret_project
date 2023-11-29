@@ -488,10 +488,18 @@ body.dark-mode .scoreboard__bar {
   .scoreboard {
     width: 100%;
   }
+
+  .scoreboard__podiums .scoreboard__podium-base {
+    min-width: 75px;
+  }
 }
 
 @media screen and (min-width: 900px) {
   .scoreboard {
     width: 50%;
+  }
+
+  .scoreboard__podiums .scoreboard__podium-base {
+    min-width: 150px;
   }
 }

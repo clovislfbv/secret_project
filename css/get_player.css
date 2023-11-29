@@ -48,7 +48,7 @@ body {
 
 #secret_message {
     padding-left: 1%;
-    height: 75%;
+    height: 50%;
     border-radius: 5px;
     border: 1px solid;
 }
@@ -554,6 +554,14 @@ body {
     } */
 
 #timerLottie {
-    height: 10%;
-    width: 10%;
+    width: 50%;
+}
+
+.description-timer {
+    display: flex;
+    height: 50%;
+}
+
+.question-guess {
+    width: 50%;
 }
