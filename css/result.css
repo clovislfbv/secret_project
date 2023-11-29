@@ -492,6 +492,14 @@ body.dark-mode .scoreboard__bar {
   .scoreboard__podiums .scoreboard__podium-base {
     min-width: 75px;
   }
+
+  .scoreboard__podiums .scoreboard__podium-rank {
+    transform: translate(-50%, 0%);
+  }
+
+  .real_message_author, #results-answer, .message-found {
+    font-size: 3vh;
+  }
 }
 
 @media screen and (min-width: 900px) {
@@ -501,5 +509,13 @@ body.dark-mode .scoreboard__bar {
 
   .scoreboard__podiums .scoreboard__podium-base {
     min-width: 150px;
+  }
+
+  .scoreboard__podiums .scoreboard__podium-rank {
+    transform: translate(-50%, -50%);
+  }
+
+  .real_message_author, #results-answer, .message-found {
+    font-size: 5vh;
   }
 }

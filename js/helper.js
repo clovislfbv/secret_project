@@ -845,6 +845,12 @@ export function showSecret() {
     $j('.start_game').addClass('d-none');
   }
 
+  if (getNbrSecretsNotDiscovered() == 0){
+    let value = $j(".secret_id_played").val();
+    $j(".secret_id_played").val(value + "-0-0");
+    window.location.href = "../php/result.php";
+  }
+
   $j(".player").draggable({revert: true});
 
   $j("#droppable-player").droppable({
