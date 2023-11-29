@@ -295,7 +295,7 @@ export function updateProgressBar(){
     $j("#progress-bar-players").css("width", progressbarValue + "%");
     $j(".progress-bar").text(totalPlayersPlayed2 + "/" + totalPlayersOnline2 + " joueurs");
     
-    if (progressbarValue === 100 && $j(".result_button").hasClass("d-none")){
+    if (progressbarValue === 100 && $j(".result_button").hasClass("d-none") && hasArrivedFirst() == 1){
       setTimeout(function () {
         $j(".result_button").removeClass("d-none");
         $j("#progress-players").addClass("d-none");
@@ -1242,11 +1242,11 @@ export function updateScore(id_player, id_player_chosen, id_curr_player, time_sp
     data: {action: "update_score", player_id: id_player, id_chosen_player: id_player_chosen, curr_player_id: id_curr_player, time_player: time_spent},
     async: false,
     success: function (res) {
-      //console.log(res);
+      console.log(res);
       result = res;
     },
     error: function (err) {
-      //console.log(err);
+      console.log(err);
     }
   })
   return result;
@@ -1307,6 +1307,74 @@ export function getChosenPlayer(){
 
 export function setAnimationFinished(value){
   animation_finished = value;
+}
+
+export function setResultClicked(){
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "set_result_clicked"},
+  })
+}
+
+export function resetResultClicked(){
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "reset_result_clicked"},
+  })
+}
+
+export function getStateResultButton(){
+  let output;
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "get_state_result_button"},
+    async: false,
+    success: function(res){
+      output = res;
+      console.log(output);
+    },
+    error: function(err){
+      console.log(err);
+    }
+  })
+  return output;
+}
+
+export function setContinueClicked(){
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "set_continue_clicked"},
+  })
+}
+
+export function resetContinueClicked(){
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "reset_continue_clicked"},
+  })
+}
+
+export function getStateContinueButton(){
+  let output;
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "get_state_continue_button"},
+    async: false,
+    success: function (res){
+      output = res;
+      console.log(output);
+    },
+    error: function (err){
+      console.log(err);
+    }
+  })
+  return output;
 }
 
 /*******

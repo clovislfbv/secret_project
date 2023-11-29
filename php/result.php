@@ -68,8 +68,6 @@
                     include_once("conn.php");
                     require_once("helper.php");
 
-                    disconnect_all_players_inactive();
-
                     $_SESSION["on_get"] = 0;
                     if (isset($_SESSION["random"])){
                       unset($_SESSION['random']);
@@ -114,9 +112,9 @@
                         // }
                         $bonus_score = round(abs((1 - ($time_spent / 10 / 2)) * 10));
                         
-                        echo "<div class='result_message text-primary'><h1 class='card-title' id='results-answer'>Bien joué !</h1><h3 class='message-found'>Tu as trouvé la personne qui a écrite ce secret !</h3></div>";
+                        echo "<div class='result_message text-primary'><h1 class='card-title' id='results-answer'>Bien joué !</h1><h3 class='message-found'>Tu as trouvé la personne qui a écrit ce secret !</h3></div>";
                       } else {
-                        echo "<div class='result_message text-primary card-title'><h1>Dommage !</h1><h3>Tu n'as pas réussi à trouver la personne qui a écrite ce secret !</h3></div>";
+                        echo "<div class='result_message text-primary card-title'><h1>Dommage !</h1><h3>Tu n'as pas réussi à trouver la personne qui a écrit ce secret !</h3></div>";
                       }
                       
                       echo "<h3 class='real_message_author text-primary'>L'auteur du message était : " . $name_array["p_name"] . "</h3>";

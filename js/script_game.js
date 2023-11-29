@@ -1,4 +1,4 @@
-import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated, getPlayerByNamePassword, getNbrPlayersIngame, getDateLastLogged, setDateLastLogged, OverlayOn, OverlayOff, SaveNamePassword, timer_game, getCurrentGameSession} from "./helper.js";
+import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated, getPlayerByNamePassword, getNbrPlayersIngame, getDateLastLogged, setDateLastLogged, OverlayOn, OverlayOff, SaveNamePassword, timer_game, getCurrentGameSession, getStateContinueButton, getStateResultButton, resetResultClicked, setContinueClicked, setResultClicked} from "./helper.js";
 
 var $j = jQuery.noConflict();
 
@@ -19,6 +19,7 @@ $j(document).ready(function () {
   let btn_login_clicked = 0;
   let btn_register_clicked = 0;
   let start_button_clicked = 0;
+  let toto_clicked = 0;
 
   if ($j("#connModal").length){
     $j("#connModal").modal("hide");
@@ -155,6 +156,7 @@ $j(document).ready(function () {
     shown = 0;
     result_clicked = 1;
     toto_clicked = 0;
+    setResultClicked();
     setTimeout(function () {
       $j("#result_form").submit();
     }, 1500);
@@ -415,6 +417,7 @@ $j(document).ready(function () {
       }
       result_clicked = 0;
       toto_clicked = 1;
+      setContinueClicked();
       /*let currPlayerId = JSON.parse(getcurrPlayer())["id"];
       resetPlayedPlayer(currPlayerId);*/
     }, 500);
@@ -579,6 +582,8 @@ $j(document).ready(function () {
       success();
     }
 
+    console.log("hasgamebegun=" + hasGameBegun() + " shown=" + shown + " start_button_clicked=" + start_button_clicked);
+
     if (hasGameBegun() == 1 && shown == 0 && start_button_clicked == 0 && $j("#cadenas").length && !($j("#cadenas").hasClass("d-none"))){
       console.log("truc secret");
       setTimeout(function(){
@@ -654,22 +659,41 @@ $j(document).ready(function () {
     /*if (window.location.pathname == "/secret_project/php/result.php" && getNbrSecretsNotDiscovered() == 0){
 
     }*/
-    /*console.log(getNbrPlayersContinued());
+    console.log(getNbrPlayersContinued());
     console.log(result_clicked);
     console.log(!($j("#result_btn").hasClass("d-none")));
 
-    if (getNbrPlayersContinued() > 0 && result_clicked == 0 && $j("#result_btn").length &&!($j("#result_btn").hasClass("d-none"))){
+    if (getStateResultButton() == 1 && result_clicked == 0 && $j("#result_btn").length){
+      let currPlayer = JSON.parse(getcurrPlayer());
       updatePlayerContinued(JSON.parse(getcurrPlayer())["id"]);
-      author_random_message = getAuthorRandomSecret();
 
-      let id_chosen_player = $j(".secret_id_played").val().split("-")[2];
-      console.log(id_chosen_player, author_random_message["id"], JSON.parse(getcurrPlayer())["id"]);
-      updateScore(id_chosen_player, author_random_message["id"], JSON.parse(getcurrPlayer())["id"]);
+      if ($j(".secret_id_played").val().split("-").length == 1){
+        let value = $j(".secret_id_played").val();
+        $j(".secret_id_played").val(value + "-0-0");
+      } else {
+        author_random_message = getAuthorRandomSecret();
+  
+        let id_chosen_player = $j(".secret_id_played").val().split("-")[2];
+        console.log(id_chosen_player, author_random_message["id"], currPlayer["id"], currPlayer["time_spent"]);
+        updateScore(id_chosen_player, author_random_message["id"], currPlayer["id"], currPlayer["time_spent"]/1000);
+      }
+
       shown = 0;
       result_clicked = 1;
-      setTimeout(function () {
-        $j("#result_form").submit();
-      }, 1500);
-    }*/
-  }, 3000);
-})
+      $j("#result_form").submit();
+    }
+
+    if (getStateContinueButton() == 1 && toto_clicked == 0 && $j(".pressToto").length){
+      setTimeout(function (){
+        unset_secret();
+        if (!($j("#cadenas").hasClass("d-none"))){
+          $j("#cadenas").addClass("d-none");
+        }
+        result_clicked = 1;
+        toto_clicked = 1;
+        /*let currPlayerId = JSON.parse(getcurrPlayer())["id"];
+        resetPlayedPlayer(currPlayerId);*/
+      }, 500);
+    }
+  },1500);
+});

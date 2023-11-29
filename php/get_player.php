@@ -74,7 +74,7 @@
                       </div>
                       <div class='players-list'>
                         <script type="module">
-                          import { displayAllPlayersOnline, resetPlayedPlayer, resetPlayerContinued, loading, getcurrPlayer, disconnectPlayer, getNbrPlayersIngame, actionMobileInit} from "../js/helper.js"
+                          import { displayAllPlayersOnline, resetPlayedPlayer, resetPlayerContinued, loading, getcurrPlayer, disconnectPlayer, getNbrPlayersIngame, actionMobileInit, resetResultClicked, resetContinueClicked} from "../js/helper.js"
                           var $j = jQuery.noConflict();
 
                           actionMobileInit();
@@ -92,6 +92,8 @@
                           
                           resetPlayedPlayer(currPlayerId);
                           resetPlayerContinued(currPlayerId);
+                          resetResultClicked();
+                          resetContinueClicked();
                           displayAllPlayersOnline();
                           //};
                         </script>
@@ -136,7 +138,7 @@
                         </div>
                         <div id="droppable-player" class="guess_secret droppable-player ui-widget-header text-primary normal border-primary">       
                           <h5>
-                            Drag-drop ici la personne qui aurait écris ce secret selon toi
+                            Drag-drop ici la personne qui aurait écrit ce secret selon toi
                           </h5>
                         </div>
                         <!-- <div class="margin-div-right"></div> -->

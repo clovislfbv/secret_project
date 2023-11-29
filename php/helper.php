@@ -206,6 +206,30 @@
         if ($_POST["action"] == "get_current_game_session"){
             get_current_game_session();
         }
+
+        if ($_POST["action"] == "set_result_clicked"){
+            set_result_clicked();
+        }
+
+        if ($_POST["action"] == "reset_result_clicked"){
+            reset_result_clicked();
+        }
+
+        if ($_POST["action"] == "get_state_result_button"){
+            get_state_result_button();
+        }
+        
+        if ($_POST["action"] == "set_continue_clicked"){
+            set_continue_clicked();
+        }
+
+        if ($_POST["action"] == "reset_continue_clicked"){
+            reset_continue_clicked();
+        }
+
+        if ($_POST["action"] == "get_state_continue_button"){
+            get_state_continue_button();
+        }
     }
 
     function check_player_exist(){
@@ -863,12 +887,7 @@
     }
 
     function has_game_begun_js(){
-        $curr_game_session = get_current_game_session();
-        if ($curr_game_session != null){
-            echo $curr_game_session["hasgamebegun"];
-        } else {
-            echo 0;
-        }
+        echo has_game_begun();
     }
 
     function has_arrived_first(){
@@ -940,7 +959,7 @@
     function create_game_session(){
         include "conn.php";
 
-        $request = "INSERT INTO game_session (isalive, hasgamebegun, nbrplayers) VALUES (1, 0, 0)";
+        $request = "INSERT INTO game_session (isalive, hasgamebegun, nbrplayers, result_clicked, continue_clicked) VALUES (1, 0, 0, 0, 0)";
         $conn->query($request);
     }
 
@@ -986,5 +1005,71 @@
 
         $request = "UPDATE game_session SET hasgamebegun = 0 WHERE id = " . $id_curr_game_session;
         $conn->query($request);
+    }
+
+    function set_result_clicked(){
+        include "conn.php";
+
+        $id_curr_game_session = get_current_game_session()["id"];
+
+        $request = "UPDATE game_session SET result_clicked = 1 WHERE id=" . $id_curr_game_session;
+        $output = $conn->query($request);
+
+        echo $output;
+    }
+
+    function reset_result_clicked(){
+        include "conn.php";
+
+        $id_curr_game_session = get_current_game_session()["id"];
+
+        $request = "UPDATE game_session SET result_clicked = 0 WHERE id = " . $id_curr_game_session;
+        $output = $conn->query($request);
+
+        echo $output;
+    }
+
+    function get_state_result_button(){
+        include "conn.php";
+
+        $id_curr_game_session = get_current_game_session()["id"];
+
+        $request = "SELECT result_clicked FROM game_session WHERE id=" . $id_curr_game_session;
+        $output = $conn->query($request)->fetch_array()[0];
+
+        echo $output;
+    }
+
+    function set_continue_clicked(){
+        include "conn.php";
+
+        $id_curr_game_session = get_current_game_session()["id"];
+
+        $request = "UPDATE game_session SET continue_clicked = 1 WHERE id=" . $id_curr_game_session;
+        $output = $conn->query($request);
+
+        echo $output;
+    }
+
+    function reset_continue_clicked(){
+        include "conn.php";
+
+        $id_curr_game_session = get_current_game_session()["id"];
+
+        $request = "UPDATE game_session SET continue_clicked = 0 WHERE id=" . $id_curr_game_session;
+        $output = $conn->query($request);
+
+        echo $output;
+    }
+
+    function get_state_continue_button(){
+        include "conn.php";
+
+        $id_curr_game_session = get_current_game_session()["id"];
+
+        $request = "SELECT continue_clicked FROM game_session WHERE id=" . $id_curr_game_session;
+        $output = $conn->query($request)->fetch_array()[0];
+
+        echo $output;
     }
 ?>
