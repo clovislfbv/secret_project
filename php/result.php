@@ -68,7 +68,8 @@
               </div>
             </div>
             <div class="body-main">
-                <div class="col-6 left">
+              <dotlottie-player id="celebrationLottie" src="../lottie-player/celebration/celebration.lottie" background="transparent" speed="1" direction="1" mode="normal"></dotlottie-player>  
+              <div class="col-6 left">
                   <script type="module">
                     import { displayContinueButton } from "../js/helper.js";
                     //var $j = jQuery.noConflict();

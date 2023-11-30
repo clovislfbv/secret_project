@@ -93,7 +93,6 @@
                           resetPlayedPlayer(currPlayerId);
                           resetPlayerContinued(currPlayerId);
                           resetResultClicked();
-                          resetContinueClicked();
                           displayAllPlayersOnline();
                           //};
                         </script>

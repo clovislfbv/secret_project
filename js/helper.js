@@ -1107,6 +1107,7 @@ export function setMinMax(minimum, maximum) {
 
 export function displayLeaderboard() {
   let first_test = 1;
+  let unique = 0;
   setInterval(function() {
     var curr_leaderboard = JSON.parse(getLeaderboard());
     //console.log(curr_leaderboard)
@@ -1120,25 +1121,8 @@ export function displayLeaderboard() {
     let rank_previous;
     let id = currPlayer["id"];
 
-    $j('#page-selection').bootpag({
-      total: Math.ceil(nbr_players/5),
-      maxVisible: 13,
-    })
-    $j('#page-selection li').addClass('page-item');
-    $j('#page-selection a').addClass('page-link');
-
     for (let i = min; i < max; i++){
       if (i < nbr_players){
-        if (currPlayer["id"] == curr_leaderboard[i]["id"]){
-          output += "<div class='list-group-item score active' id='";
-        } else {
-          output += "<div class='list-group-item score' style='background-color: black; color: #FF550B;' id='";
-        }
-
-        rank = i+1;
-
-        output += curr_leaderboard[i]["id"] + "'>" + rank + ". <span id='addon-wrapping'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'></path><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'></path></svg></span> " + curr_leaderboard[i]["p_name"] + " : " + curr_leaderboard[i]["score"] + " points </div>";
-
         if (nbrSecretsNotDiscovered == 0) {
           if (counter < 4) {
             let classname = ".";
@@ -1162,17 +1146,15 @@ export function displayLeaderboard() {
               $j(classname).text(curr_leaderboard[i]["p_name"]);
               $j(classname).html($j(classname).html() + "<small><span class='js-podium-data-second text-primary'>" + curr_leaderboard[i]["score"] + " points" + "</span></small>");
             }
-              counter++;
+            counter++;
           }
         }
-      } else {
-        output += "<div class='list-group-item score' style='background-color: black; color: black;'>.</div>";
       }
     }
 
-    $j(".list-group").html(output);
-
+    var time = 200;
     if (nbrSecretsNotDiscovered > 0) {
+      $j("#celebrationLottie").addClass("d-none");
       rank = 1;
       for (let i = rank-1; i < curr_leaderboard.length && curr_leaderboard[i]["id"] != id; i++){
         rank_previous = curr_leaderboard[i];
@@ -1188,6 +1170,15 @@ export function displayLeaderboard() {
         $j(".comments-leaderboard").html("Tu es actuellement au rang " + rank + " au classement actuel avec un score de " + curr_leaderboard[rank-1]["score"] + " points.");
       }
     } else {
+      if (unique == 0){
+        $j("#celebrationLottie").removeClass("d-none");
+        document.getElementById("celebrationLottie").addEventListener("complete", function () {
+          $j("#celebrationLottie").addClass("d-none");
+        })
+        unique = 1;
+      }
+
+      console.log(counter);
       if (counter == 4) {
         $j(".column-third").removeClass("d-none");
       }
@@ -1208,7 +1199,7 @@ export function displayLeaderboard() {
 
 
       var sum = 1000; // rank 1.
-      var time = 250;
+
       let third = $j(".column-third");
       if (!(third.hasClass("d-none"))){
         setTimeout( function(){ 
@@ -1217,7 +1208,7 @@ export function displayLeaderboard() {
         //console.log(h);
         third.find('.scoreboard__podium-base').css('height', h).addClass('is-expanding');
           }, time);
-        time += 1000;
+        time += 2250;
       };
 
       let second = $j(".column-second");
@@ -1228,7 +1219,7 @@ export function displayLeaderboard() {
         //console.log(h);
         second.find('.scoreboard__podium-base').css('height', h).addClass('is-expanding');
           }, time);
-        time += 1750;
+        time += 3500;
       };
 
       let first = $j(".column-first");
@@ -1238,9 +1229,37 @@ export function displayLeaderboard() {
         var h = first.data('height');
         //console.log(h);
         first.find('.scoreboard__podium-base').css('height', h).addClass('is-expanding');
-          }, time);
+        document.getElementById("celebrationLottie").play();
+          }, time+1000);
       };
     }
+
+    setTimeout(function (){
+      $j('#page-selection').bootpag({
+        total: Math.ceil(nbr_players/5),
+        maxVisible: 13,
+      })
+      $j('#page-selection li').addClass('page-item');
+      $j('#page-selection a').addClass('page-link');
+
+      for (let i = min; i < max; i++){
+        if (i < nbr_players){
+          if (currPlayer["id"] == curr_leaderboard[i]["id"]){
+            output += "<div class='list-group-item score active' id='";
+          } else {
+            output += "<div class='list-group-item score' style='background-color: black; color: #FF550B;' id='";
+          }
+
+          rank = i+1;
+
+          output += curr_leaderboard[i]["id"] + "'>" + rank + ". <span id='addon-wrapping'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'></path><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'></path></svg></span> " + curr_leaderboard[i]["p_name"] + " : " + curr_leaderboard[i]["score"] + " points </div>";
+        } else {
+          output += "<div class='list-group-item score' style='background-color: black; color: black;'>.</div>";
+        }
+      }
+
+      $j(".list-group").html(output);
+    }, time + 1000)
   }, 3000);
 }
 

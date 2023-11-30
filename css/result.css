@@ -519,3 +519,10 @@ body.dark-mode .scoreboard__bar {
     font-size: 5vh;
   }
 }
+
+#celebrationLottie {
+  position: absolute;
+  /*width: 10%;*/
+  height: 90%;
+  z-index: 1;
+}

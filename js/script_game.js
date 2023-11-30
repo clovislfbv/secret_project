@@ -169,7 +169,7 @@ $j(document).ready(function () {
     $j(".list-group").html(output);
   });
 
-  $j("#result_btn").click(function (e) {
+  $j("#result_btn").one("click", function (e) {
     let currPlayer = JSON.parse(getcurrPlayer());
     updatePlayerContinued(currPlayer["id"]);
     author_random_message = getAuthorRandomSecret();
@@ -180,6 +180,7 @@ $j(document).ready(function () {
     shown = 0;
     result_clicked = 1;
     toto_clicked = 0;
+    resetContinueClicked();
     setResultClicked();
     setTimeout(function () {
       $j("#result_form").submit();
@@ -433,7 +434,7 @@ $j(document).ready(function () {
     unsetNewRandomSecret();
   }
 
-  $j(".pressToto").click(function (e) {
+  $j(".pressToto").one("click", function (e) {
     setTimeout(function (){
       unset_secret();
       if (!($j("#cadenas").hasClass("d-none"))){
