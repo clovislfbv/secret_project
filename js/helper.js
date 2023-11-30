@@ -953,6 +953,8 @@ export function showSecret() {
 
     shown = 0;
 
+    setResultClicked();
+
     console.log("time's up !!!!!!!!!!!!")
     $j("#result_form").submit();
     check_only_one_time = 0

@@ -1,4 +1,4 @@
-import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated, getPlayerByNamePassword, getNbrPlayersIngame, getDateLastLogged, setDateLastLogged, OverlayOn, OverlayOff, SaveNamePassword, timer_game, getCurrentGameSession, getStateContinueButton, getStateResultButton, resetResultClicked, setContinueClicked, setResultClicked} from "./helper.js";
+import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated, getPlayerByNamePassword, getNbrPlayersIngame, getDateLastLogged, setDateLastLogged, OverlayOn, OverlayOff, SaveNamePassword, timer_game, getCurrentGameSession, getStateContinueButton, getStateResultButton, resetResultClicked, setContinueClicked, setResultClicked, resetContinueClicked} from "./helper.js";
 
 var $j = jQuery.noConflict();
 
@@ -20,6 +20,7 @@ $j(document).ready(function () {
   let btn_register_clicked = 0;
   let start_button_clicked = 0;
   let toto_clicked = 0;
+  let submit_once = 0;
 
   if ($j("#connModal").length){
     $j("#connModal").modal("hide");
@@ -691,6 +692,7 @@ $j(document).ready(function () {
     if (getStateResultButton() == 1 && result_clicked == 0 && $j("#result_btn").length){
       let currPlayer = JSON.parse(getcurrPlayer());
       updatePlayerContinued(JSON.parse(getcurrPlayer())["id"]);
+      resetContinueClicked();
 
       if ($j(".secret_id_played").val().split("-").length == 1){
         let value = $j(".secret_id_played").val();
@@ -705,7 +707,10 @@ $j(document).ready(function () {
 
       shown = 0;
       result_clicked = 1;
-      $j("#result_form").submit();
+      if (submit_once == 0){
+        $j("#result_form").submit();
+        submit_once = 1;
+      }
     }
 
     if (getStateContinueButton() == 1 && toto_clicked == 0 && $j(".pressToto").length){
@@ -716,6 +721,7 @@ $j(document).ready(function () {
         }
         result_clicked = 1;
         toto_clicked = 1;
+        submit_once = 0;
         /*let currPlayerId = JSON.parse(getcurrPlayer())["id"];
         resetPlayedPlayer(currPlayerId);*/
       }, 500);

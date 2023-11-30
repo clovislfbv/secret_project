@@ -906,6 +906,14 @@
             $request = "UPDATE players SET first_ingame=1 WHERE id=" . $player["id"];
             $output = $conn->query($request)->fetch_array()[0];
             echo $output;
+        } else if ($output != "1"){
+            $reset_someone = "UPDATE players SET first_ingame = 0 WHERE first_ingame = 1 AND ingame = 1 AND logged=1 AND id_game_session ='" . $id_curr_game_session . "' ORDER BY RAND() LIMIT 1";
+            $output = $conn->query($reset_someone);
+
+            $status_curr = "SELECT first_ingame FROM players WHERE id=" . $player["id"];
+            $output = $conn->query($status_curr);
+
+            echo $output;
         } else {
             echo $player["first_ingame"];
         }
