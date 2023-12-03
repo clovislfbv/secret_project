@@ -46,7 +46,7 @@ if (!(isset($_SESSION["player_id"]))){
     $update_nbr_players = "UPDATE game_session SET nbrplayers = nbrplayers + 1 WHERE id = '" . $id_curr_game_session . "'";
     $conn->query($update_nbr_players);
 
-    $request = "UPDATE players SET score = 0 WHERE id= " . $player_id;
+    $request = "UPDATE players SET score = 0, submitted = 0 WHERE id= " . $player_id;
     $conn->query($request);
 
     insert_ingame();

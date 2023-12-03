@@ -106,6 +106,7 @@
                   <div id="cadenas" class="cadenas">
                     <dotlottie-player id="myLottie" src="../lottie-player/lock_animation/lock_animation.lottie" background="transparent" speed="0" direction="1" mode="normal" autoplay></dotlottie-player>
                     <h5 class="waiting-players text-primary" id="waiting-players">Vous êtes seul dans cette partie.<br> Veuillez patienter le temps qu'un autre joueur rejoigne la partie<span>.</span><span>.</span><span>.</span></h5>
+                    <h5 class="waiting-admin text-primary d-none">En attente que l'administrateur commence la partie<span>.</span><span>.</span><span>.</span></h5>
                   </div>
                   <div class="start_game d-none">
                     <button type='button' class='start_button btn btn-outline-primary' id='start_button'>Commencer la partie</button>

@@ -537,6 +537,7 @@ export function loading(){
           $j(".start_game").addClass("d-none");
           $j(".secret_and_progress").addClass("d-none");
           $j(".waiting-players").removeClass("d-none");
+          $j(".waiting-admin").addClass("d-none")
 
           endGame();
           
@@ -601,7 +602,7 @@ export function loading(){
               let value = $j(".secret_id_played").val().split("-");
               $j("#" + value[1] + "-" + value[2]).draggable( "option", "revert", false);
               $j("#" + value[1] + "-" + value[2]).draggable("disable", 1);
-              $j("#" + value[1] + "-" + value[2]).click(function (e) {
+              $j("#" + value[1] + "-" + value[2]).on("click",function (e) {
                 $j(".wait4").addClass("d-none");
                 let chosen_player = value;
                 updatePlayerWhenClicked(chosen_player[1]);
@@ -630,6 +631,7 @@ export function loading(){
             $j(".start_game").removeClass("d-none");
           } else {
             $j(".start_game").addClass("d-none");
+            $j(".waiting-admin").removeClass("d-none");
           }
         }
       }
@@ -886,7 +888,7 @@ export function showSecret() {
         }
 
         
-        $j(ui.draggable).click(function (e) {
+        $j(ui.draggable).on("click",function (e) {
           $j(".wait4").addClass("d-none");
           let chosen_player = JSON.parse(getChosenPlayer());
           updatePlayerWhenClicked(chosen_player[1]);
@@ -948,7 +950,10 @@ export function showSecret() {
 
       let id_chosen_player = $j(".secret_id_played").val().split("-")[2];
       console.log(id_chosen_player, author["id"], currPlayer["id"], currPlayer["time_spent"]);
-      updateScore(id_chosen_player, author["id"], currPlayer["id"], currPlayer["time_spent"]/1000);
+      if (getStateSubmitted() == 0){
+        updateScore(id_chosen_player, author["id"], currPlayer["id"], currPlayer["time_spent"]/1000);
+        setSubmitted();
+      }
     }
 
     shown = 0;
@@ -1408,6 +1413,51 @@ export function getStateContinueButton(){
   return output;
 }
 
+export function getStateSubmitted(){
+  let output;
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "get_state_submitted"},
+    async: false,
+    success: function (res) {
+      output = res;
+    },
+    error: function (err) {
+      console.log(err);
+    }
+  })
+  return output;
+}
+
+export function setSubmitted(){
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "set_submitted"},
+    success: function (res) {
+      console.log(res);
+    },
+    error: function (err) {
+      console.log(err);
+    }
+  })
+}
+
+export function resetSubmitted(){
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "reset_submitted"},
+    success: function (res) {
+      console.log(res);
+    },
+    error: function (err) {
+      console.log(err);
+    }
+  })
+}
+
 /*******
  * show all players on the web page thanks to buttons and also manage how the progress bar is displayed
  *******/
@@ -1431,13 +1481,15 @@ export function displayAllPlayersOnline(){
           "justify-content": "normal",
           "align-items": "normal",
         })
+        //$j(".players-list").html("<ul class='players-list-ul'></ul>")
         all_players_logged.forEach(function(element){
           if (!(element["id"] in already_displayed)){
             already_displayed[element["id"]] = element["p_name"];
             if (element["id"] == JSON.parse(getcurrPlayer())["id"]){
-              document.getElementsByClassName("players-list")[0].innerHTML += "<div class='btn player ui-widget-content " + colors[index_colors] + "' id='" + element.p_name + "-" + element["id"] + "' type='button'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'/><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'/></svg>"+"<nbsp>"+ " " +"<b>"+element.p_name+"</b></nbsp></div>";
+              //document.getElementsByClassName("players-list-ul")[0].innerHTML += "<li><div class='btn player ui-widget-content " + colors[index_colors] + "' id='" + element.p_name + "-" + element["id"] + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'/><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'/></svg>"+"<nbsp>"+ " " +"<b>"+element.p_name+"</b></nbsp></div></li>";
+              document.getElementsByClassName("players-list")[0].innerHTML += "<div class='btn player ui-widget-content " + colors[index_colors] + "' id='" + element.p_name + "-" + element["id"] + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'/><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'/></svg>"+"<nbsp>"+ " " +"<b>"+element.p_name+"</b></nbsp></div>";
             } else {
-              document.getElementsByClassName("players-list")[0].innerHTML += "<div class='btn player ui-widget-content " + colors[index_colors] + "' id='" + element.p_name + "-" + element["id"] + "' type='button'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'/><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'/></svg>"+"<nbsp>"+ " " +element.p_name+"</nbsp></div>";
+              document.getElementsByClassName("players-list")[0].innerHTML += "<div class='btn player ui-widget-content " + colors[index_colors] + "' id='" + element.p_name + "-" + element["id"] + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'/><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'/></svg>"+"<nbsp>"+ " " +element.p_name+"</nbsp></div>";
             }
 
             index_colors++;
@@ -1456,7 +1508,7 @@ export function displayAllPlayersOnline(){
             if (value.length > 1){
               $j("#" + value[1] + "-" + value[2]).draggable( "option", "revert", false);
               $j("#" + value[1] + "-" + value[2]).draggable("disable", 1);
-              $j("#" + value[1] + "-" + value[2]).click(function (e) {
+              $j("#" + value[1] + "-" + value[2]).on("click",function (e) {
                 $j(".wait4").addClass("d-none");
                 let chosen_player = value;
                 updatePlayerWhenClicked(chosen_player[1]);

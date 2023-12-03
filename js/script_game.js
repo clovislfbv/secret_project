@@ -1,4 +1,4 @@
-import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated, getPlayerByNamePassword, getNbrPlayersIngame, getDateLastLogged, setDateLastLogged, OverlayOn, OverlayOff, SaveNamePassword, timer_game, getCurrentGameSession, getStateContinueButton, getStateResultButton, resetResultClicked, setContinueClicked, setResultClicked, resetContinueClicked} from "./helper.js";
+import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated, getPlayerByNamePassword, getNbrPlayersIngame, getDateLastLogged, setDateLastLogged, OverlayOn, OverlayOff, SaveNamePassword, timer_game, getCurrentGameSession, getStateContinueButton, getStateResultButton, resetResultClicked, setContinueClicked, setResultClicked, resetContinueClicked, getStateSubmitted, setSubmitted, resetSubmitted} from "./helper.js";
 
 var $j = jQuery.noConflict();
 
@@ -188,7 +188,7 @@ $j(document).ready(function () {
     }, 1500);
   })
 
-  $j("#btn_login").click(function (e, t){
+  $j("#btn_login").on("click", function (e, t){
     console.log(e,t);
     if (checkPlayerExist() != 0){
       let name = $j("#username").val();
@@ -254,7 +254,7 @@ $j(document).ready(function () {
   //   $j("#btn_login").prop("disabled", true);
   // })
 
-  $j("#btn_register").click(function (e, t){
+  $j("#btn_register").on("click", function (e, t){
     console.log(e,t);
     if (checkSeveralUsernames() != 0){
       $j("#connModal").modal("show")
@@ -367,41 +367,6 @@ $j(document).ready(function () {
     }
   });
 
-  // $j("#btn_save_list_secrets").click(function(e){
-  //   $j("#edits-not-saved").addClass("d-none");
-  //   let all_secrets = JSON.parse(getAllSecretsStored());
-  //   var actives = [];
-  //   var hiddens = [];
-
-  //   // Get all elements with the class 'my-class'
-  //   $j('.active').each(function() {
-  //       // Add each element to the 'elements' array
-  //       actives.push(this);
-  //   });
-
-  //   $j(".poubelle.d-none").each(function() {
-  //     hiddens.push(this);
-  //   })
-
-  //   console.log(hiddens);
-
-  //   if (actives.length + hiddens.length != all_secrets.length){
-  //     $j(".secret").each(function() {
-  //       console.log($j(this).hasClass('active'));
-  //       if ($j(this).hasClass('active')){
-  //         setSecretAsDisabled(this.id);
-  //       } else {
-  //         setSecretAsEnabled(this.id);
-  //       }
-  //     })
-  //     console.log("done");
-  //   } else {
-  //     $j("#edits-not-saved").removeClass("d-none");
-  //     console.log("error disable")
-  //   }
-  // })
-
-
   $j("#list_secrets_modal").on("hide.bs.modal", function (e){
     $j("#edits-not-saved").addClass("d-none");
     $j("#edits-not-saved").css({
@@ -444,12 +409,10 @@ $j(document).ready(function () {
       result_clicked = 0;
       toto_clicked = 1;
       setContinueClicked();
-      /*let currPlayerId = JSON.parse(getcurrPlayer())["id"];
-      resetPlayedPlayer(currPlayerId);*/
     }, 500);
   })
 
-  $j(".main_title").click(function (e) {
+  $j(".main_title").on("click", function (e) {
     console.log("title CLICKED");
     getAuthorRandomSecret();
     disconnectPlayer(JSON.parse(getcurrPlayer())["id"]);
@@ -466,7 +429,7 @@ $j(document).ready(function () {
     }, 2000);
   })
 
-  $j(".output").click(function (e) {
+  $j(".output").on("click",function (e) {
     console.log("test");
     let current_player = null;
     while (current_player == null){
@@ -484,7 +447,7 @@ $j(document).ready(function () {
     window.location.href = "../php/addSecretOrPlay.php";
   })
 
-  $j("#btn_play_game").click(function (e) {
+  $j("#btn_play_game").on("click", function (e) {
     let now = Date.now();
     let tooOld;
     if (getDateGameSessionCreated()){
@@ -552,27 +515,29 @@ $j(document).ready(function () {
     disconnectPlayer(currPlayer["id"]);
   }
 
-  var prevKey="";
-  $j(document).keydown(function (e) {            
-    /*if (e.key=="F5") {
-      window.onbeforeunload = ConfirmLeave;
-    }*/
-    if (e.key.toUpperCase() == "W" && prevKey == "CONTROL") {                
-      window.onbeforeunload = realDisconnect;   
-    }
-    /*else if (e.key.toUpperCase() == "R" && prevKey == "CONTROL") {
-      window.onbeforeunload = ConfirmLeave;
-    }*/
-    else if (e.key.toUpperCase() == "F4" && (prevKey == "ALT" || prevKey == "CONTROL")) {
-      window.onbeforeunload = realDisconnect;
-    }
-    prevKey = e.key.toUpperCase();
-    //console.log("key:"+prevKey);
-  });
+  if (window.location.pathname != "/secret_project/php/index.php"){
+    var prevKey="";
+    $j(document).keydown(function (e) {            
+      /*if (e.key=="F5") {
+        window.onbeforeunload = ConfirmLeave;
+      }*/
+      if (e.key.toUpperCase() == "W" && prevKey == "CONTROL") {                
+        window.onbeforeunload = realDisconnect;   
+      }
+      /*else if (e.key.toUpperCase() == "R" && prevKey == "CONTROL") {
+        window.onbeforeunload = ConfirmLeave;
+      }*/
+      else if (e.key.toUpperCase() == "F4" && (prevKey == "ALT" || prevKey == "CONTROL")) {
+        window.onbeforeunload = realDisconnect;
+      }
+      prevKey = e.key.toUpperCase();
+      //console.log("key:"+prevKey);
+    });
+  }
 
-  var currentKey;
   window.onbeforeunload = function (event) {
     if (toto_clicked == 0){
+      var currentKey;
       if (event) {
         $j(document).keydown(function (e) {
           currentKey = e.key.toUpperCase();
@@ -702,7 +667,11 @@ $j(document).ready(function () {
   
         let id_chosen_player = $j(".secret_id_played").val().split("-")[2];
         console.log(id_chosen_player, author_random_message["id"], currPlayer["id"], currPlayer["time_spent"]);
-        updateScore(id_chosen_player, author_random_message["id"], currPlayer["id"], currPlayer["time_spent"]/1000);
+
+        if (getStateSubmitted() == 0){
+          updateScore(id_chosen_player, author_random_message["id"], currPlayer["id"], currPlayer["time_spent"]/1000);
+          setSubmitted();
+        }
       }
 
       shown = 0;
@@ -722,6 +691,8 @@ $j(document).ready(function () {
         result_clicked = 1;
         toto_clicked = 1;
         submit_once = 0;
+
+        resetSubmitted();
         /*let currPlayerId = JSON.parse(getcurrPlayer())["id"];
         resetPlayedPlayer(currPlayerId);*/
       }, 500);

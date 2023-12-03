@@ -18,7 +18,7 @@
   
     $now = date("Y-m-d H:i:s");
     
-    $create_player = "INSERT INTO players (p_name, p_password, id_secret, logged, date_last_logged, ingame, first_ingame, score, time_spent, p_played, continued, id_p_choice, id_game_session) VALUES ('" . $player . "', '" . $hash_password . "', 0, 1,'" . $now . "', 0, 0, 0, 0, 0, 0, 0, 0)";
+    $create_player = "INSERT INTO players (p_name, p_password, id_secret, logged, date_last_logged, ingame, first_ingame, score, submitted, time_spent, p_played, continued, id_p_choice, id_game_session) VALUES ('" . $player . "', '" . $hash_password . "', 0, 1,'" . $now . "', 0, 0, 0, 0, 0, 0, 0, 0, 0)";
     
     if ($conn->query($create_player)){
         $id_player = $conn->insert_id;

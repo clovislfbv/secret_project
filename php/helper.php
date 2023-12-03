@@ -230,12 +230,24 @@
         if ($_POST["action"] == "get_state_continue_button"){
             get_state_continue_button();
         }
+
+        if ($_POST["action"] == "get_state_submitted"){
+            get_state_submitted();
+        }
+
+        if ($_POST["action"] == "set_submitted"){
+            set_submitted();
+        }
+
+        if ($_POST["action"] == "reset_submitted"){
+            reset_submitted();
+        }
     }
 
     function check_player_exist(){
         include "conn.php";
 
-        $username_to_check = $_POST["username"];
+        $username_to_check = addslashes($_POST["username"]);
         $password_to_check = md5($_POST["password"]);
 
         $request = "SELECT COUNT(*) FROM players WHERE p_name='" . $username_to_check . "' AND p_password='" . $password_to_check . "'";
@@ -1076,6 +1088,39 @@
         $id_curr_game_session = get_current_game_session()["id"];
 
         $request = "SELECT continue_clicked FROM game_session WHERE id=" . $id_curr_game_session;
+        $output = $conn->query($request)->fetch_array()[0];
+
+        echo $output;
+    }
+
+    function get_state_submitted(){
+        include "conn.php";
+
+        $id_curr_player = get_curr_player()["id"];
+
+        $request = "SELECT submitted FROM players WHERE id=" . $id_curr_player;
+        $output = $conn->query($request)->fetch_array()[0];
+
+        echo $output;
+    }
+
+    function set_submitted(){
+        include "conn.php";
+
+        $id_curr_player = get_curr_player()["id"];
+
+        $request = "UPDATE players SET submitted=1 WHERE id=" . $id_curr_player;
+        $output = $conn->query($request)->fetch_array()[0];
+
+        echo $output;
+    }
+
+    function reset_submitted(){
+        include "conn.php";
+
+        $id_curr_player = get_curr_player()["id"];
+
+        $request = "UPDATE players SET submitted=0 WHERE id=" . $id_curr_player;
         $output = $conn->query($request)->fetch_array()[0];
 
         echo $output;
