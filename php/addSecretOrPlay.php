@@ -57,7 +57,7 @@
                                 leave_ingame();
                             }
                             
-                            if (get_current_game_session() && get_nbr_players_ingame() == '0'){
+                            if (get_current_game_session() && get_nbr_players_ingame() == 0){
                                 kill_session();
                             }
 

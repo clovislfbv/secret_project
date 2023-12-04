@@ -560,9 +560,9 @@ export function loading(){
         }
       }, 5000);
     }
-    console.log(total_players_logged, animation_finished, hasGameBegun());
-    if (total_players_logged > 1 && animation_finished == 0 && hasGameBegun()){
-      if ($j(".start_game").hasClass("d-none") && getNbrMessagesDiscovered() > 0){
+    // console.log(total_players_logged, animation_finished, hasGameBegun());
+    if (total_players_logged > 1 && animation_finished == 0 && $j("#cadenas").length && !($j("#cadenas").hasClass("d-none")) && hasGameBegun()){
+      if ($j(".start_game").hasClass("d-none") && nbr_messages_discovered > 0){
         startGame();
       }
       if (nbr_messages_discovered > 0){
@@ -629,6 +629,7 @@ export function loading(){
           //console.log(hasArrivedFirst());
           if (hasArrivedFirst() == 1){
             $j(".start_game").removeClass("d-none");
+            $j(".waiting-admin").addClass("d-none");
           } else {
             $j(".start_game").addClass("d-none");
             $j(".waiting-admin").removeClass("d-none");
@@ -1471,7 +1472,7 @@ export function displayAllPlayersOnline(){
       all_players_logged = getAllPlayersIngame();
       //console.log(all_players_logged);
       
-      nbr_messages_discovered = getNbrMessagesDiscovered();
+      // nbr_messages_discovered = getNbrMessagesDiscovered();
       total_players_logged = getNbrPlayersIngame();
 
       if (total_players_logged > 0){
@@ -1481,15 +1482,15 @@ export function displayAllPlayersOnline(){
           "justify-content": "normal",
           "align-items": "normal",
         })
-        $j(".players-list").html("<ul class='players-list-ul'></ul>")
+        // $j(".players-list").html("<ul class='players-list-ul'></ul>")
         all_players_logged.forEach(function(element){
           if (!(element["id"] in already_displayed)){
             already_displayed[element["id"]] = element["p_name"];
             if (element["id"] == JSON.parse(getcurrPlayer())["id"]){
               //document.getElementsByClassName("players-list-ul")[0].innerHTML += "<li><div class='btn player ui-widget-content " + colors[index_colors] + "' id='" + element.p_name + "-" + element["id"] + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'/><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'/></svg>"+"<nbsp>"+ " " +"<b>"+element.p_name+"</b></nbsp></div></li>";
-              document.getElementsByClassName("players-list-ul")[0].innerHTML += "<li class='btn player ui-widget-content " + colors[index_colors] + "' id='" + element.p_name + "-" + element["id"] + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'/><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'/></svg>"+"<nbsp>"+ " " +"<b>"+element.p_name+"</b></nbsp></li>";
+              document.getElementsByClassName("players-list")[0].innerHTML += "<div class='btn player ui-widget-content " + colors[index_colors] + "' id='" + element.p_name + "-" + element["id"] + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'/><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'/></svg>"+"<nbsp>"+ " " +"<b>"+element.p_name+"</b></nbsp></div>";
             } else {
-              document.getElementsByClassName("players-list-ul")[0].innerHTML += "<li class='btn player ui-widget-content " + colors[index_colors] + "' id='" + element.p_name + "-" + element["id"] + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'/><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'/></svg>"+"<nbsp>"+ " " +element.p_name+"</nbsp></li>";
+              document.getElementsByClassName("players-list")[0].innerHTML += "<div class='btn player ui-widget-content " + colors[index_colors] + "' id='" + element.p_name + "-" + element["id"] + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'/><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'/></svg>"+"<nbsp>"+ " " +element.p_name+"</nbsp></div>";
             }
 
             index_colors++;
@@ -1586,7 +1587,7 @@ export function displayAllPlayersOnline(){
         }
         
       })
-      if (total_players_logged >= 1 || (hasGameBegun() && !($j("#cadenas").hasClass("d-none")))){
+      if (total_players_logged >= 1 || (!($j("#cadenas").hasClass("d-none")) && hasGameBegun())){
         animation_finished = 0;
       }
 

@@ -316,6 +316,13 @@ $j(document).ready(function () {
   }
 
   $j("#btn_list_secrets").on("click", function (e) {
+    $j("#edits-not-saved").addClass("d-none");
+    $j("#edits-not-saved").css({
+      "margin-bottom": "0",
+    });
+    $j(".zone-secrets-enabled").css({
+      "margin-bottom": "10%",
+    });
     $j("#list_secrets_modal").modal("show");
 
     display_player_secrets();
@@ -350,6 +357,13 @@ $j(document).ready(function () {
         setSecretAsDisabled(new_id);
         console.log("disabled");
         display_player_secrets();
+        $j("#edits-not-saved").addClass("d-none");
+        $j("#edits-not-saved").css({
+          "margin-bottom": "0",
+        });
+        $j(".zone-secrets-enabled").css({
+          "margin-bottom": "10%",
+        });
       } else {
         $j("#edits-not-saved").removeClass("d-none");
         $j("#edits-not-saved").css({
@@ -456,16 +470,16 @@ $j(document).ready(function () {
       tooOld = null;
     }
     console.log(now);
-    console.log(getDateGameSessionCreated() + " " + getNbrPlayersIngame() + " " + hasGameBegun());
-    if (hasGameBegun() == 1) {
-      if (tooOld || (getNbrPlayersIngame() <= 1 && hasGameBegun())) {
-        killSession();
-      } else {
-        e.preventDefault();
-        $j("#connModal").modal("show")
-        $j(".modal-title").text("Erreur d'insertion de joueur")
-        $j("#modal-body").text("Une partie a déjà commencé veuillez attendre qu'elle se termine avant d'en rejoindre une nouvelle")
-      }
+    // console.log(getDateGameSessionCreated() + " " + getNbrPlayersIngame() + " " + hasGameBegun());
+
+    // if (tooOld || (getNbrPlayersIngame() <= 1 && hasGameBegun() == 0)) {
+    //   killSession();
+    // } else {
+    if (hasGameBegun() == 1){
+      e.preventDefault();
+      $j("#connModal").modal("show")
+      $j(".modal-title").text("Erreur d'insertion de joueur")
+      $j("#modal-body").text("Une partie a déjà commencé veuillez attendre qu'elle se termine avant d'en rejoindre une nouvelle")
     }
   })
 
@@ -573,7 +587,7 @@ $j(document).ready(function () {
     //   success();
     // }
 
-    if (window.location.pathname == "/secret_project/php/get_player.php" && hasGameBegun() == 1 && shown == 0 && start_button_clicked == 0 && $j("#cadenas").length && !($j("#cadenas").hasClass("d-none"))) {
+    if (window.location.pathname == "/secret_project/php/get_player.php" && $j("#cadenas").length && !($j("#cadenas").hasClass("d-none")) && $j(".start_game").hasClass("d-none") && hasGameBegun() == 1 && shown == 0 && start_button_clicked == 0) {
       // console.log("truc secret");
       // setTimeout(function(){
       //   if (start_button_clicked == 0 && $j("#cadenas").length && !($j("#cadenas").hasClass("d-none"))){
@@ -595,15 +609,15 @@ $j(document).ready(function () {
       //}, 3000)
     }
 
-    if (window.location.pathname == "/secret_project/php/addSecretOrPlay.php" && getNbrSecretsEnabled() > 1) {
-      $j("#edits-not-saved").addClass("d-none");
-      $j("#edits-not-saved").css({
-        "margin-bottom": "0",
-      }),
-        $j(".zone-secrets-enabled").css({
-          "margin-bottom": "10%",
-        })
-    }
+    // if (window.location.pathname == "/secret_project/php/addSecretOrPlay.php" && getNbrSecretsEnabled() > 1) {
+    //   $j("#edits-not-saved").addClass("d-none");
+    //   $j("#edits-not-saved").css({
+    //     "margin-bottom": "0",
+    //   });
+    //   $j(".zone-secrets-enabled").css({
+    //     "margin-bottom": "10%",
+    //   });
+    // }
 
     let currPlayer = getcurrPlayer();
 
@@ -676,7 +690,7 @@ $j(document).ready(function () {
       }
     }
 
-    if (window.location.href == "/secret_project/php/result.php" && getStateContinueButton() == 1 && toto_clicked == 0 && $j(".pressToto").length) {
+    if (window.location.href == "/secret_project/php/result.php" && $j("#continue_btn").hasClass("d-none") && getStateContinueButton() == 1 && toto_clicked == 0 && $j(".pressToto").length) {
       setTimeout(function () {
         unset_secret();
         if (!($j("#cadenas").hasClass("d-none"))) {

@@ -349,11 +349,17 @@
 
     function get_nbr_players_ingame(){
         include "conn.php";
+        
+        $curr_game_session = get_current_game_session();
 
-        $request = "SELECT COUNT(*) FROM players WHERE ingame=1";
-        $output = $conn->query($request)->fetch_array();
+        if ($curr_game_session == null){
+            return 0;
+        } else {
+            $request = "SELECT COUNT(*) FROM players WHERE logged=1 AND ingame=1 AND id_game_session = " . $curr_game_session["id"];
+            $output = $conn->query($request)->fetch_array();
 
-        return $output[0];
+            return $output[0];
+        }
     }
 
     function connect_curr_player(){
