@@ -1138,7 +1138,7 @@
         $id_curr_player = get_curr_player()["id"];
 
         $request = "UPDATE players SET submitted=0 WHERE id=" . $id_curr_player;
-        $output = $conn->query($request)->fetch_array()[0];
+        $output = $conn->query($request);
 
         echo $output;
     }

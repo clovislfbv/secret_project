@@ -662,7 +662,7 @@ $j(document).ready(function () {
     console.log(result_clicked);
     console.log(!($j("#result_btn").hasClass("d-none")));
 
-    if (window.location.href == "/secret_project/php/get_player.php" && getStateResultButton() == 1 && result_clicked == 0 && $j("#result_btn").length) {
+    if (window.location.pathname == "/secret_project/php/get_player.php" && getStateResultButton() == 1 && result_clicked == 0 && $j("#result_btn").length) {
       let currPlayer = JSON.parse(getcurrPlayer());
       updatePlayerContinued(JSON.parse(getcurrPlayer())["id"]);
       resetContinueClicked();
@@ -690,7 +690,9 @@ $j(document).ready(function () {
       }
     }
 
-    if (window.location.href == "/secret_project/php/result.php" && $j("#continue_btn").hasClass("d-none") && getStateContinueButton() == 1 && toto_clicked == 0 && $j(".pressToto").length) {
+    console.log(window.location.pathname == "/secret_project/php/result.php" && $j(".continue_button").hasClass("d-none") && getStateContinueButton() == 1 && toto_clicked == 0 && $j(".pressToto").length);
+
+    if (window.location.pathname == "/secret_project/php/result.php" && $j(".continue_button").hasClass("d-none") && getStateContinueButton() == 1 && toto_clicked == 0 && $j(".pressToto").length) {
       setTimeout(function () {
         unset_secret();
         if (!($j("#cadenas").hasClass("d-none"))) {
