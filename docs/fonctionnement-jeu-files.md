@@ -24,3 +24,5 @@ Pour expliquer plus en détails,
 - helper.js : stocke toutes les fonctions js et requêtes ajax dont j'ai besoin
 
 - script_game.js : stocke tous les event listeners que j'utilise dans le projet.
+
+- conn.php : stocke les connexions à la base de données 

@@ -62,7 +62,7 @@
                       <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
                     </svg>
                   </span>
-                  <input type="text" class="form-control border-primary" id="password" name="password" placeholder="Renseignez votre mot de passe" aria-label="password" onkeyup="success()"/>
+                  <input type="text" class="form-control border-primary" id="password" name="password" placeholder="Renseignez votre mot de passe" aria-label="password" onkeypress="success()"/>
                 </div>
                 <div class="all_buttons">
                   <div class="login">
@@ -83,7 +83,7 @@
                       </div>
                       <div class="modal-body">
                         <p class="text-primary">
-                          <textarea class="form-control border-primary" id="mySecret" name="mySecret" placeholder="Renseignez votre secret" aria-label="With textarea" onkeyup="success_secret()"></textarea>
+                          <textarea class="form-control border-primary" id="mySecret" name="mySecret" placeholder="Renseignez votre secret" aria-label="With textarea" onkeypress="success_secret()"></textarea>
                         </p>
                       </div>
                       <div class="modal-footer">

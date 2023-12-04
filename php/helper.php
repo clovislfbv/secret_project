@@ -360,8 +360,7 @@
         include "conn.php";
         session_start();
 
-        $is_ingame = $_SESSION["ingame"];
-        $id_curr_game_session = $_SESSION["id_curr_game_session"];
+        $is_ingame = is_ingame();
         $player_id = $_SESSION["player_id"];
 
         if ($is_ingame){
@@ -692,11 +691,15 @@
     function get_nbr_players_continued() {
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"];
+        $curr_game_session = get_current_game_session();
 
-        $request = "SELECT COUNT(*) FROM players WHERE continued = 1 AND logged = 1 AND ingame = 1 AND id_game_session =" . $id_curr_game_session;
-        $players_continued = $conn->query($request);
-        echo $players_continued->fetch_array()[0];
+        if ($curr_game_session != null){
+            $request = "SELECT COUNT(*) FROM players WHERE continued = 1 AND logged = 1 AND ingame = 1 AND id_game_session =" . $curr_game_session["id"];
+            $players_continued = $conn->query($request);
+            echo $players_continued->fetch_array()[0];
+        } else {
+            echo 0;
+        }
     }
 
     function disconnect_player() {
@@ -1052,12 +1055,16 @@
     function get_state_result_button(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"];
+        $curr_game_session = get_current_game_session();
 
-        $request = "SELECT result_clicked FROM game_session WHERE id=" . $id_curr_game_session;
-        $output = $conn->query($request)->fetch_array()[0];
+        if ($curr_game_session != null){
+            $request = "SELECT result_clicked FROM game_session WHERE id=" . $curr_game_session["id"];
+            $output = $conn->query($request)->fetch_array()[0];
 
-        echo $output;
+            echo $output;
+        } else {
+            echo 0;
+        }
     }
 
     function set_continue_clicked(){
@@ -1085,12 +1092,16 @@
     function get_state_continue_button(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"];
+        $curr_game_session = get_current_game_session();
 
-        $request = "SELECT continue_clicked FROM game_session WHERE id=" . $id_curr_game_session;
-        $output = $conn->query($request)->fetch_array()[0];
+        if ($curr_game_session != null){
+            $request = "SELECT continue_clicked FROM game_session WHERE id=" . $curr_game_session["id"];
+            $output = $conn->query($request)->fetch_array()[0];
 
-        echo $output;
+            echo $output;
+        } else {
+            echo 0;
+        }
     }
 
     function get_state_submitted(){
