@@ -2,314 +2,341 @@
     include 'ChromePhp.php';  
     include "conn.php";
 
-    if (isset($_POST["action"])){
-        if ($_POST["action"] == "connect_curr_player"){
-            connect_curr_player();
-        }
-
-        if ($_POST["action"] == "check_several_usernames"){
-            check_several_usernames();
-        }
-
-        if ($_POST["action"] == "check_player_exist"){
-            check_player_exist();
-        }
-
-        if ($_POST["action"] == "update_player_when_played"){
-            update_player_when_played();
-        }
-
-        if($_POST["action"] == "update_player_when_clicked"){
-            update_player_when_clicked();
-        }
-
-        if($_POST["action"] == "get_nbr_players_online"){
-            count_all_players_online();
-        }
-
-        if ($_POST["action"] == "get_nbr_players_ingame"){
-            count_all_players_ingame();
-        }
-
-        if ($_POST["action"] == "get_nbr_players_played"){
-            get_nbr_players_played();
-        }
-
-        if ($_POST["action"] == "get_all_players_ingame"){
-            get_all_players_ingame_js();
-        }
-
-        if ($_POST["action"] == "get_all_players_disconnected"){
-            get_all_players_disconnected();
-        }
-
-        if ($_POST["action"] == "get_curr_player"){
-            get_curr_player_js();
-        }
-
-        if ($_POST["action"] == "get_date_game_session_created"){
-            get_date_game_session_created();
-        }
-
-        if ($_POST["action"] == "get_curr_player_name"){
-            get_curr_player_name_js();
-        }
-
-        if ($_POST["action"] == "get_player_by_id"){
-            get_player_by_id();
-        }
-
-        if ($_POST["action"] == "reset_played_player"){
-            reset_single_played_player();
-        }
-
-        if ($_POST["action"] == "choose_random_secret"){
-            choose_random_secret_js();
-        }
-
-        if ($_POST["action"] == "get_author_random_secret"){
-            get_author_random_message_js();
-        }
-        
-        if ($_POST["action"] == "update_player_continued"){
-            update_player_continued();
-        }
-
-        if ($_POST["action"] == "reset_player_continued"){
-            reset_player_continued();
-        }
-
-        if ($_POST["action"] == "get_nbr_players_continued"){
-            get_nbr_players_continued();
-        }
-
-        if ($_POST["action"] == "unset_new_random_secret"){
-            unset_new_random_secret();
-        }
-
-        if ($_POST["action"] == "is_logged"){
-            is_logged();
-        }
-
-        if ($_POST["action"] == "set_date_last_logged"){
-            set_date_last_logged();
-        }
-
-        if ($_POST["action"] == "get_date_last_logged"){
-            get_date_last_logged();
-        }
-
-        if ($_POST["action"] == "is_ingame"){
-            is_ingame_js();
-        }
-
-        if ($_POST["action"] == "has_arrived_first"){
-            has_arrived_first();
-        }
-
-        if ($_POST["action"] == "get_player_by_name_password"){
-            get_player_by_name_password_js();
-        }
-
-        if ($_POST["action"] == "save_name_password"){
-            save_name_password();
-        }
-
-        if ($_POST["action"] == "disconnect_player"){
-            disconnect_player();
-        }
-
-        if ($_POST["action"] == "disconnect_all_players_inactive"){
-            disconnect_all_players_inactive_js();
-        }
-
-        if ($_POST["action"] == "get_nbr_message_discovered"){
-            get_nbr_message_discovered();
-        }
-
-        if ($_POST["action"] == "get_leaderboard"){
-            get_leaderboard();
-        }
-
-        if ($_POST["action"] == "get_nbr_secrets_not_discovered"){
-            get_nbr_secrets_not_discovered_js();
-        }
-
-        if ($_POST["action"] == "set_message_as_discovered"){
-            set_message_as_discovered();
-        }
-
-        if ($_POST["action"] == "set_secret_as_disabled"){
-            set_secret_as_disabled();
-        }
-        
-        if ($_POST["action"] == "set_secret_as_enabled"){
-            set_secret_as_enabled();
-        }
-
-        if ($_POST["action"] == "get_nbr_secrets_enabled"){
-            get_nbr_secrets_enabled();
-        }
-
-        if ($_POST["action"] == "delete_secret"){
-            delete_secret();
-        }
-
-        if ($_POST["action"] == "add_new_secret"){
-            add_new_secret();
-        }
-
-        if ($_POST["action"] == "get_all_secrets_stored"){
-            get_all_secrets_stored();
-        }
-
-        if ($_POST["action"] == "get_nbr_total_secrets"){
-            get_nbr_total_secrets();
-        }
-        
-        if ($_POST["action"] == "update_score"){
-            update_score();
-        }
-
-        if ($_POST["action"] == "has_game_begun"){
-            has_game_begun_js();
-        }
-
-        if ($_POST["action"] == "start_game"){
-            start_game();
-        }
-
-        if ($_POST["action"] == "decode_secret"){
-            decode_secret();
-        }
-
-        if ($_POST["action"] == "get_chosen_player"){
-            get_chosen_player();
-        }
-
-        if ($_POST["action"] == "kill_session"){
-            kill_session_js();
-        }
-
-        if ($_POST["action"] == "end_game"){
-            end_game();
-        }
-
-        if ($_POST["action"] == "leave_ingame"){
-            leave_ingame();
-        }
-
-        if ($_POST["action"] == "destroy_session_variable"){
-            destroy_session_variable();
-        }
-
-        if ($_POST["action"] == "get_current_game_session"){
-            get_current_game_session();
-        }
-
-        if ($_POST["action"] == "set_result_clicked"){
-            set_result_clicked();
-        }
-
-        if ($_POST["action"] == "reset_result_clicked"){
-            reset_result_clicked();
-        }
-
-        if ($_POST["action"] == "get_state_result_button"){
-            get_state_result_button();
-        }
-        
-        if ($_POST["action"] == "set_continue_clicked"){
-            set_continue_clicked();
-        }
-
-        if ($_POST["action"] == "reset_continue_clicked"){
-            reset_continue_clicked();
-        }
-
-        if ($_POST["action"] == "get_state_continue_button"){
-            get_state_continue_button();
-        }
-
-        if ($_POST["action"] == "get_state_submitted"){
-            get_state_submitted();
-        }
-
-        if ($_POST["action"] == "set_submitted"){
-            set_submitted();
-        }
-
-        if ($_POST["action"] == "reset_submitted"){
-            reset_submitted();
+    if (isset($_POST["action"])) {
+        switch ($_POST["action"]) {
+            case "connect_curr_player":
+                connect_curr_player();
+                break;
+    
+            case "check_several_usernames":
+                check_several_usernames();
+                break;
+    
+            case "check_player_exist":
+                check_player_exist();
+                break;
+    
+            case "update_player_when_played":
+                update_player_when_played();
+                break;
+    
+            case "update_player_when_clicked":
+                update_player_when_clicked();
+                break;
+    
+            case "get_nbr_players_online":
+                count_all_players_online();
+                break;
+    
+            case "get_nbr_players_ingame":
+                count_all_players_ingame();
+                break;
+    
+            case "get_nbr_players_played":
+                get_nbr_players_played();
+                break;
+    
+            case "get_all_players_ingame":
+                get_all_players_ingame_js();
+                break;
+    
+            case "get_all_players_disconnected":
+                get_all_players_disconnected();
+                break;
+    
+            case "get_curr_player":
+                get_curr_player_js();
+                break;
+    
+            case "get_date_game_session_created":
+                get_date_game_session_created();
+                break;
+    
+            case "get_curr_player_name":
+                get_curr_player_name_js();
+                break;
+    
+            case "get_player_by_id":
+                get_player_by_id();
+                break;
+    
+            case "reset_played_player":
+                reset_single_played_player();
+                break;
+    
+            case "choose_random_secret":
+                choose_random_secret_js();
+                break;
+    
+            case "get_author_random_secret":
+                get_author_random_message_js();
+                break;
+    
+            case "update_player_continued":
+                update_player_continued();
+                break;
+    
+            case "reset_player_continued":
+                reset_player_continued();
+                break;
+    
+            case "get_nbr_players_continued":
+                get_nbr_players_continued();
+                break;
+    
+            case "unset_new_random_secret":
+                unset_new_random_secret();
+                break;
+    
+            case "is_logged":
+                is_logged();
+                break;
+    
+            case "set_date_last_logged":
+                set_date_last_logged();
+                break;
+    
+            case "get_date_last_logged":
+                get_date_last_logged();
+                break;
+    
+            case "is_ingame":
+                is_ingame_js();
+                break;
+    
+            case "has_arrived_first":
+                has_arrived_first();
+                break;
+    
+            case "get_player_by_name_password":
+                get_player_by_name_password_js();
+                break;
+    
+            case "save_name_password":
+                save_name_password();
+                break;
+    
+            case "disconnect_player":
+                disconnect_player();
+                break;
+    
+            case "disconnect_all_players_inactive":
+                disconnect_all_players_inactive_js();
+                break;
+    
+            case "get_nbr_message_discovered":
+                get_nbr_message_discovered();
+                break;
+    
+            case "get_leaderboard":
+                get_leaderboard();
+                break;
+    
+            case "get_nbr_secrets_not_discovered":
+                get_nbr_secrets_not_discovered_js();
+                break;
+    
+            case "set_message_as_discovered":
+                set_message_as_discovered();
+                break;
+    
+            case "set_secret_as_disabled":
+                set_secret_as_disabled();
+                break;
+    
+            case "set_secret_as_enabled":
+                set_secret_as_enabled();
+                break;
+    
+            case "get_nbr_secrets_enabled":
+                get_nbr_secrets_enabled();
+                break;
+    
+            case "delete_secret":
+                delete_secret();
+                break;
+    
+            case "add_new_secret":
+                add_new_secret();
+                break;
+    
+            case "get_all_secrets_stored":
+                get_all_secrets_stored();
+                break;
+    
+            case "get_nbr_total_secrets":
+                get_nbr_total_secrets();
+                break;
+    
+            case "update_score":
+                update_score();
+                break;
+    
+            case "has_game_begun":
+                has_game_begun_js();
+                break;
+    
+            case "start_game":
+                start_game();
+                break;
+    
+            case "decode_secret":
+                decode_secret();
+                break;
+    
+            case "get_chosen_player":
+                get_chosen_player();
+                break;
+    
+            case "kill_session":
+                kill_session_js();
+                break;
+    
+            case "end_game":
+                end_game();
+                break;
+    
+            case "leave_ingame":
+                leave_ingame();
+                break;
+    
+            case "destroy_session_variable":
+                destroy_session_variable();
+                break;
+    
+            case "get_current_game_session":
+                get_current_game_session();
+                break;
+    
+            case "set_result_clicked":
+                set_result_clicked();
+                break;
+    
+            case "reset_result_clicked":
+                reset_result_clicked();
+                break;
+    
+            case "get_state_result_button":
+                get_state_result_button();
+                break;
+    
+            case "set_continue_clicked":
+                set_continue_clicked();
+                break;
+    
+            case "reset_continue_clicked":
+                reset_continue_clicked();
+                break;
+    
+            case "get_state_continue_button":
+                get_state_continue_button();
+                break;
+    
+            case "get_state_submitted":
+                get_state_submitted();
+                break;
+    
+            case "set_submitted":
+                set_submitted();
+                break;
+    
+            case "reset_submitted":
+                reset_submitted();
+                break;
+    
+            default:
+                // Handle the case when the action is not recognized
+                break;
         }
     }
 
+    /********
+     * Quand l'utilisateur essaye de se connecter, cette fonction check si l'identifiant et le mot de passe qu'il a donné existe dans la base de données
+     * valeur d'output: 1 ou 0 
+     * *******/
     function check_player_exist(){
-        include "conn.php";
+        include "conn.php"; // on include conn.php pour récupèrer la variable $conn qui va permettre de nous connecter à notre base de données et y faire des requêtes
 
-        $username_to_check = addslashes($_POST["username"]);
-        $password_to_check = md5($_POST["password"]);
+        $username_to_check = addslashes($_POST["username"]); // on récupère le nom d'utilisateur puis on lui ajoute des slashes pour éviter les injections sql
+        $password_to_check = md5($_POST["password"]); // on récupère le mot de passe et on le hache
 
         $request = "SELECT COUNT(*) FROM players WHERE p_name='" . $username_to_check . "' AND p_password='" . $password_to_check . "'";
-        $output = $conn->query($request)->fetch_array();
+        $output = $conn->query($request)->fetch_array(); // on récupère le nombre de personnes qui a cet username et ce mot de passe
 
-        echo $output[0];
+        echo $output[0]; // On retourne le nombre de personnes qui ont ces noms et mots de passe
     }
 
+    /****** 
+     *  Retourne un booléen qui dit si un nom d'utilisateur existe déjà dans la base de données ou non
+     *  valeur d'output: 1 ou 0 
+     * *******/
     function check_several_usernames(){
         include "conn.php";
 
-        $username_to_check = $_POST["username"];
+        $username_to_check = $_POST["username"]; // On récupère le nom d'utilisateur qui a été renseigné par l'utilisateur
 
         $request = "SELECT COUNT(*) FROM players WHERE p_name='" . $username_to_check . "'";
-        $output = $conn->query($request)->fetch_array();
+        $output = $conn->query($request)->fetch_array(); // on récupère le nombre de joueur qui a cette username
 
-        echo $output[0];
+        echo $output[0]; // on return ce nombre
     }
 
+    /****
+     * Retourne un booléen qui dit si le client est loggé ou pas
+     * valeur d'output: 1 ou 0
+     * ******/
     function is_logged(){
         include "conn.php";
 
-        //$id_curr_game_session = $_SESSION["id_curr_game_session"];
+        $id_curr_player = get_curr_player()["id"]; //récupère l'id du joueur
 
-        //$request = "SELECT isalive FROM game_session WHERE id=" . $id_curr_game_session;
-
-        $id_curr_player = get_curr_player()["id"];
         $request = "SELECT logged FROM players WHERE id=" . $id_curr_player;
-        $output = $conn->query($request)->fetch_array();
+        $output = $conn->query($request)->fetch_array(); // récupère la valeur qui dit si le joueur est loggé en base de données
 
-        return $output[0];
+        return $output[0]; // retourne cette valeur
     }
 
+    /****** 
+     * Enregistre la date et l'heure la dernière fois où le joueur s'est loggé
+     * valeur d'output : 1 ou 0 pour dire si le code a bien réussi à enregistrer la valeur en base de données
+     * ******/
     function set_date_last_logged(){
         include "conn.php";
         
-        date_default_timezone_set('Europe/Paris');
-        $now = date("Y-m-d H:i:s");
-        $player_id = $_POST["p_id"];
+        date_default_timezone_set('Europe/Paris'); //initialise la timezone à celle de Paris
+        $now = date("Y-m-d H:i:s"); //stocke la date et l'heure d'aujourd'hui dans la variable $now sous le format 'YYYY-MM-DD HH:mm:ss'
+        $player_id = $_POST["p_id"]; //récupère l'identifiant du joueur donné en argument de la requête ajax de cette fonction
 
         $request = "UPDATE players SET date_last_logged = '" . $now . "' WHERE id=" . $player_id;
-        $output = $conn->query($request);
+        $output = $conn->query($request); //modifie la valeur de la colonne date_last_logged dans la base de données
 
-        echo $output;
+        echo $output; //retourne si la valeur a bien réussi à être modifié ou non
     }
 
+    /****** 
+     * Récupère la date et l'heure de la dernière fois à laquelle le joueur s'est loggé
+     * valeur d'output: timestamp
+     * ******/
     function get_date_last_logged(){
         include "conn.php";
 
-        $player_id = $_POST["p_id"];
+        $player_id = $_POST["p_id"]; // récupère la valeur de l'id du joueur donné en argument en requête ajax
 
         $request = "SELECT date_last_logged FROM players WHERE id=" . $player_id;
-        echo strtotime($conn->query($request)->fetch_array()[0])*1000;
+        echo strtotime($conn->query($request)->fetch_array()[0])*1000; //retourne la date et l'heure de la dernière fois où le joueur s'est connecté en millisecondes
     }
 
+    /****** 
+     * Retourne si le joueur est dans une partie ou non
+     * valeur d'output: 1 ou 0
+     * ******/
     function is_ingame(){
         include "conn.php";
 
-        $id_curr_player = get_curr_player()["id"];
+        $id_curr_player = get_curr_player()["id"]; //récupère l'id du joueur par les variables sessions
 
         $request = "SELECT ingame FROM players WHERE id=" . $id_curr_player;
-        $output = $conn->query($request)->fetch_array();
+        $output = $conn->query($request)->fetch_array(); // récupère la valeur d
 
         return $output[0];
     }
