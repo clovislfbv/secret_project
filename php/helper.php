@@ -259,6 +259,8 @@
     /********
      * Quand l'utilisateur essaye de se connecter, cette fonction check si l'identifiant et le mot de passe qu'il a donné existe dans la base de données
      * valeur d'output: 1 ou 0 
+     * 
+     * Adapté pour la requête ajax de cette fonction
      * *******/
     function check_player_exist(){
         include "conn.php"; // on include conn.php pour récupèrer la variable $conn qui va permettre de nous connecter à notre base de données et y faire des requêtes
@@ -275,6 +277,8 @@
     /****** 
      *  Retourne un booléen qui dit si un nom d'utilisateur existe déjà dans la base de données ou non
      *  valeur d'output: 1 ou 0 
+     * 
+     *  Adapté pour la requête ajax de cette fonction
      * *******/
     function check_several_usernames(){
         include "conn.php";
@@ -305,6 +309,8 @@
     /****** 
      * Enregistre la date et l'heure la dernière fois où le joueur s'est loggé
      * valeur d'output : 1 ou 0 pour dire si le code a bien réussi à enregistrer la valeur en base de données
+     * 
+     * Adapté pour la requête ajax de cette fonction
      * ******/
     function set_date_last_logged(){
         include "conn.php";
@@ -322,6 +328,8 @@
     /****** 
      * Récupère la date et l'heure de la dernière fois à laquelle le joueur s'est loggé
      * valeur d'output: timestamp
+     * 
+     * Adapté pour la requête ajax de cette fonction
      * ******/
     function get_date_last_logged(){
         include "conn.php";
@@ -483,6 +491,52 @@
         }
     }
 
+    /****** 
+     * met à jour la base de donnée pour dire que le jour viens de bouger depuis la page get_player.php à la page result.php
+     * valeur d'output: aucune
+     * ******/ 
+     function update_player_continued() {
+        include "conn.php";
+
+        $p_id = $_POST["player_id"]; //récupère l'identifiant du joueur actuel
+
+        $update_continue = "UPDATE players SET continued = 1 WHERE id=" . $p_id;
+        $conn->query($update_continue); //change la valeur de continued dans la base de données
+    }
+
+    /****** 
+     * met à jour la base de donnée pour dire que le jour viens de bouger depuis la page result.php à la page get_player.php
+     * valeur d'output: aucune
+     * ******/
+    function reset_player_continued() {
+        include "conn.php";
+
+        $player_id = $_POST["p_id"]; //récupère l'identifiant du joueur actuel
+
+        $request = "UPDATE players SET continued = 0, id_p_choice = 0 WHERE id=" . $player_id;
+        $conn->query($request); //change la valeur de continued dans la base de données
+    }
+
+    /****** 
+     * récupère le nombre de joueur qui ont bougé de la page get_player.php à la page result.php
+     * valeur d'output: int
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
+    function get_nbr_players_continued() {
+        include "conn.php";
+
+        $curr_game_session = get_current_game_session(); //récupère la session de jeu actuelle
+
+        if ($curr_game_session != null){
+            $request = "SELECT COUNT(*) FROM players WHERE continued = 1 AND logged = 1 AND ingame = 1 AND id_game_session =" . $curr_game_session["id"];
+            $players_continued = $conn->query($request);
+            echo $players_continued->fetch_array()[0]; //si une session de jeu est en cours, retourne le nombre de joueurs qui a bougé
+        } else {
+            echo 0; //sinon retourne 0
+        }
+    }
+
     /******
      * Récupère la liste des joueurs qui sont loggés et dans une partie
      * valeur d'output: une array php
@@ -496,7 +550,7 @@
         $elements = $conn->query($request); //on récupère la liste des joueurs loggés et dans la partie actuelle
 
         $all_players_ingame = $elements->fetch_all(MYSQLI_ASSOC); //on convertis cette liste en une array php
-        return($all_players_ingame); //Enfin, on retourne cette array
+        return $all_players_ingame; //Enfin, on retourne cette array
     }
 
     /******
@@ -577,7 +631,7 @@
 
     /****** 
      * remets la valeur qui détermine si un joueur a déjà joué ou non pendant cette partie à zéro pour tous les joueurs connectés et dans la partie actuelle
-     * valeur d'output: none  
+     * valeur d'output: aucune  
      * ******/
     function reset_played_player(){
         include "conn.php";
@@ -694,6 +748,8 @@
     /****** 
      * Récupère toutes les informations de n'importe quel joueur grâce à son nom d'utilisateur et son mot de passe
      * valeur d'output: array php encodé en json
+     * 
+     * Adapté pour la requête ajax de cette fonction
      * ******/
     function get_player_by_name_password_js(){
         $name = $_POST["name"]; //Récupère le nom d'utilisateur donné en argument
@@ -706,7 +762,7 @@
 
     /****** 
      * Sauvegarde le nom d'utilisateur et le mot de passe donné lors de l'inscription d'un joueur dans les variables sessions correspondantes
-     * valeur d'output: none
+     * valeur d'output: aucune
      * 
      * Adapté à la requête ajax de cette fonction
      * ******/
@@ -768,179 +824,116 @@
         }
     }
 
-
+    /******
+     * Choisis aléatoirement le secret à afficher à tous les joueurs
+     * valeur d'output: aucune
+     * ******/
     function set_new_random_secret(){
         include "conn.php";
 
-        $id_curr_game_session = $_SESSION['id_curr_game_session'];
+        $id_curr_game_session = $_SESSION['id_curr_game_session']; //récupère l'identifiant de la session de jeu actuelle
 
         $request = "SELECT mysecret.id FROM mySecret, players WHERE players.ingame = 1 AND mySecret.random_choice = 0 AND mySecret.discovered = 0 AND mySecret.id_player = players.id AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session = '" . $id_curr_game_session . "' ORDER BY RAND() LIMIT 1";
-        $idSecret = $conn->query($request)->fetch_array()[0];
+        $idSecret = $conn->query($request)->fetch_array()[0]; //sélectionne un secret aléatoire parmi tous ceux qui n'ont pas été découvert et récupère l'id de celui-ci
 
         $setMarker = "UPDATE mySecret SET random_choice = 1 WHERE id='" . $idSecret . "'";
-        $conn2->query($setMarker);
+        $conn2->query($setMarker); //mets à jour la base de données pour dire qu'il faut afficher, pour l'instant, uniquement ce secret à tous les joueurs
     }
 
+    /****** 
+     * set les secrets découverts dans la base de données
+     * valeur d'output: aucune
+     * ******/
     function unset_new_random_secret(){
         include "conn.php";
 
-        $id_curr_game_session = $_SESSION['id_curr_game_session'];
+        $id_curr_game_session = $_SESSION['id_curr_game_session']; //récupère l'identifiant de la session de jeu actuelle
 
         $unsetMarker = "UPDATE mySecret, players SET mySecret.random_choice = 0 WHERE mySecret.discovered = 1";
-        $conn2->query($unsetMarker);
+        $conn2->query($unsetMarker); //mets à jour la base de données pour dire que les secrets découverts ont bien été découvert et que l'on n'a plus besoin de les afficher à tous les joueurs
     }
 
+    /****** 
+     * affiche le secret qui est montré à tous les utilisateur ce tour
+     * valeur d'output: une array php
+     * ******/
     function choose_random_secret(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"];
+        $id_curr_game_session = get_current_game_session()["id"]; //récupère l'identifiant de la session de jeu actuelle
         
         $getSecret = "SELECT * FROM mySecret, players WHERE players.ingame = 1 AND mySecret.random_choice = 1 AND mySecret.id_player = players.id AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session = " . $id_curr_game_session;
-        $secret = $conn->query($getSecret);
-        $check = $secret->fetch_array();
+        $secret = $conn->query($getSecret); //récupère toutes les informations du secret choisi par la fonction set_new_random_secret et à afficher à tous les joueurs
+        $check = $secret->fetch_array(); //ajoute les informations récupéré dans une array
 
-        while ($check == null){
-            set_new_random_secret();
+        while ($check == null){ // si cette array est null, cela veut dire que le secret a été découvert
+            set_new_random_secret(); //on en set un nouveau dans la base de données
             $secret = $conn->query($getSecret);
-            $check = $secret->fetch_array();
+            $check = $secret->fetch_array(); //puis on récupère les infos de celui-ci dans $check
         }
 
-        return $check;
+        return $check; //et on retourne cette variable
     }
 
+    /****** 
+     * affiche le secret qui est montré à tous les utilisateur ce tour
+     * valeur d'output: une array php encodé en json
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
     function choose_random_secret_js(){
         session_start();
-        $check = choose_random_secret();
-        echo json_encode($check);
+        $check = choose_random_secret(); //récupère les informations sur le secret actuellement affiché dans une array php
+        echo json_encode($check); //encode cette array en json et le retourne
     }
 
+    /****** 
+     * récupère toutes les informations sur l'auteur du secret à afficher
+     * valeur d'output: une array php
+     * ******/
     function get_author_random_message(){
         include "conn.php";
 
-        $secret = choose_random_secret();
+        $secret = choose_random_secret(); //récupère l'array php avec toutes les informations du secret 
         $request = "SELECT * FROM players WHERE id =" . $secret["id_player"];
-        $player = $conn->query($request);
+        $player = $conn->query($request); //récupère toutes les informations liés à l'auteur du secret actuel
 
-        return $player->fetch_array();
+        return $player->fetch_array(); //ajoute ces informations dans une array php et la retourne
     }
 
+    /****** 
+     * récupère toutes les informations sur l'auteur du secret à afficher
+     * valeur d'output: une array php encodé en json
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
     function get_author_random_message_js(){
         session_start();
-        $author = get_author_random_message();
-        echo json_encode($author);
+        $author = get_author_random_message(); //récupère l'array php avec toutes les informations sur l'auteur du secret affiché à tous les joueurs actuellement
+        echo json_encode($author); //encode cette array en json et le retourne
     }
 
-    function update_player_continued() {
-        include "conn.php";
-
-        $p_id = $_POST["player_id"];
-
-        $update_continue = "UPDATE players SET continued = 1 WHERE id=" . $p_id;
-        $conn->query($update_continue);
-    }
-
-    function reset_player_continued() {
-        include "conn.php";
-
-        $player_id = $_POST["p_id"];
-
-        $request = "UPDATE players SET continued = 0, id_p_choice = 0 WHERE id=" . $player_id;
-        $conn->query($request);
-
-        /*$reset_p_played = "UPDATE players SET p_played = 0 WHERE id=" . $player_id;
-        $conn->query($reset_p_played);*/
-    }
-
-    function get_nbr_players_continued() {
-        include "conn.php";
-
-        $curr_game_session = get_current_game_session();
-
-        if ($curr_game_session != null){
-            $request = "SELECT COUNT(*) FROM players WHERE continued = 1 AND logged = 1 AND ingame = 1 AND id_game_session =" . $curr_game_session["id"];
-            $players_continued = $conn->query($request);
-            echo $players_continued->fetch_array()[0];
-        } else {
-            echo 0;
-        }
-    }
-
-    function disconnect_player() {
-        include "conn.php";
-        
-        $player_id = $_POST["p_id"];
-        
-        $request = "SELECT COUNT(*) FROM players WHERE id=" . $player_id . " AND logged = 1";
-        $status = $conn->query($request)->fetch_array();
-
-        if ($status[0] == '1'){
-            $reset = "UPDATE players SET logged = 0 WHERE id=" . $player_id;
-            $conn->query($reset);
-        }
-    }
-
-    function disconnect_all_players_inactive() {
-        include "conn.php";
-
-        $id_curr_game_session = get_current_game_session()["id"];
-
-        $request = "UPDATE players SET logged=0, ingame=0 WHERE id_game_session=" . $id_curr_game_session . " AND id_p_choice = 0";
-        $disconnect = $conn->query($request);
-
-        return $disconnect;
-    }
-
-    function disconnect_all_players_inactive_js(){
-        $disconnect = disconnect_all_players_inactive();
-        echo $disconnect;
-    }
-
-    function get_all_secrets_stored(){
-        include "conn.php";
-
-        $id_curr_player = get_curr_player()["id"];
-
-        $request = "SELECT * FROM mySecret WHERE id_player=" . $id_curr_player;
-        $output = $conn->query($request)->fetch_all(MYSQLI_ASSOC);
-
-        echo json_encode($output);
-    }
-
-    function get_nbr_total_secrets(){
-        include "conn.php";
-        
-        $id_curr_player = get_curr_player()["id"];
-        
-        $request = "SELECT COUNT(*) FROM mySecret WHERE id_player=" . $id_curr_player;
-        $output = $conn->query($request)->fetch_array();
-
-        echo $output[0];
-    }
-
-    function add_new_secret(){
-        include "conn.php";
-
-        $id_curr_player = get_curr_player()["id"];
-        $new_secret = htmlspecialchars($_POST["secret"], ENT_QUOTES);
-
-        $request = "INSERT INTO mysecret (p_secret, id_player, discovered, random_choice) VALUES ('" . $new_secret . "', '". $id_curr_player ."', 0, 0)";
-        $output = $conn->query($request);
-
-        echo $output;
-    }
-
+    /****** 
+     * récupère le nombre de messages qui ont déjà été montré aux joueurs
+     * valeur d'output: int
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
     function get_nbr_message_discovered(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"];
+        $id_curr_game_session = get_current_game_session()["id"]; //on récupère l'identifiant de la session de jeu en cours
 
         $request = "SELECT COUNT(*) FROM mySecret, players WHERE mySecret.discovered = 1 AND mySecret.id_player = players.id AND players.logged = 1 AND players.ingame = 1 AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session =" . $id_curr_game_session;
         $nbr_discovered = $conn->query($request);
-        $nbr_discovered_array = $nbr_discovered->fetch_array();
+        $nbr_discovered_array = $nbr_discovered->fetch_array(); //on récupère le nombre de messages qui ont été découvert lors de cette session de jeu dans une array php
 
-        echo $nbr_discovered_array[0];
+        echo $nbr_discovered_array[0]; //et on retourne ce nombre
     }
 
+    /****** 
+     * met à jour le message dans la base de données pour dire qu'il a été découvert
+     * ******/
     function set_message_as_discovered(){
         include "conn.php";
 
@@ -948,111 +941,235 @@
         $conn->query($secret_discovered);
     }
 
-    function set_secret_as_disabled(){
-        include "conn.php";
-
-        $secret_id = $_POST["id"];
-
-        $id_curr_player = get_curr_player()["id"];
-
-        $request = "UPDATE mysecret SET disabled=1 WHERE id=" . $secret_id . " AND id_player=" . $id_curr_player;
-        $output = $conn->query($request);
-
-        echo $output;
-    }
-
-    function set_secret_as_enabled(){
-        include "conn.php";
-
-        $secret_id = $_POST["id"];
-
-        $id_curr_player = get_curr_player()["id"];
-
-        $request = "UPDATE mysecret SET disabled=0 WHERE id=" . $secret_id . " AND id_player=" . $id_curr_player;
-        $output = $conn->query($request);
-
-        echo $output;
-    }
-
-    function delete_secret(){
-        include "conn.php";
-
-        $secret_id = $_POST["id"];
-
-        $request = "DELETE FROM mySecret WHERE id=" . $secret_id;
-        $output = $conn->query($request);
-
-        echo $output;
-    }
-
-    function get_nbr_secrets_enabled(){
-        include "conn.php";
-
-        $id_curr_player = get_curr_player()["id"];
-
-        $request = "SELECT COUNT(*) FROM mysecret WHERE (disabled=0 OR disabled IS NULL) AND id_player=" . $id_curr_player;
-        $output = $conn->query($request)->fetch_array();
-
-        echo $output[0];
-    }
-
-    function get_leaderboard(){
-        include "conn.php";
-
-        $id_curr_game_session = get_current_game_session()["id"];
-
-        $new_request = "SELECT * FROM players WHERE id_game_session = '" . $id_curr_game_session . "' ORDER BY score DESC";
-        /*$leaderboard = null;
-        while ($leaderboard == null){*/
-        $leaderboard = $conn->query($new_request);
-        //}
-        $curr_leaderboard = $leaderboard->fetch_all(MYSQLI_ASSOC);
-         
-        echo json_encode($curr_leaderboard);
-    }
-
+    /****** 
+     * Récupère le nombre de secrets qui n'ont pas encore été découvert pendant la partie
+     * valeur d'output: int
+     * ******/
     function get_nbr_secrets_not_discovered(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"];
+        $id_curr_game_session = get_current_game_session()["id"]; //on récupère d'abord l'id de la session de jeu actuel
 
         $get_num_not_discovered = "SELECT COUNT(*) FROM mysecret, players WHERE mysecret.discovered = 0 AND players.id = mysecret.id_player AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.ingame = 1 AND players.id_game_session =" . $id_curr_game_session;
         $length = $conn->query($get_num_not_discovered);
-        $total = $length->fetch_array();
+        $total = $length->fetch_array(); //on récupère le nombre total de secret qui n'ont pas été découvert
 
-        return $total[0];
+        return $total[0]; //et on retourne ce nombre
     }
 
+    /****** 
+     * Fais la même chose que la fonction get_nbr_secrets_not_discovered mais est adapté pour sa requête ajax
+     * ******/
     function get_nbr_secrets_not_discovered_js(){
         echo get_nbr_secrets_not_discovered();
     }
 
+    /****** 
+     * déconnecte un joueur grâce à son id 
+     * ******/
+    function disconnect_player() {
+        include "conn.php";
+        
+        $player_id = $_POST["p_id"]; //récupère l'id d'un joueur donné en argument de la fonction
+        
+        $request = "SELECT COUNT(*) FROM players WHERE id=" . $player_id . " AND logged = 1";
+        $status = $conn->query($request)->fetch_array(); //récupère le nombre de personnes connectés avec cet id
+
+        if ($status[0] == '1'){ //s'il y en a une, on la déconnecte en base de donnée
+            $reset = "UPDATE players SET logged = 0 WHERE id=" . $player_id;
+            $conn->query($reset);
+        }
+    }
+
+    /****** 
+     * déconnecte tous les joueurs qui n'ont pas joué ce tour
+     * utile car cela déconnecte totalement un joueur qui s'est mal déconnecté et cela reconnecte automatiquement un joueur s'il est en ligne grâce au système de coeur
+     * valeur d'output : 1 ou 0
+     * ******/
+    function disconnect_all_players_inactive() {
+        include "conn.php";
+
+        $id_curr_game_session = get_current_game_session()["id"]; //récupère l'id de la session de jeu actuelle
+
+        $request = "UPDATE players SET logged=0, ingame=0 WHERE id_game_session=" . $id_curr_game_session . " AND id_p_choice = 0";
+        $disconnect = $conn->query($request); //déconnecte tous les joueurs qui n'ont pas joué pendant ce tour
+
+        return $disconnect; //retourne si la déconnexion a bien eu lieu
+    }
+
+    /****** 
+     * Fait la même chose que la fonction disconnect_all_players_inactive mais est adapté pour les requêtes ajax
+     * *******/
+    function disconnect_all_players_inactive_js(){
+        $disconnect = disconnect_all_players_inactive();
+        echo $disconnect;
+    }
+
+    /****** 
+     * récupère la liste de tous les secrets que le joueur a enregistré sur son compte
+     * valeur d'output: array php encodé en json
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
+    function get_all_secrets_stored(){
+        include "conn.php";
+
+        $id_curr_player = get_curr_player()["id"]; //récupère l'identifiant du joueur actuel
+
+        $request = "SELECT * FROM mySecret WHERE id_player=" . $id_curr_player;
+        $output = $conn->query($request)->fetch_all(MYSQLI_ASSOC); //On récupère la liste de ses secrets dans la base de données et on les stocke dans une array php
+
+        echo json_encode($output); //On encode cette array php et on la retourne
+    }
+
+    /****** 
+     * récupère le nombre de secrets total que le joueur a enregistré dans le jeu
+     * valeur d'output: int
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
+    function get_nbr_total_secrets(){
+        include "conn.php";
+        
+        $id_curr_player = get_curr_player()["id"]; //on récupère l'identifiant du joueur
+        
+        $request = "SELECT COUNT(*) FROM mySecret WHERE id_player=" . $id_curr_player;
+        $output = $conn->query($request)->fetch_array(); //on stocke le nombre de secrets
+
+        echo $output[0]; //puis on les retourne
+    }
+
+    /****** 
+     * enregistre le secret donné par le joueur en base de données
+     * valeur d'output: 1 ou 0
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
+    function add_new_secret(){
+        include "conn.php";
+
+        $id_curr_player = get_curr_player()["id"]; //récupère l'identifiant du joueur actuel
+        $new_secret = htmlspecialchars($_POST["secret"], ENT_QUOTES); //on récupère le message renseigné par le joueur. Ici on a ajouté la fonction htmlspecialchars car dans certains cas, avec des caractères spéciaux, cela ne laisser pas le message s'enregistrer 
+
+        $request = "INSERT INTO mysecret (p_secret, id_player, discovered, random_choice) VALUES ('" . $new_secret . "', '". $id_curr_player ."', 0, 0)";
+        $output = $conn->query($request); //enregistre le nouveau message dans la base de données
+
+        echo $output; //retourne si le nouveau secret a bien été enregistré 
+    }
+
+    /****** 
+     * met à jour dans la base de données un message choisi par l'utilisateur pour dire qu'il a été disabled (Dans le cas du jeu, cela veut dire que le joueur a choisi de ne pas montrer temporairement son secret à la prochaine partie)
+     * valeur d'output: 1 ou 0
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
+    function set_secret_as_disabled(){
+        include "conn.php";
+
+        $secret_id = $_POST["id"]; //récupère l'id du secret donné en argument
+
+        $request = "UPDATE mysecret SET disabled=1 WHERE id=" . $secret_id;
+        $output = $conn->query($request); //met à jour l'état du secret dans la base de données
+
+        echo $output; //retourne si la base de donnée a bien été mise à jour
+    }
+
+    /****** 
+     * met à jour dans la base de données un message choisi par l'utilisateur pour dire qu'il a été enabled (Dans le cas du jeu, cela veut dire que le joueur a décidé de remontrer un message qu'il avait mis de coté)
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
+    function set_secret_as_enabled(){
+        include "conn.php";
+
+        $secret_id = $_POST["id"]; //récupère l'id du secret donné en argument
+
+        $request = "UPDATE mysecret SET disabled=0 WHERE id=" . $secret_id;
+        $output = $conn->query($request); //met à jour l'état du secret dans la base de données
+
+        echo $output; //retourne si la base de donnée a bien été mise à jour
+    }
+
+    /****** 
+     * met à jour dans la base de données un message choisi par l'utilisateur pour le supprimer définitivement du jeu
+     * valeur d'output: 1 ou 0
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
+    function delete_secret(){
+        include "conn.php";
+
+        $secret_id = $_POST["id"]; //récupère l'identifiant du secret
+
+        $request = "DELETE FROM mySecret WHERE id=" . $secret_id;
+        $output = $conn->query($request); //supprime définitivement le secret de la base de données
+
+        echo $output; //retourne si le secret a bien été supprimé ou non
+    }
+
+    /****** 
+     * récupère le nombre de secrets que le joueur a choisi de montrer à la prochaine partie
+     * valeur d'output: int
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
+    function get_nbr_secrets_enabled(){
+        include "conn.php";
+
+        $id_curr_player = get_curr_player()["id"]; //on récupère l'id du joueur
+
+        $request = "SELECT COUNT(*) FROM mysecret WHERE (disabled=0 OR disabled IS NULL) AND id_player=" . $id_curr_player;
+        $output = $conn->query($request)->fetch_array(); //on récupère le nombre de secrets dans la base de données qu'il a choisi de montrer à la prochaine partie
+
+        echo $output[0]; //on retourne ce nombre
+    }
+
+    /****** 
+     * récupère le classement actuel de tous les joueurs (même ceux déconnectés)
+     * valeur d'output: une array php encodé en json
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
+    function get_leaderboard(){
+        include "conn.php";
+
+        $id_curr_game_session = get_current_game_session()["id"]; //on récupère l'id de la session de jeu actuelle
+
+        $new_request = "SELECT * FROM players WHERE id_game_session = '" . $id_curr_game_session . "' ORDER BY score DESC";
+        $leaderboard = $conn->query($new_request);
+        $curr_leaderboard = $leaderboard->fetch_all(MYSQLI_ASSOC); //ensuite on récupère le classement actuel des joueurs dans la base de données, puis on ajoute les valeurs récupérés dans une array php
+         
+        echo json_encode($curr_leaderboard); //enfin on retourne l'array encodé en json
+    }
+
+    /****** 
+     * Une fois que le tour est terminé, mets à jour le score du joueur actuel et ajoute un bonus en fonction du temps qu'il a mis pour répondre
+     * valeur d'output: int
+     * ******/
     function update_score(){
         include "conn.php";
 
         $bonus_score = 0;
 
-        $id_chosen_player = $_POST["id_chosen_player"];
-        $player_id = $_POST["player_id"];
-        $id_curr_player = $_POST["curr_player_id"];
-        $time_spent = $_POST["time_player"];
+        $id_chosen_player = $_POST["id_chosen_player"]; //récupère l'id du joueur que le joueur actuel a choisi
+        $player_id = $_POST["player_id"]; //récupère l'id du véritable auteur du secret affiché actuellement
+        $id_curr_player = $_POST["curr_player_id"]; //récupère l'id du joueur qui joue actuellement
+        $time_spent = $_POST["time_player"]; //récupère le temps que le joueur a mis pour faire son choix
         
         $sql_update = "UPDATE players SET p_played = 1, id_p_choice = $id_chosen_player WHERE id=" . $id_curr_player;
-        $conn->query($sql_update);
+        $conn->query($sql_update); //update dans la base de données que le joueur a joué et ajoute le choix qu'il a fait 
 
-        $return_value = 2;
 
-        if ($time_spent >= 0 && $time_spent <= 20){
-            $bonus_score = round(abs((1 - (($time_spent / 10) / 2)) * 10));
-            $return_value = 1;
+        if ($time_spent >= 0 && $time_spent <= 20){ //ce if sert à être sûr que le joueur ne triche pas
+            $bonus_score = round(abs((1 - (($time_spent / 10) / 2)) * 10)); //calcule le score bonus a ajouté si le joueur a bien joué dans les temps
         }
 
         if ($id_chosen_player == $player_id){
             $sql_update = "UPDATE players SET score = score + 20 + $bonus_score, p_played = 1, id_p_choice = $id_chosen_player WHERE id=" . $id_curr_player; // update db
-            $conn->query($sql_update);
+            $conn->query($sql_update); //ajoute 20 points au joueur et un bonus s'il a bien répondu sinon cela n'en ajoute pas
         }
 
-        echo $bonus_score;
+        echo $bonus_score; //retourne le nombre de points bonus que le joueur a gagné
     }
 
     function has_game_begun(){
