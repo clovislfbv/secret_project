@@ -25,4 +25,11 @@ Pour expliquer plus en détails,
 
 - script_game.js : stocke tous les event listeners que j'utilise dans le projet.
 
-- conn.php : stocke les connexions à la base de données 
+- conn.php : stocke les connexions à la base de données
+
+# Explication du système de coeur utilisé pour chaque joueur dans le jeu
+La déconnexion d'un joueur fût un de mes plus gros problèmes lorsque j'ai réalisé ce projet car je voulais que lorsqu'il quitte mon jeu, cela lui déconnecte du jeu.
+
+Pour cela, j'ai fait un système de coeur humain pour chacun de mes joueurs. En effet, lorsque le joueur se situe dans l'une des pages du jeu, le joueur va automatiquement envoyé des requêtes à la base de données pour dire qu'il est bien connecté au jeu et qu'il est bien dans une partie ou non. Ce système me permets ainsi qu'à chaque tentative de fermer la page ou changer de page, le joueur va être déconnecter automatiquement. Ainsi, si le joueur reviens sur l'une des pages du jeu, il sera reconnecté automatiquement grâce à ce système de coeur et déconnecté automatiquement s'il quitte le jeu.
+
+# Explication du système de choix 

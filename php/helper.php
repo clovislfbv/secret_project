@@ -2,6 +2,9 @@
     include 'ChromePhp.php';  
     include "conn.php";
 
+    /******
+     * Début des checks si une requête ajax a été demandé
+     * ******/
     if (isset($_POST["action"])) {
         switch ($_POST["action"]) {
             case "connect_curr_player":
@@ -249,6 +252,9 @@
                 break;
         }
     }
+    /******
+     * Fin des checks si une requête ajax a été demandé
+     * ******/
 
     /********
      * Quand l'utilisateur essaye de se connecter, cette fonction check si l'identifiant et le mot de passe qu'il a donné existe dans la base de données
@@ -336,92 +342,115 @@
         $id_curr_player = get_curr_player()["id"]; //récupère l'id du joueur par les variables sessions
 
         $request = "SELECT ingame FROM players WHERE id=" . $id_curr_player;
-        $output = $conn->query($request)->fetch_array(); // récupère la valeur d
+        $output = $conn->query($request)->fetch_array(); // récupère la valeur se situant en base de données
 
-        return $output[0];
+        return $output[0]; //return cette valeur
     }
 
+    /******
+     * Fait la même chose que la fonction is_ingame mais est adaptée pour les requêtes ajax
+     *  ******/
     function is_ingame_js(){
         $is_ingame = is_ingame();
         echo $is_ingame;
     }
 
+    /******
+     * insère le joueur dans une partie
+     * valeur d'output : aucune
+     *  ******/
     function insert_ingame(){
         include "conn.php";
 
         if (!isset($_SESSION)){
-            session_start();
+            session_start(); //importe les variables sessions si elles n'ont pas déjà été importé
         }
 
-        $id_curr_player = get_curr_player()["id"];
+        $id_curr_player = get_curr_player()["id"]; //récupère l'identifiant du joueur grâce aux variables sessions
 
-        $_SESSION["ingame"] = 1;
+        $_SESSION["ingame"] = 1; // initialise la valeur session ingame à 1 pour dire que le joueur est bien dans une partie
 
         $request = "UPDATE players SET ingame = 1 WHERE id=" . $id_curr_player;
-        $conn->query($request);
+        $conn->query($request); // ajoute le fait que le joueur est dans une game das la base de données
     }
 
+    /******
+     *  fait quitter le joueur de la partie actuelle où il est
+     *  valeur d'output: 1 ou 0 pour dire si le code a bien réussi à faire quitter le joueur de la partie
+     *  ******/
     function leave_ingame(){
         include "conn.php";
 
-        $id_curr_player = get_curr_player()["id"];
+        $id_curr_player = get_curr_player()["id"]; // récupère l'identifiant du joueur
 
-        $_SESSION["ingame"] = 0;
+        $_SESSION["ingame"] = 0; // set la variable session ingame à 0 pour dire que le joueur a quitté la partie
 
         $request = "UPDATE players SET ingame = 0, first_ingame = 0 WHERE id=" . $id_curr_player;
-        $output = $conn->query($request);
+        $output = $conn->query($request); // fais quitter le joueur de la partie dans la base de données
 
-        return $output;
+        return $output; // retourne si la variable dans la ingame a bien été mise à jour en base de données
     }
 
+    /******
+     *  retourne le nombre de joueur dans la même partie
+     *  valeur d'output: un nombre qui a pour valeur minimale 0
+     *  ******/
     function get_nbr_players_ingame(){
         include "conn.php";
         
-        $curr_game_session = get_current_game_session();
+        $curr_game_session = get_current_game_session(); // récupère la game session actuelle. Si aucune game session n'a été créer, retourne null 
 
         if ($curr_game_session == null){
-            return 0;
+            return 0; //si aucune session de jeu n'a été créer, retourne qu'aucun joueur n'est en game.
         } else {
             $request = "SELECT COUNT(*) FROM players WHERE logged=1 AND ingame=1 AND id_game_session = " . $curr_game_session["id"];
             $output = $conn->query($request)->fetch_array();
 
-            return $output[0];
+            return $output[0]; //Sinon retourne le nombre de joueur connectés dans la même partie
         }
     }
 
+    /******
+     *  permet de connecter le joueur au jeu dans une partie ou pas en fonction de là où il est
+     *  Cette fonction sert au système de "coeur". Le principe de ce système est le suivant : 
+     *              - Chaque seconde, on dit à la base de données, que le joueur est bien connecté au jeu.
+     *              - Chaque fois que le joueur change de page ou se déconnecte par un quelconque moyen, ce système de "coeur"
+     *              permet de garder le joueur connecté si le joueur se redirige vers une autre page du jeu et de le déconnecté sinon 
+     * valeur d'output: aucune
+     *  ******/
     function connect_curr_player(){
         include "conn.php";
         session_start();
 
-        $is_ingame = is_ingame();
-        $player_id = $_SESSION["player_id"];
+        $is_ingame = is_ingame(); //stocke dans une variable si le joueur est dans une partie ou non
+        $player_id = $_SESSION["player_id"]; //récupère l'identifiant du joueur grâce à la variable session
 
         if ($is_ingame){
-            $request = "UPDATE players SET logged = 1, ingame = 1 WHERE id=" . $player_id;
+            $request = "UPDATE players SET logged = 1, ingame = 1 WHERE id=" . $player_id;  // Si le joueur est dans une partie, on reconnecte le joueur et on le réinsère dans la partie
         } else {
-            $request = "UPDATE players SET logged = 1 WHERE id=" . $player_id;
+            $request = "UPDATE players SET logged = 1 WHERE id=" . $player_id; //Sinon on reconnecte juste le joueur sans le réinsérer dans la partie
         }
         $conn->query($request);
-        
-        
-        // $request = "SELECT COUNT(*) FROM players WHERE ingame = 1 AND id_game_session=" . $id_curr_game_session;
-        // $output = $conn->query($request)->fetch_array();
-        // if ($output[0]){
-        //     $request = "UPDATE game_session SET isalive = 1 WHERE id=" . $id_curr_game_session;
-        //     echo $conn->query($request);
-        // }
     }
 
+    /******
+     *  Mets à jour toutes les infos du joueur dans la base de données pour dire qu'il a joué c'est à dire qu'il a glissé et déposé le joueur de son choix sur la surface dédié à cet effet
+     *  valeur d'output: un string qui dit si le jour a bien été mis à jour ou non
+     *  ******/
     function update_player_when_played(){
         include "conn.php";
         session_start();
 
-        $id_chosen_player = $_POST["chosen_player"]; 
-        $player_id = $_SESSION["player_id"];
-        $time_player = $_POST["time_spent"];
+        $id_chosen_player = $_POST["chosen_player"]; //récupère l'id du joueur que le joueur actuel a joué
+        $player_id = $_SESSION["player_id"];    //récupère l'id du joueur actuel
+        $time_player = $_POST["time_spent"];    //récupère le temps que le joueur actuel a mis pour jouer
 
         $sql_update = "UPDATE players set time_spent = $time_player, p_played = 1, id_p_choice = $id_chosen_player WHERE id=" . $player_id;
-        $res = $conn->query($sql_update);
+        $res = $conn->query($sql_update); //update le joueur dans la base de données en fonction des données récupérés
+
+        /****** 
+         * on affiche si le player a bien été updated ou non
+         * ******/
         if (!$res){
             $error = mysqli_error($conn);
         }
@@ -434,15 +463,19 @@
         }
     }
 
+    /******
+     *  Mets à jour toutes les infos du joueur dans la base de données pour dire qu'il a cliqué sur le joueur qu'il avait glissé et déposé
+     *  valeur d'output: un string qui dit si le jour a bien été mis à jour ou non
+     *  ******/
     function update_player_when_clicked(){
         include "conn.php";
         session_start();
         
-        $player_id = $_SESSION["player_id"];
+        $player_id = $_SESSION["player_id"]; //on récupère l'id du joueur qui joue grâce aux variables sessions
 
         $sql_update = "UPDATE players SET time_spent = 0, p_played = 0, id_p_choice = 0 WHERE id=" . $player_id;
-        $res = $conn->query($sql_update);
-        if ($res) {
+        $res = $conn->query($sql_update); //on met à jour les valeurs qu'il faut dans la base de données 
+        if ($res) { //puis on affiche s'il y a eu erreur ou non
             $msg = "player updated";
             return $msg;
         } else {
@@ -450,22 +483,38 @@
         }
     }
 
+    /******
+     * Récupère la liste des joueurs qui sont loggés et dans une partie
+     * valeur d'output: une array php
+     * ******/
     function get_all_players_ingame(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"];
+        $id_curr_game_session = get_current_game_session()["id"]; //on récupère l'identifiant de la session de jeu actuelle
 
         $request = "SELECT * FROM players WHERE logged = 1 AND ingame = 1 AND id_game_session = " . $id_curr_game_session;
-        $elements = $conn->query($request);
+        $elements = $conn->query($request); //on récupère la liste des joueurs loggés et dans la partie actuelle
 
-        $all_players_ingame = $elements->fetch_all(MYSQLI_ASSOC);
-        return($all_players_ingame);
+        $all_players_ingame = $elements->fetch_all(MYSQLI_ASSOC); //on convertis cette liste en une array php
+        return($all_players_ingame); //Enfin, on retourne cette array
     }
 
+    /******
+     * Récupère la liste des joueurs qui sont loggés et dans une partie
+     * valeur d'output: une array php encodé en json
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
     function get_all_players_ingame_js(){
-        echo json_encode(get_all_players_ingame());
+        echo json_encode(get_all_players_ingame()); //on récupère l'array php des joueurs connectés au jeu et dans une partie. On l'encode en json puis en retourne cette version json
     }
 
+    /****** 
+     * Retourne la liste de tous les joueurs déconnectés au jeu en général
+     * valeur d'output: une array php encodé en json
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
     function get_all_players_disconnected(){
         include "conn.php";
         $request = "SELECT * FROM players WHERE logged = 0 OR ingame = 0";
@@ -473,43 +522,95 @@
 
         $all_players_disconnected = $elements->fetch_all(MYSQLI_ASSOC);
         echo json_encode($all_players_disconnected);
-        //var_dump($all_players_logged);
     }
 
+    /******
+     * Compte le nombre de joueurs connecté au jeu en général mais pas nécessairement connectés dans une partie
+     * valeur d'output: int
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
     function count_all_players_online(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"];
-
-        $request = "SELECT count(*) FROM players WHERE logged = 1 AND id_game_session = " . $id_curr_game_session;
-        $elements = $conn->query($request);
-        $all = $elements->fetch_all(MYSQLI_ASSOC);
-        echo $all[0]["count(*)"];
+        $request = "SELECT count(*) FROM players WHERE logged = 1";
+        $elements = $conn->query($request); //on récupère le nombre de joueurs loggés
+        $all = $elements->fetch_all(MYSQLI_ASSOC); //on fetch ce nombre en array php pour récupérer le résultat
+        echo $all[0]["count(*)"]; //Enfin on return l'élément à l'index cout(*) correspondant au résultat que l'on veut récupérer
     }
 
+    /******
+     * Compte le nombre de joueurs connectés au jeu en général ET connectés dans une partie
+     * valeur d'output: int
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
     function count_all_players_ingame(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"];
+        $id_curr_game_session = get_current_game_session()["id"]; //on récupère l'identifiant de la session de jeu actuelle
 
         $request = "SELECT count(*) FROM players WHERE logged = 1 AND ingame = 1 AND id_game_session = " . $id_curr_game_session;
-        $elements = $conn->query($request);
-        $all = $elements->fetch_all(MYSQLI_ASSOC);
-        echo $all[0]["count(*)"];
+        $elements = $conn->query($request); //on récupère le nombre de joueurs loggés et dans la partie actuelle
+        $all = $elements->fetch_all(MYSQLI_ASSOC); //on fetch ce nombre en array php pour récupérer le résultat
+        echo $all[0]["count(*)"]; //Enfin on return l'élément à l'index cout(*) correspondant au résultat que l'on veut récupérer
     }
 
+    /******
+     * Récupère le nombre de joueurs connectés dans une partie ET qui a déjà joué pendant cette partie
+     * valeur d'output: int
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * Utile pour afficher l'état de la bar de progression
+     * ******/
     function get_nbr_players_played(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"];
+        $id_curr_game_session = get_current_game_session()["id"]; // on récupère l'identifiant de la session de jeu actuelle
         
         $request = "SELECT * FROM players WHERE p_played = 1 AND logged = 1 AND ingame = 1 AND id_game_session = " . $id_curr_game_session;
-        $elements = $conn->query($request);
+        $elements = $conn->query($request); //puis on récupère la liste des joueurs loggés, dans la partie actuelle et qui a déjà joué pendant cette partie
 
-        $all_players_played = count($elements->fetch_all(MYSQLI_ASSOC));
-        echo $all_players_played;
+        $all_players_played = count($elements->fetch_all(MYSQLI_ASSOC)); //on convertis cette liste en array php puis on compte le nombre d'éléments dans cette array
+        echo $all_players_played; //Ce qui permet ainsi de récupérer le nombre de personne qui a déjà joué pendant cette partie et de la retourner
     }
 
+    /****** 
+     * remets la valeur qui détermine si un joueur a déjà joué ou non pendant cette partie à zéro pour tous les joueurs connectés et dans la partie actuelle
+     * valeur d'output: none  
+     * ******/
+    function reset_played_player(){
+        include "conn.php";
+        $identifiant = $_POST["id"]; //plus utile, mais récupère l'identifiant du joueur actuel
+        $id_curr_game_session = get_current_game_session()["id"]; //récupère la session de jeu actuelle
+
+        $nbr_persons_played = "SELECT COUNT(*) FROM players WHERE p_played = 1 AND logged = 1 AND ingame = 1 AND id_game_session = " . $id_curr_game_session; //récupère le nombre de personnes qui a joué ce tour
+
+        if ($conn->query($nbr_persons_played)->fetch_array()[0] != '0'){
+            $request = "UPDATE players SET time_spent = 0, p_played = 0 WHERE logged = 1 AND ingame = 1";
+            $conn->query($request); //si plus d'un joueur a déjà joué, on reset tout le monde comme si personne n'avait déjà joué
+        }
+    }
+
+    /****** 
+     * remets la valeur qui détermine si un joueur a déjà joué ou non pendant cette partie à zéro pour uniquement le joueur actuel
+     * valeur d'output: 1 ou 0
+     * ******/
+    function reset_single_played_player(){
+        include "conn.php";
+        $identifiant = $_POST["id"]; //on récupère l'identifiant du joueur actuel donné en argument
+        $id_curr_game_session = get_current_game_session()["id"]; //on récupère l'identifiant de la session de jeu actuel
+
+        $request = "UPDATE players SET time_spent = 0, p_played = 0 WHERE logged = 1 AND ingame = 1 AND id_game_session=" . $id_curr_game_session . " AND id=" . $identifiant;
+        echo $conn->query($request); //mets à jour la base de données et retourne si la valeur a bien été mise à jour dans la base de données ou non par un booléen
+    }
+
+    /****** 
+     * Récupère toutes les infos du joueur qui joue actuellement
+     * valeur d'output: une array php
+     * 
+     * très utilisé dans la plupart des autres fonctions php 
+     * ******/
     function get_curr_player(){
         include "conn.php";
         if(!isset($_SESSION)) 
@@ -517,106 +618,132 @@
             session_start();
         }
 
-        if (isset($_SESSION["player_id"])){
-            $player_id = $_SESSION["player_id"];
+        if (isset($_SESSION["player_id"])){ //s'il n'y a pas la variable session player_id d'initialisé, cela veut dire que le joueur ne s'est pas loggé ou inscris donc on return null
+            $player_id = $_SESSION["player_id"]; //sinon on récupère l'identifiant du joueur actuel
         
             $request = "SELECT * FROM players WHERE id=" . $player_id;
-            $currPlayer = $conn->query($request);
-            $curr_player = $currPlayer->fetch_array();
-            return $curr_player; 
+            $currPlayer = $conn->query($request); //on récupère tous les éléments du joueurs dans la base de données grâce à son id
+            $curr_player = $currPlayer->fetch_array(); //on stocke toutes ces informations dans une array php
+            return $curr_player; //enfin on return cette array 
         } else {
             return null;
         }  
     }
 
+    /****** 
+     * Récupère toutes les infos du joueur qui joue actuellement
+     * valeur d'output: une array php encodé en json
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * très utilisé dans la plupart de mes autres fonctions
+     * ******/
+    function get_curr_player_js(){
+        $curr_player = get_curr_player(); //récupère l'array php du joueur actuel
+        echo json_encode($curr_player); //return cette array encodé en json
+    }
+
+    /****** 
+     * Récupère le nom du joueur actuel
+     * valeur d'output: string
+     * ******/
+    function get_curr_player_name(){
+        session_start();
+        return $_SESSION["username"]; //on retourne la valeur stocké dans la variable session username
+    }
+
+    /****** 
+     * Récupère le nom du joueur actuel
+     * valeur d'output: string
+     * 
+     * Adapté à la requête ajax de cette fonction
+     * ******/
+    function get_curr_player_name_js(){
+        echo get_curr_player_name(); //on récupère la valeur retourné par la fonction get_curr_player_name et on la return
+    }
+
+    /****** 
+     * Récupère toutes les informations de n'importe quel joueur grâce à son identfiant
+     * valeur d'output: une array php encodé en json
+     * 
+     * Adapté à la requête ajax de cette fonction
+     * ******/
+    function get_player_by_id() {
+        include "conn.php";
+
+        $identifiant = $_POST["id"]; //on récupère l'identifiant du joueur donné en argument de la requête
+
+        $request = "SELECT * FROM players WHERE id=" . $identifiant;
+        echo json_encode($conn->query($request)->fetch_array()); //on récupère toutes les informations du joueur correspndant, on les ajoute dans une array php et on retourne cette array encodé en json
+    }
+
+    /******
+     * Récupère toutes les informations de n'importe quel joueur grâce à son nom d'utilisateur et son mot de passe
+     * valeur d'output: array php
+     * ******/
+    function get_player_by_name_password($name, $pass_word) {
+        include "conn.php";
+        
+        $hash_psw = md5($pass_word); //on hache la valeur du mot de passe donné en argument
+
+        $request = "SELECT * FROM players WHERE p_name='" . $name . "' AND p_password='" . $hash_psw . "'";
+        $player = $conn->query($request)->fetch_array(); //on récupère les informations du joueur spécifié grâce à son nom d'utilisateur et son mot de passe haché puis on ajoute ces informations dans une array php
+        
+        return $player; //on retourne ensuite l'array php avec toutes les informations du joueur trouvé
+    }
+
+    /****** 
+     * Récupère toutes les informations de n'importe quel joueur grâce à son nom d'utilisateur et son mot de passe
+     * valeur d'output: array php encodé en json
+     * ******/
+    function get_player_by_name_password_js(){
+        $name = $_POST["name"]; //Récupère le nom d'utilisateur donné en argument
+        $pass_word = $_POST["pass_word"]; //Récupère le mot de passe donné en argument
+
+        $player = get_player_by_name_password($name, $pass_word); //récupère l'array php avec toutes les infos du joueur spécifié par son nom d'utilisateur et son mot de passe
+
+        echo json_encode($player); //on return cette array récupéré encodé en json
+    }
+
+    /****** 
+     * Sauvegarde le nom d'utilisateur et le mot de passe donné lors de l'inscription d'un joueur dans les variables sessions correspondantes
+     * valeur d'output: none
+     * 
+     * Adapté à la requête ajax de cette fonction
+     * ******/
+    function save_name_password(){
+        session_start();
+
+        $name = $_POST["name"]; //récupère le nom d'utilisateur donné en argument
+        $pass_word = $_POST["pass_word"]; //récupère le mot de passe donné en argument
+
+        $_SESSION["username"] = $name; //sauvegarde le nom d'utilisateur donné en argument dans la varible session associé
+        $_SESSION["password"] = $pass_word; //sauvegarde le mot de passe donné en argument dans la varible session associé
+    }
+
+    /******
+     * Récupère la date et l'heure à laquelle la session de jeu actuelle a été créer
+     * valeur d'output: int
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
     function get_date_game_session_created(){
         include "conn.php";
 
         $request = "SELECT datecreation FROM game_session WHERE isalive = 1";
-        $output = $conn->query($request)->fetch_array();
+        $output = $conn->query($request)->fetch_array(); //on récupère la date et l'heure à laquelle la session de jeu actuelle a été créer puis on la fetch en array php
 
         if ($output){
-            echo strtotime($output[0])*1000;
+            echo strtotime($output[0])*1000; //Si on arrive à récupérer l'array, on return la valeur récupéré de la base de données convertis en millisecondes 
         } else {
-            echo null;
+            echo null; //sinon on return null car cela veut dire qu'aucune session de jeu n'est actif actuellement
         }
     }
 
-    function get_curr_player_js(){
-        $curr_player = get_curr_player();
-        echo json_encode($curr_player);
-    }
-
-    function get_curr_player_name(){
-        session_start();
-        return $_SESSION["username"];
-    }
-
-    function get_curr_player_name_js(){
-        echo get_curr_player_name();
-    }
-
-    function get_player_by_id() {
-        include "conn.php";
-
-        $identifiant = $_POST["id"];
-
-        $request = "SELECT * FROM players WHERE id=" . $identifiant;
-        echo json_encode($conn->query($request)->fetch_array());
-    }
-
-    function get_player_by_name_password($name, $pass_word) {
-        include "conn.php";
-        
-        $hash_psw = md5($pass_word);
-
-        $request = "SELECT * FROM players WHERE p_name='" . $name . "' AND p_password='" . $hash_psw . "'";
-        $player = $conn->query($request)->fetch_array();
-        
-        return $player;
-    }
-
-    function get_player_by_name_password_js(){
-        $name = $_POST["name"];
-        $pass_word = $_POST["pass_word"];
-
-        $player = get_player_by_name_password($name, $pass_word);
-
-        echo json_encode($player);
-    }
-
-    function save_name_password(){
-        session_start();
-
-        $name = $_POST["name"];
-        $pass_word = $_POST["pass_word"];
-
-        $_SESSION["username"] = $name;
-        $_SESSION["password"] = $pass_word;
-    }
-    
-    function reset_played_player(){
-        include "conn.php";
-        $identifiant = $_POST["id"];
-        $id_curr_game_session = get_current_game_session()["id"];
-
-        $nbr_persons_played = "SELECT COUNT(*) FROM players WHERE p_played = 1 AND logged = 1 AND ingame = 1 AND id_game_session = " . $id_curr_game_session;
-
-        if ($conn->query($nbr_persons_played)->fetch_array()[0] != '0'){
-            $request = "UPDATE players SET time_spent = 0, p_played = 0 WHERE logged = 1 AND ingame = 1"; /*id=" . $identifiant;*/
-            $conn->query($request);
-        }
-    }
-
-    function reset_single_played_player(){
-        include "conn.php";
-        $identifiant = $_POST["id"];
-        $id_curr_game_session = get_current_game_session()["id"];
-
-        $request = "UPDATE players SET time_spent = 0, p_played = 0 WHERE logged = 1 AND ingame = 1 AND id_game_session=" . $id_curr_game_session . " AND id=" . $identifiant; /*id=" . $identifiant;*/
-        echo $conn->query($request);
-    }
-
+    /****** 
+     * Pas utilisé mais est censé retourné un id random d'une longueur de 13 chiffres 
+     * pour éviter que l'id des joueurs ne soit juste un nombre qui s'incrémente de un 
+     * chaque fois qu'un joueur s'inscrit
+     * ******/
     function uniqidReal($lenght = 13) {
         // uniqid gives 13 chars, but you could adjust it to your needs.
         if (function_exists("random_bytes")) {
@@ -629,6 +756,9 @@
         return substr(bin2hex($bytes), 0, $lenght);
     }
 
+    /******
+     * Pas utilisé mais est censé être l'équivalent du setInterval en js en php
+     * ******/
     function setInterval($f, $milliseconds) {
         $seconds=(int)$milliseconds/1000;
         while(true)
