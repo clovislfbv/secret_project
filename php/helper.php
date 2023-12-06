@@ -1045,7 +1045,7 @@
 
             echo $output[0]; //puis on les retourne
         } else {
-            echo 0;
+            echo 0; //on retourne un nombre total de 0 secrets si le joueur n'a pas de secrets
         }
     }
 
@@ -1155,6 +1155,8 @@
     /****** 
      * Une fois que le tour est terminé, mets à jour le score du joueur actuel et ajoute un bonus en fonction du temps qu'il a mis pour répondre
      * valeur d'output: int
+     * 
+     * Adapté pour la requête ajax de cette fonction
      * ******/
     function update_score(){
         include "conn.php";
@@ -1182,93 +1184,133 @@
         echo $bonus_score; //retourne le nombre de points bonus que le joueur a gagné
     }
 
+    /****** 
+     * permet de savoir si une partie a déjà commencé ou non
+     * valeur d'output: 1 ou 0
+     * ******/
     function has_game_begun(){
-        $curr_game_session = get_current_game_session();
+        $curr_game_session = get_current_game_session(); //on récupère la session de jeu en cours
         if ($curr_game_session != null){
-            return $curr_game_session["hasgamebegun"];
+            return $curr_game_session["hasgamebegun"]; //si une session est en cours, on retourne si elle a déjà commencé ou pas 
         } else {
-            return 0;
+            return 0; //sinon on retourne qu'aucune partie n'a commencé
         }
     }
 
+    /****** 
+     * fait la même chose que la fonction has_game_begun() mais est adapté pour les requêtes ajax
+     * ******/
     function has_game_begun_js(){
         echo has_game_begun();
     }
 
+    /****** 
+     * vérifie si le joueur actuel a bien rejoins la partie en premier.
+     * donne le role admin de la partie à un joueur s'il n'y a pas ou plus d'admins dans la partie
+     * 
+     * valeur d'output: 1 ou 0 pour dire si le joueur a ou n'a pas le role admin dans cette partie
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
     function has_arrived_first(){
         include "conn.php";
 
-        $player = get_curr_player();
-        $id_curr_game_session = get_current_game_session()["id"];
+        $player = get_curr_player(); //récupère les informations sur le joueur actuel
+        $id_curr_game_session = get_current_game_session()["id"]; //récupère l'id de la session de jeu
 
         $request = "SELECT COUNT(*) FROM players WHERE first_ingame=1 AND ingame=1 AND logged = 1 AND id_game_session='" . $id_curr_game_session . "'";
-        $output = $conn->query($request)->fetch_array()[0];
+        $output = $conn->query($request)->fetch_array()[0]; //récupère le nombre de personnes qui ont le role admin pour la base de donnes
 
-        if ($output == "0"){
+        if ($output == "0"){ //s'il y a aucune personnes qui a ce role, on mets tous le monde sans ce role pour etre sûr que vraiment personne ne l'a, puis on attribue le role a une personne au hasard
             $reset_everyone = "UPDATE players SET first_ingame = 0";
-            $conn2->query($reset_everyone);
+            $conn2->query($reset_everyone); //enleve le role admin de toutes les personnes de la base de données
 
             $request = "UPDATE players SET first_ingame=1 WHERE id=" . $player["id"];
-            $output = $conn->query($request)->fetch_array()[0];
-            echo $output;
-        } else if ($output != "1"){
+            $output = $conn->query($request)->fetch_array()[0]; //attribue le role admin a une personne au hasard
+            echo $output; //puis on retourne le role actuel de la personne
+        } else if ($output != "1"){ //s'il y a plus d'une personne avec ce role et que le joueur actuel a ce role, on retire le role admin du joueur actuel
             $reset_someone = "UPDATE players SET first_ingame = 0 WHERE first_ingame = 1 AND ingame = 1 AND logged=1 AND id_game_session ='" . $id_curr_game_session . "' ORDER BY RAND() LIMIT 1";
-            $output = $conn->query($reset_someone);
+            $output = $conn->query($reset_someone); //enleve le role admin du joueur actuel
 
             $status_curr = "SELECT first_ingame FROM players WHERE id=" . $player["id"];
-            $output = $conn->query($status_curr);
+            $output = $conn->query($status_curr); //recupère le role du joueur actuel
 
-            echo $output;
+            echo $output; //retourne l'état du joueur actuel
         } else {
-            echo $player["first_ingame"];
+            echo $player["first_ingame"]; //si une seule personne a le role admin, on ne fait rien et on retourne le role du joueur actuel car il peut avoir le role admin ou alors rien du tout
         }
     }
 
+    /****** 
+     * met à jour la base de données pour dire qu'une partie vient de commencer
+     * 
+     * valeur d'output: aucune
+     * ******/
     function start_game(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"];
+        $id_curr_game_session = get_current_game_session()["id"]; //récupère l'id de la session de jeu actuel
         $request = "UPDATE game_session SET hasgamebegun = 1 WHERE id=" . $id_curr_game_session;
-        $conn->query($request);
+        $conn->query($request); //met à jour l'état de la partie en base de données
     }
 
+    /****** 
+     * décode le secret choisi par le jeu pour qu'il soit lisible à tous les joueurs
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * valeur d'output: string avec les caractères spéciaux décodés
+     * ******/
     function decode_secret(){
         include "conn.php";
 
-        $secret = $_POST["message"];
+        $secret = $_POST["message"]; //récupère le secret choisi par le jeu en argument depuis la base de données.
         
-        $output = preg_replace_callback("/(&#[0-9]+;)/", function($m) { return mb_convert_encoding($m[1], "UTF-8", "HTML-ENTITIES"); }, $secret);
+        $output = preg_replace_callback("/(&#[0-9]+;)/", function($m) { return mb_convert_encoding($m[1], "UTF-8", "HTML-ENTITIES"); }, $secret); //remplace certains caractères modifié par la base de données en caractères lisibles pour l'humain
 
-        echo $output;
+        echo $output; //retourne le secret décodé
     }
 
+    /****** 
+     * récupère le joueur choisi par le joueur actuel pendant une partie
+     * 
+     * valeur d'output: une array php encodé en json
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
     function get_chosen_player(){
         include "conn.php";
 
-        $identifiant = $_POST["id_p"];
+        $identifiant = $_POST["id_p"]; //récupère l'id du joueur qui a été joué par le joueur actuel
 
         $request = "SELECT * FROM players WHERE id=" . $identifiant;
-        $player = $conn->query($request);
+        $player = $conn->query($request); //récupère toutes les informations sur le joueur en question 
 
-        $player = $player->fetch_array();
+        $player = $player->fetch_array(); //ajoute ces informations dans une array php
 
-        echo json_encode($player);
+        echo json_encode($player); //retourné cette array encodé en json
     }
 
+    /****** 
+     * retourne toutes les informations sur la session de jeu actuelle
+     * valeur d'output: une array php
+     * 
+     * Adapté pour la requête ajax de cette fonction
+     * ******/
     function get_current_game_session(){
         include "conn.php";
 
         $request = "SELECT * FROM game_session WHERE isalive = 1";
-        $result = $conn->query($request);
-        $result_array = $result->fetch_array();
+        $result = $conn->query($request); //récupère toutes les informations sur la session de jeu actuelle
+        $result_array = $result->fetch_array(); //les stockent dans une array php
 
         if ($result_array){
-            $_SESSION["id_curr_game_session"] = $result_array["id"];
+            $_SESSION["id_curr_game_session"] = $result_array["id"]; //stocke l'id de la session de jeu actuelle en variable session
         }
 
-        return $result_array;
+        return $result_array; //retourne l'array php de la session de jeu
     }
 
+    /****** 
+     * crée une nouvelle session de jeu
+     * ******/
     function create_game_session(){
         include "conn.php";
 
@@ -1276,6 +1318,22 @@
         $conn->query($request);
     }
 
+    /****** 
+     * termine la session de jeu de façon temporaire
+     * ******/
+    function end_game(){
+        include "conn.php";
+
+        $id_curr_game_session = get_current_game_session()["id"]; //récupère l'id de la session de jeu actuelle
+
+        $request = "UPDATE game_session SET hasgamebegun = 0 WHERE id = " . $id_curr_game_session;
+        $conn->query($request); //termine temporairement la partie
+    }
+
+    /****** 
+     * finis la session de jeu actuelle de façon permanente
+     * valeur d'output: 1 ou 0 pour dire si la session de jeu a bien été arrété ou non
+     * ******/
     function kill_session(){
         include "conn.php";
 
@@ -1284,42 +1342,32 @@
             session_start();
         }
 
-        $id_curr_game_session = $_SESSION['id_curr_game_session'];
+        $id_curr_game_session = $_SESSION['id_curr_game_session']; //on récupère l'id de la session de jeu actuel en session
 
         $kill_session = "UPDATE game_session SET isalive = 0 AND hasgamebegun = 0 WHERE id=" . $id_curr_game_session;
-        return $conn->query($kill_session);
+        return $conn->query($kill_session); //on arrête la session de jeu actuelle grâce à son id récupéré
     }
 
+    /****** 
+     * fais la même chose que kill_session() mais est adapté pour la requête ajax
+     * ******/
     function kill_session_js(){
-        include "conn.php";
-
-        if(!isset($_SESSION)) 
-        { 
-            session_start();
-        }
-
-        $id_curr_game_session = $_SESSION['id_curr_game_session'];
-
-        //$id_curr_game_session = get_current_game_session()["id"];
-
-        $kill_session = "UPDATE game_session SET isalive = 0 AND hasgamebegun = 0 WHERE id=" . $id_curr_game_session;
-        echo $conn->query($kill_session);
+        $session_killed = kill_session();
+        echo $session_killed;
     }
 
+    /****** 
+     * détruis toutes les variables sessions du joueur lorsqu'il se déconnecte totalement du jeu
+     * ******/
     function destroy_session_variable(){
-        session_start();
-        session_unset();
+        session_start(); //récupère toutes les variables sessions du joueurs
+        session_unset(); //supprime toutes ces variables sessions
     }
 
-    function end_game(){
-        include "conn.php";
-
-        $id_curr_game_session = get_current_game_session()["id"];
-
-        $request = "UPDATE game_session SET hasgamebegun = 0 WHERE id = " . $id_curr_game_session;
-        $conn->query($request);
-    }
-
+    /****** 
+     * met à jour la colonne result_clicked en base de données
+     * Pour le jeu, cela veut dire que l'admin a cliqué sur le bouton "voir les résultats" et cela permet ainsi de pouvoir rediriger tous les joueurs à la page suivante
+     * ******/
     function set_result_clicked(){
         include "conn.php";
 
@@ -1331,6 +1379,10 @@
         echo $output;
     }
 
+    /****** 
+     * met à jour la colonne result_clicked en base de données
+     * Pour le jeu, cela veut dire que les joueurs arrivent à un nouveau tour. Il faut donc reset le bouton result pour pouvoir bien rediriger les joueurs au bon moment lorsqu'ils en auront besoin
+     * ******/
     function reset_result_clicked(){
         include "conn.php";
 
@@ -1342,6 +1394,9 @@
         echo $output;
     }
 
+    /****** 
+     * Récupère l'état actuel du bouton result pour savoir si l'admin a cliqué sur le bouton result ou pas
+     * ******/
     function get_state_result_button(){
         include "conn.php";
 
@@ -1357,6 +1412,10 @@
         }
     }
 
+    /****** 
+     * met à jour en base de donnée la colonne continue_clicked
+     * Pour le jeu, cela veut dire que l'admin a cliqué sur le bouton "Continuer" et cela permet ainsi de pouvoir rediriger tous les joueurs à la page suivante
+     * ******/
     function set_continue_clicked(){
         include "conn.php";
 
@@ -1368,6 +1427,10 @@
         echo $output;
     }
 
+    /****** 
+     * met à jour la colonne continue_clicked en base de données
+     * Pour le jeu, cela veut dire que les joueurs arrivent à un nouveau tour. Il faut donc reset le bouton continue pour pouvoir bien rediriger les joueurs au bon moment lorsqu'ils en auront besoin
+     * ******/
     function reset_continue_clicked(){
         include "conn.php";
 
@@ -1379,6 +1442,9 @@
         echo $output;
     }
 
+    /****** 
+     * Récupère l'état actuel du continue result pour savoir si l'admin a cliqué sur le bouton continue ou pas
+     * ******/
     function get_state_continue_button(){
         include "conn.php";
 
@@ -1394,6 +1460,9 @@
         }
     }
 
+    /****** 
+     * fais en sorte que quand les joueurs submit leur choix de joueur, fait en sorte de ne pas ajouter pleins de points grâce à un glitch au niveau du bouton voir les résultats
+     * ******/
     function get_state_submitted(){
         include "conn.php";
 
@@ -1405,6 +1474,9 @@
         echo $output;
     }
 
+    /****** 
+     * change la valeur de submitted en base, pour que tous les joueurs petvent être redirigé vers une nouvelle page au bon moment
+     * ******/
     function set_submitted(){
         include "conn.php";
 
@@ -1416,6 +1488,9 @@
         echo $output;
     }
 
+    /****** 
+     * change la valeur de submitted en base, pour que tous les joueurs petvent être redirigé vers une nouvelle page au bon moment
+     * ******/
     function reset_submitted(){
         include "conn.php";
 
