@@ -81,11 +81,6 @@
 
                           loading();
 
-                          // let nbr_players = getNbrPlayersIngame();
-
-                          // console.log(nbr_players);
-
-                          // if (nbr_players > 0){ 
                           let currPlayer = JSON.parse(getcurrPlayer());
                           console.log(currPlayer);
                           let currPlayerId = currPlayer["id"];
@@ -94,7 +89,6 @@
                           resetPlayerContinued(currPlayerId);
                           resetResultClicked();
                           displayAllPlayersOnline();
-                          //};
                         </script>
                       </div>
                     </div>
@@ -122,17 +116,6 @@
                                   <div class="question-guess">Vous avez une minute pour trouver à qui appartient ce secret</div>
                                   <dotlottie-player id="timerLottie" src="../lottie-player/timer/timer.lottie" background="transparent" speed="2" direction="1" mode="normal" autoplay></dotlottie-player>
                                 </div>
-                                <!-- <div class="timer">
-                                  <div class="circle-timer">
-                                    <div class="timer-slot">
-                                      <div class="timer-lt"></div>
-                                    </div>
-                                    <div class="timer-slot">
-                                      <div class="timer-rt"></div>
-                                    </div>
-                                    <div class="count"></div>
-                                  </div>
-                                </div> -->
                                 <div class="text-secret border-primary" id="secret_message"></div>
                               </div>
                             </div>
@@ -143,7 +126,6 @@
                             Drag-drop ici la personne qui aurait écrit ce secret selon toi
                           </h5>
                         </div>
-                        <!-- <div class="margin-div-right"></div> -->
                         <form name="result_form" id="result_form" method="POST" action="result.php">
                           <div>
                             <input type="hidden" name="secret_id_played" class="secret_id_played"></input>

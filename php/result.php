@@ -55,10 +55,6 @@
                           console.log($j(".current_score").text());
                         }, 1500)
                       </script>
-                      <?php
-                        // require_once("helper.php"); 
-                        // echo get_curr_player()["score"] . " points";
-                      ?>
                     </a>
                   </li>
                 </ul>
@@ -72,7 +68,6 @@
               <div class="col-6 left">
                   <script type="module">
                     import { displayContinueButton } from "../js/helper.js";
-                    //var $j = jQuery.noConflict();
                     setTimeout(() => {
                       displayContinueButton();
                     }, 5000);
@@ -86,7 +81,6 @@
                       unset($_SESSION['random']);
                     }
                     $post_variables = explode("-", $_POST["secret_id_played"]);
-                    //var_dump($post_variables);
                     /*echo "<br> id du message : " . $post_variables[0] . "<br>";
                     echo "chosen player : " . $post_variables[1] . "<br>";
                     echo "nom du joueur en train de jouer : " . $_SESSION["username"] . "<br>";
@@ -105,25 +99,16 @@
                       echo "<div class='end card border-primary text-primary'><div class='card-body' id='game-finished-body'><div class='id='end-title'><h2 class='comments'>Jeu terminé !</h2></div><h4 class='comments card-subtitle mb-2 text-muted'>Voici le classement finale !</h4></div></div>";
                       echo "<div class='all_players'><div id='final_leaderboard' class='final_leaderboard text-primary'><div class='card-header leaderboard' style='background-color:black; border: 1px solid #FF550B;'><h1 class='final-leaderboard-title'>classement finale des scores </h1></div><div class='list-group list-group-flush list-players'></div></div><div class='pagination-container pagination-final-leaderboard'><div id='page-selection'></div></div></div>";
                     } else {
-                      //echo "<form name='result_form' method='' action='get_player.php'>
                       echo "<div class='results border-primary card'><div class='results-card-body card-body'>";
                       
                       $author = $real_author["id"];
                       $request = "SELECT p_name FROM players WHERE id = $author";
                       $name = $conn->query($request);
                       $name_array = $name->fetch_array();
-                      // $good_answer = false;
-                      // var_dump("avant : " . $good_answer);
                       $bonus_score = 0;
 
                       if ($post_variables[1] === $name_array["p_name"]){
                         $time_spent = get_curr_player()["time_spent"] / 1000;
-                        // $good_answer = 1;
-                        // var_dump("après : " . $good_answer);
-                        // if ($good_answer === 1 && $time_spent <= 5) {
-                        //   $bonus_score = 10;
-                        //   var_dump($bonus_score);
-                        // }
                         $bonus_score = round(abs((1 - ($time_spent / 10 / 2)) * 10));
                         
                         echo "<div class='result_message text-primary'><h1 class='card-title' id='results-answer'>Bien joué !</h1><h3 class='message-found'>Tu as trouvé la personne qui a écrit ce secret !</h3></div>";
@@ -174,7 +159,6 @@
                       echo "<div class='result_button output' id='res_button'><button type='button' class='btn btn-lg btn-outline-primary'>Revenir au lobby</button></div>";
                     }
                   ?>
-                  <!--<div class='wait4results'></div>-->
                   <script type='module'>
                     import { displayLeaderboard } from '../js/helper.js';
                     var $j = jQuery.noConflict();

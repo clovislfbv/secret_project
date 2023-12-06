@@ -50,8 +50,7 @@
                                     $test = get_player_by_name_password($player, $pass_word);
                                     $_SESSION["player_id"] = $test["id"];
                                 } else {
-                                    echo "test";
-                                    //echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
+                                    echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
                                 }
                             }
                             if (is_ingame()){
@@ -138,7 +137,6 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <!-- <h5 class="text-primary">Voici la liste des secrets que vous avez enregistré</h5> -->
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
