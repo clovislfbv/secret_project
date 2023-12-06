@@ -2,7 +2,7 @@
   session_start();
   require_once("helper.php");
 
-  if (!(isset($_SESSION["player_id"])) || !(is_ingame())){
+  if (!(isset($_SESSION["player_id"])) || !(Helper::is_ingame())){
     echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
   }
 ?>
@@ -51,7 +51,7 @@
                       <?php
                         require_once("helper.php");
                         if (isset($_SESSION["player_id"])){
-                          echo get_curr_player()["score"] . " points";
+                          echo Helper::get_curr_player()["score"] . " points";
                         };
                       ?>
                     </a>

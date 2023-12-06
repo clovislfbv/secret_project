@@ -1,47 +1,14 @@
 var $j = jQuery.noConflict();
 
-var doesPlayerExist; //a boolean from the checkPlayerExist function which says if a player exists or not
-var isUsernameUnique; //return a boolean which says if the username given by the user is already used by someone or not
-var totalPlayersOnline = 0; //return value nbr all players currently online for the function getNbrPlayersOnline
-var totalPlayersIngame = 0
-var totalPlayersPlayed = 0; //return value nbr all players who already played for the function getNbrPlayersPlayed
-var progressbarValue; //current progressbar's value
-var test; //array of all players currently online
-var test2; //array of all players disconnected
-var test3; //name of the player currently playing
-var player; //player returned by getPlayerById
-var WasSecretadded; //a boolean from the addNewSecret function which says if a new secret has successfuly been added or not
-var nbr_total_secrets; //an int from the getNbrTotalSecrets function that says the number of secrets that the user added to the game
-var all_secrets_stored;
-var wasSecretDeleted;
-var nbrSecretsEnabled;
-var isSecretDisabled; //boolean to say if a secret has successfully been set as disabled or not
-var isSecretEnabled; //boolean to say if a secret has successfully been set as enabled or not
-var all_players_logged = []; //array of all players currently online
-var total_players_logged; //nbr of all players online
-var all_players_disconnected; //array of all players disconnected
-var nbr_messages_discovered; //nbr of all messages discovered
-var already_displayed = new Object(); //object that display players only one time
-var LottiePlayer = document.getElementById("myLottie"); //points to the locker animation
-var animation_finished = 0; //variable that says if the lock animation is finished or not
-var currPlayer; //return value for the getcurrPlayer function
 var random_secret; //generate a secret or return the current secret
 var changed = 0; //says if a secret have just been generated or not
 var author; //the random secret author
-var nbr_continued; //nbr of players who clicked on the continue button
-var nbrDiscovered; //nbr of secrets already discovered by the players online
 var dropped = 0; //says if the player playing dropped a player in the droppable area or not
-var nbrSecretsNotDiscovered; //nbr of secrets not discovered yet
-var currLeaderboard; //get the current leaderboard
-var already_shown = new Object(); //make sure that every players in the leaderboard is displayed only one time
-var decoded_secret; //decode the secret generated in a readable way for the special characters
-var shown = 0;
-var begun;
+var shown = 0; //says if a secret is currently showing to everyone or not
 var min = 0; //min pour le leeaderboard
 var max = 5; //max pour le leaderboard
-var enable = 0;
-var start_time = 0;
-var date_game_session_created;
+var animation_finished = 0;
+var start_time = 0; //récupère la date et l'heure à laquelle le secret a été montré au joueur actuel
 
 export function actionMobileInit() {
   document.addEventListener("touchstart", touchHandler, true);
@@ -89,6 +56,8 @@ export function destroySessionVariable(){
 }
 
 export function checkPlayerExist(){
+  let doesPlayerExist; //a boolean from the checkPlayerExist function which says if a player exists or not
+
   let usernameToCheck = $j("#username").val();
   let passwordToCheck = $j("#password").val();
   jQuery.ajax({
@@ -104,7 +73,9 @@ export function checkPlayerExist(){
 }
 
 export function checkSeveralUsernames(){
+  let isUsernameUnique; //return a boolean which says if the username given by the user is already used by someone or not
   let usernameToCheck = $j("#username").val();
+
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
@@ -242,6 +213,8 @@ export function updatePlayerWhenClicked(){
  * get the number of players currently playing the game
  *******/
 export function getNbrPlayersOnline(){
+  let totalPlayersOnline = 0; //return value nbr all players currently online for the function getNbrPlayersOnline
+
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
@@ -251,10 +224,12 @@ export function getNbrPlayersOnline(){
       totalPlayersOnline = nbr;
     }
   });
+
   return totalPlayersOnline;
 }
 
 export function getNbrPlayersIngame(){
+  let totalPlayersIngame = 0
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
@@ -271,6 +246,8 @@ export function getNbrPlayersIngame(){
  * get the number of players who already played during the turn
  *******/
 export function getNbrPlayersPlayed(){
+  let totalPlayersPlayed = 0; //return value nbr all players who already played for the function getNbrPlayersPlayed
+
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
@@ -287,6 +264,8 @@ export function getNbrPlayersPlayed(){
  * update the progressbarValue compared to the number of players online and the number of players who already played during this turn
  *******/
 export function updateProgressBar(){
+  let progressbarValue; //current progressbar's value
+
   var totalPlayersPlayed2 = getNbrPlayersPlayed();
   var totalPlayersOnline2 = getNbrPlayersIngame();
 
@@ -326,52 +305,52 @@ export function resetPlayedPlayer(identifiant){
 }
 
 /*******
- * show the number of players currently online
- *******/
-export function getNbrPlayersOnline2(){
-    return all_players_logged.length;
-}
-
-/*******
  * return an array of all players who are currently playing the game
  *******/
 function getAllPlayersIngame() {
-    jQuery.ajax({
-    type:"POST", 
-    url: "../php/helper.php",
-    data: {action: "get_all_players_ingame"},
-    async: false,
-    dataType: "json",
-    success: function (result){
-        test = result;
-    },
-    error: function (err) {
-        //console.log(err);
-    }
-    });
-    return test;
+  var test; //array of all players currently online
+
+  jQuery.ajax({
+  type:"POST", 
+  url: "../php/helper.php",
+  data: {action: "get_all_players_ingame"},
+  async: false,
+  dataType: "json",
+  success: function (result){
+      test = result;
+  },
+  error: function (err) {
+      console.log(err);
+  }
+  });
+
+  return test;
 }
 
 /*******
  * return an array of all players who disconnected from the game
  *******/
 function getAllPlayersDisconnected() {
-    jQuery.ajax({
-    type:"POST", 
-    url: "../php/helper.php",
-    data: {action: "get_all_players_disconnected"},
-    async: false,
-    success: function (res){
-        test2 = res;
-    },
-    error: function (err) {
-        //console.log(err);
-    }
-    });
-    return test2;
+  let test2; //array of all players disconnected
+
+  jQuery.ajax({
+  type:"POST", 
+  url: "../php/helper.php",
+  data: {action: "get_all_players_disconnected"},
+  async: false,
+  success: function (res){
+      test2 = res;
+  },
+  error: function (err) {
+      //console.log(err);
+  }
+  });
+  return test2;
 }
 
 export function getDateGameSessionCreated(){
+  var date_game_session_created;
+
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
@@ -385,6 +364,8 @@ export function getDateGameSessionCreated(){
 }
 
 export function getcurrPlayer() {
+  var currPlayer; //return value for the getcurrPlayer function
+
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
@@ -401,6 +382,8 @@ export function getcurrPlayer() {
  * return the name of the player currently playing
  *******/
 export function getCurrPlayerName () {
+  var test3; //name of the player currently playing
+
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
@@ -416,6 +399,7 @@ export function getCurrPlayerName () {
 
 
 export function getPlayerById(identifiant) {
+  let player; //player returned by getPlayerById
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
@@ -509,14 +493,16 @@ export function hasArrivedFirst(){
 export function loading(){
   let output = "";
   var save = 0;
+  var LottiePlayer = document.getElementById("myLottie"); //points to the locker animation
+  var animation_finished = 0; //variable that says if the lock animation is finished or not
   setInterval(function() {
 
     LottiePlayer.addEventListener("complete", function () {
       animation_finished = 1;
     });
 
-    nbr_messages_discovered = getNbrMessagesDiscovered();
-    total_players_logged = getNbrPlayersIngame();
+    let nbr_messages_discovered = getNbrMessagesDiscovered();
+    let total_players_logged = getNbrPlayersIngame();
 
     if (total_players_logged < 2) {
       setTimeout(function() {
@@ -542,17 +528,8 @@ export function loading(){
           endGame();
           
           if (dropped == 1){
-            //dropped = 0;
             let value = $j(".secret_id_played").val().split("-");
-            /*updatePlayerWhenClicked();
-            $j("#"+value[1]+"-"+value[2]).css({
-              'top': '0px',
-              'left': '0px',
-              'position': 'relative'
-            });*/
             $j("#"+value[1]+"-"+value[2]).addClass("d-none")
-            /*$j("#droppable-player").removeClass("correct");
-            $j("#droppable-player").addClass("normal text-primary");*/
           }
 
           LottiePlayer.seek(0);
@@ -560,7 +537,7 @@ export function loading(){
         }
       }, 5000);
     }
-    // console.log(total_players_logged, animation_finished, hasGameBegun());
+
     if (total_players_logged > 1 && animation_finished == 0 && $j("#cadenas").length && !($j("#cadenas").hasClass("d-none")) && hasGameBegun()){
       if ($j(".start_game").hasClass("d-none") && nbr_messages_discovered > 0){
         startGame();
@@ -642,6 +619,8 @@ export function loading(){
 }
 
 export function getAllSecretsStored(){
+  let all_secrets_stored;
+
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
@@ -666,6 +645,8 @@ export function checkSecretAlreadyStored(secretToCheck){
 }
 
 export function getNbrTotalSecrets(){
+  var nbr_total_secrets; //an int from the getNbrTotalSecrets function that says the number of secrets that the user added to the game
+
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
@@ -696,6 +677,8 @@ export function displayNbrTotalSecrets(){
 }
 
 export function addNewSecret(){
+  var WasSecretadded; //a boolean from the addNewSecret function which says if a new secret has successfuly been added or not
+
   let new_secret = $j("#mySecret").val();
   jQuery.ajax({
     type:"POST",
@@ -773,6 +756,8 @@ export function resetPlayerContinued(player_id) {
 }
 
 export function getNbrPlayersContinued(){
+  var nbr_continued; //nbr of players who clicked on the continue button
+
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
@@ -822,6 +807,8 @@ export function disconnectAllPlayersInactive(){
 }
 
 export function getNbrMessagesDiscovered(){
+  var nbrDiscovered; //nbr of secrets already discovered by the players online
+
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
@@ -983,6 +970,8 @@ export function showSecret() {
 }
 
 export function getNbrSecretsNotDiscovered(){
+  let nbrSecretsNotDiscovered; //nbr of secrets not discovered yet
+
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
@@ -1004,6 +993,8 @@ export function setMessageAsDiscovered(){
 }
 
 export function setSecretAsDisabled(id_secret){
+  var isSecretDisabled; //boolean to say if a secret has successfully been set as disabled or not
+
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
@@ -1017,6 +1008,8 @@ export function setSecretAsDisabled(id_secret){
 }
 
 export function setSecretAsEnabled(id_secret){
+  var isSecretEnabled; //boolean to say if a secret has successfully been set as enabled or not
+
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
@@ -1030,6 +1023,8 @@ export function setSecretAsEnabled(id_secret){
 }
 
 export function deleteSecret(id_secret){
+  var wasSecretDeleted;
+
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
@@ -1078,6 +1073,8 @@ export function OverlayOff(){
 }
 
 export function getNbrSecretsEnabled(){
+  let nbrSecretsEnabled;
+
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
@@ -1091,6 +1088,8 @@ export function getNbrSecretsEnabled(){
 }
 
 export function getLeaderboard() {
+  let currLeaderboard; //get the current leaderboard
+
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
@@ -1286,6 +1285,8 @@ export function updateScore(id_player, id_player_chosen, id_curr_player, time_sp
 }
 
 export function hasGameBegun(){
+  let begun;
+
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
@@ -1310,6 +1311,8 @@ export function startGame(){
 }
 
 export function decodeSecret(secret) {
+  let decoded_secret; //decode the secret generated in a readable way for the special characters
+
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
@@ -1462,14 +1465,12 @@ var check_only_one_time = 0
 export function displayAllPlayersOnline(){
     var colors = ["btn-secondary", "btn-info", "btn-danger", "btn-success", "btn-warning", "btn-light", "btn-primary"]
     var index_colors = 0;
+    var already_displayed = new Object(); //object that display players only one time
     setInterval(function() {
       let value = $j(".secret_id_played").val().split("-");
 
-      all_players_logged = getAllPlayersIngame();
-      //console.log(all_players_logged);
-      
-      // nbr_messages_discovered = getNbrMessagesDiscovered();
-      total_players_logged = getNbrPlayersIngame();
+      let all_players_logged = getAllPlayersIngame();
+      let total_players_logged = getNbrPlayersIngame();
 
       if (total_players_logged > 0){
         $j(".spinner-border").addClass("d-none");
@@ -1530,15 +1531,10 @@ export function displayAllPlayersOnline(){
 
         })
       }
-
-      // if (nbr_messages_discovered > 0 && check_only_one_time == 0 && shown == 0 && $j(".secret_and_progress").hasClass("d-none") && $j("#cadenas").hasClass("d-none")){
-      //   showSecret()
-      //   check_only_one_time = 1; 
-      // }
       
       updateProgressBar();
 
-      all_players_disconnected = JSON.parse(getAllPlayersDisconnected());
+      let all_players_disconnected = JSON.parse(getAllPlayersDisconnected());
       all_players_disconnected.forEach(function(element){
         if ($j("#"+element["p_name"]+"-"+element["id"]).length > 0){
           setTimeout(function(){

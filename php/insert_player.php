@@ -9,16 +9,16 @@ if (!(isset($_SESSION["player_id"]))){
   $player = $_SESSION["username"];
   $player_id = $_SESSION["player_id"];
 
-  var_dump(get_current_game_session());
+  var_dump(Helper::get_current_game_session());
   $_SESSION["first"] = 0;
-  if (get_current_game_session() == null){
+  if (Helper::get_current_game_session() == null){
     echo "test   11 1 11 1 1 1 1 1 1 11 1";
-    create_game_session();
+    Helper::create_game_session();
     $request = "UPDATE players SET first_ingame=1 WHERE id=" . $player_id;
     $conn->query($request);
   };
   
-  $curr_game_session = get_current_game_session();
+  $curr_game_session = Helper::get_current_game_session();
   $id_curr_game_session = $curr_game_session["id"];  
   
   if (isset($_SESSION["random"])) {
@@ -49,7 +49,7 @@ if (!(isset($_SESSION["player_id"]))){
     $request = "UPDATE players SET score = 0, submitted = 0 WHERE id= " . $player_id;
     $conn->query($request);
 
-    insert_ingame();
+    Helper::insert_ingame();
   };
   
   mysqli_close($conn);

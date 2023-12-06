@@ -7,243 +7,243 @@
     if (isset($_POST["action"])) {
         switch ($_POST["action"]) {
             case "connect_curr_player":
-                connect_curr_player();
+                Helper::connect_curr_player();
                 break;
     
             case "check_several_usernames":
-                check_several_usernames();
+                Helper::check_several_usernames();
                 break;
     
             case "check_player_exist":
-                check_player_exist();
+                Helper::check_player_exist();
                 break;
     
             case "update_player_when_played":
-                update_player_when_played();
+                Helper::update_player_when_played();
                 break;
     
             case "update_player_when_clicked":
-                update_player_when_clicked();
+                Helper::update_player_when_clicked();
                 break;
     
             case "get_nbr_players_online":
-                count_all_players_online();
+                Helper::count_all_players_online();
                 break;
     
             case "get_nbr_players_ingame":
-                count_all_players_ingame();
+                Helper::count_all_players_ingame();
                 break;
     
             case "get_nbr_players_played":
-                get_nbr_players_played();
+                Helper::get_nbr_players_played();
                 break;
     
             case "get_all_players_ingame":
-                get_all_players_ingame_js();
+                Helper::get_all_players_ingame_js();
                 break;
     
             case "get_all_players_disconnected":
-                get_all_players_disconnected();
+                Helper::get_all_players_disconnected();
                 break;
     
             case "get_curr_player":
-                get_curr_player_js();
+                Helper::get_curr_player_js();
                 break;
     
             case "get_date_game_session_created":
-                get_date_game_session_created();
+                Helper::get_date_game_session_created();
                 break;
     
             case "get_curr_player_name":
-                get_curr_player_name_js();
+                Helper::get_curr_player_name_js();
                 break;
     
             case "get_player_by_id":
-                get_player_by_id();
+                Helper::get_player_by_id();
                 break;
     
             case "reset_played_player":
-                reset_single_played_player();
+                Helper::reset_single_played_player();
                 break;
     
             case "choose_random_secret":
-                choose_random_secret_js();
+                Helper::choose_random_secret_js();
                 break;
     
             case "get_author_random_secret":
-                get_author_random_message_js();
+                Helper::get_author_random_message_js();
                 break;
     
             case "update_player_continued":
-                update_player_continued();
+                Helper::update_player_continued();
                 break;
     
             case "reset_player_continued":
-                reset_player_continued();
+                Helper::reset_player_continued();
                 break;
     
             case "get_nbr_players_continued":
-                get_nbr_players_continued();
+                Helper::get_nbr_players_continued();
                 break;
     
             case "unset_new_random_secret":
-                unset_new_random_secret();
+                Helper::unset_new_random_secret();
                 break;
     
             case "is_logged":
-                is_logged();
+                Helper::is_logged();
                 break;
     
             case "set_date_last_logged":
-                set_date_last_logged();
+                Helper::set_date_last_logged();
                 break;
     
             case "get_date_last_logged":
-                get_date_last_logged();
+                Helper::get_date_last_logged();
                 break;
     
             case "is_ingame":
-                is_ingame_js();
+                Helper::is_ingame_js();
                 break;
     
             case "has_arrived_first":
-                has_arrived_first();
+                Helper::has_arrived_first();
                 break;
     
             case "get_player_by_name_password":
-                get_player_by_name_password_js();
+                Helper::get_player_by_name_password_js();
                 break;
     
             case "save_name_password":
-                save_name_password();
+                Helper::save_name_password();
                 break;
     
             case "disconnect_player":
-                disconnect_player();
+                Helper::disconnect_player();
                 break;
     
             case "disconnect_all_players_inactive":
-                disconnect_all_players_inactive_js();
+                Helper::disconnect_all_players_inactive_js();
                 break;
     
             case "get_nbr_message_discovered":
-                get_nbr_message_discovered();
+                Helper::get_nbr_message_discovered();
                 break;
     
             case "get_leaderboard":
-                get_leaderboard();
+                Helper::get_leaderboard();
                 break;
     
             case "get_nbr_secrets_not_discovered":
-                get_nbr_secrets_not_discovered_js();
+                Helper::get_nbr_secrets_not_discovered_js();
                 break;
     
             case "set_message_as_discovered":
-                set_message_as_discovered();
+                Helper::set_message_as_discovered();
                 break;
     
             case "set_secret_as_disabled":
-                set_secret_as_disabled();
+                Helper::set_secret_as_disabled();
                 break;
     
             case "set_secret_as_enabled":
-                set_secret_as_enabled();
+                Helper::set_secret_as_enabled();
                 break;
     
             case "get_nbr_secrets_enabled":
-                get_nbr_secrets_enabled();
+                Helper::get_nbr_secrets_enabled();
                 break;
     
             case "delete_secret":
-                delete_secret();
+                Helper::delete_secret();
                 break;
     
             case "add_new_secret":
-                add_new_secret();
+                Helper::add_new_secret();
                 break;
     
             case "get_all_secrets_stored":
-                get_all_secrets_stored();
+                Helper::get_all_secrets_stored();
                 break;
     
             case "get_nbr_total_secrets":
-                get_nbr_total_secrets();
+                Helper::get_nbr_total_secrets();
                 break;
     
             case "update_score":
-                update_score();
+                Helper::update_score();
                 break;
     
             case "has_game_begun":
-                has_game_begun_js();
+                Helper::has_game_begun_js();
                 break;
     
             case "start_game":
-                start_game();
+                Helper::start_game();
                 break;
     
             case "decode_secret":
-                decode_secret();
+                Helper::decode_secret();
                 break;
     
             case "get_chosen_player":
-                get_chosen_player();
+                Helper::get_chosen_player();
                 break;
     
             case "kill_session":
-                kill_session_js();
+                Helper::kill_session_js();
                 break;
     
             case "end_game":
-                end_game();
+                Helper::end_game();
                 break;
     
             case "leave_ingame":
-                leave_ingame();
+                Helper::leave_ingame();
                 break;
     
             case "destroy_session_variable":
-                destroy_session_variable();
+                Helper::destroy_session_variable();
                 break;
     
             case "get_current_game_session":
-                get_current_game_session();
+                Helper::get_current_game_session();
                 break;
     
             case "set_result_clicked":
-                set_result_clicked();
+                Helper::set_result_clicked();
                 break;
     
             case "reset_result_clicked":
-                reset_result_clicked();
+                Helper::reset_result_clicked();
                 break;
     
             case "get_state_result_button":
-                get_state_result_button();
+                Helper::get_state_result_button();
                 break;
     
             case "set_continue_clicked":
-                set_continue_clicked();
+                Helper::set_continue_clicked();
                 break;
     
             case "reset_continue_clicked":
-                reset_continue_clicked();
+                Helper::reset_continue_clicked();
                 break;
     
             case "get_state_continue_button":
-                get_state_continue_button();
+                Helper::get_state_continue_button();
                 break;
     
             case "get_state_submitted":
-                get_state_submitted();
+                Helper::get_state_submitted();
                 break;
     
             case "set_submitted":
-                set_submitted();
+                Helper::set_submitted();
                 break;
     
             case "reset_submitted":
-                reset_submitted();
+                Helper::reset_submitted();
                 break;
     
             default:
@@ -255,13 +255,14 @@
      * Fin des checks si une requête ajax a été demandé
      * ******/
 
+    class Helper{
     /********
      * Quand l'utilisateur essaye de se connecter, cette fonction check si l'identifiant et le mot de passe qu'il a donné existe dans la base de données
      * valeur d'output: 1 ou 0 
      * 
      * Adapté pour la requête ajax de cette fonction
      * *******/
-    function check_player_exist(){
+    public static function check_player_exist(){
         include "conn.php"; // on include conn.php pour récupèrer la variable $conn qui va permettre de nous connecter à notre base de données et y faire des requêtes
 
         $username_to_check = addslashes($_POST["username"]); // on récupère le nom d'utilisateur puis on lui ajoute des slashes pour éviter les injections sql
@@ -270,7 +271,7 @@
         $request = "SELECT COUNT(*) FROM players WHERE p_name='" . $username_to_check . "' AND p_password='" . $password_to_check . "'";
         $output = $conn->query($request)->fetch_array(); // on récupère le nombre de personnes qui a cet username et ce mot de passe
 
-        echo $output[0]; // On retourne le nombre de personnes qui ont ces noms et mots de passe
+        echo $output[0]; // On retourne le nombre de personnes qui ont ces noms et mots de passe. Si output >= 1, ce sera interprété comme un true sinon ça sera interprété comme un false
     }
 
     /****** 
@@ -279,7 +280,7 @@
      * 
      *  Adapté pour la requête ajax de cette fonction
      * *******/
-    function check_several_usernames(){
+    public static function check_several_usernames(){
         include "conn.php";
 
         $username_to_check = $_POST["username"]; // On récupère le nom d'utilisateur qui a été renseigné par l'utilisateur
@@ -294,10 +295,10 @@
      * Retourne un booléen qui dit si le client est loggé ou pas
      * valeur d'output: 1 ou 0
      * ******/
-    function is_logged(){
+    public static function is_logged(){
         include "conn.php";
 
-        $id_curr_player = get_curr_player()["id"]; //récupère l'id du joueur
+        $id_curr_player = Self::get_curr_player()["id"]; //récupère l'id du joueur
 
         $request = "SELECT logged FROM players WHERE id=" . $id_curr_player;
         $output = $conn->query($request)->fetch_array(); // récupère la valeur qui dit si le joueur est loggé en base de données
@@ -311,7 +312,7 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function set_date_last_logged(){
+    public static function set_date_last_logged(){
         include "conn.php";
         
         date_default_timezone_set('Europe/Paris'); //initialise la timezone à celle de Paris
@@ -330,7 +331,7 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function get_date_last_logged(){
+    public static function get_date_last_logged(){
         include "conn.php";
 
         $player_id = $_POST["p_id"]; // récupère la valeur de l'id du joueur donné en argument en requête ajax
@@ -343,10 +344,10 @@
      * Retourne si le joueur est dans une partie ou non
      * valeur d'output: 1 ou 0
      * ******/
-    function is_ingame(){
+    public static function is_ingame(){
         include "conn.php";
 
-        $curr_player = get_curr_player(); //récupère l'id du joueur par les variables sessions
+        $curr_player = Self::get_curr_player(); //récupère l'id du joueur par les variables sessions
 
         if ($curr_player != null){
             $request = "SELECT ingame FROM players WHERE id=" . $curr_player["id"];
@@ -361,8 +362,8 @@
     /******
      * Fait la même chose que la fonction is_ingame mais est adaptée pour les requêtes ajax
      *  ******/
-    function is_ingame_js(){
-        $is_ingame = is_ingame();
+    public static function is_ingame_js(){
+        $is_ingame = Helper::is_ingame();
         echo $is_ingame;
     }
 
@@ -370,14 +371,14 @@
      * insère le joueur dans une partie
      * valeur d'output : aucune
      *  ******/
-    function insert_ingame(){
+    public static function insert_ingame(){
         include "conn.php";
 
         if (!isset($_SESSION)){
             session_start(); //importe les variables sessions si elles n'ont pas déjà été importé
         }
 
-        $id_curr_player = get_curr_player()["id"]; //récupère l'identifiant du joueur grâce aux variables sessions
+        $id_curr_player = Self::get_curr_player()["id"]; //récupère l'identifiant du joueur grâce aux variables sessions
 
         $_SESSION["ingame"] = 1; // initialise la valeur session ingame à 1 pour dire que le joueur est bien dans une partie
 
@@ -389,10 +390,10 @@
      *  fait quitter le joueur de la partie actuelle où il est
      *  valeur d'output: 1 ou 0 pour dire si le code a bien réussi à faire quitter le joueur de la partie
      *  ******/
-    function leave_ingame(){
+    public static function leave_ingame(){
         include "conn.php";
 
-        $id_curr_player = get_curr_player()["id"]; // récupère l'identifiant du joueur
+        $id_curr_player = Self::get_curr_player()["id"]; // récupère l'identifiant du joueur
 
         $_SESSION["ingame"] = 0; // set la variable session ingame à 0 pour dire que le joueur a quitté la partie
 
@@ -406,10 +407,10 @@
      *  retourne le nombre de joueur dans la même partie
      *  valeur d'output: un nombre qui a pour valeur minimale 0
      *  ******/
-    function get_nbr_players_ingame(){
+    public static function get_nbr_players_ingame(){
         include "conn.php";
         
-        $curr_game_session = get_current_game_session(); // récupère la game session actuelle. Si aucune game session n'a été créer, retourne null 
+        $curr_game_session = Self::get_current_game_session(); // récupère la game session actuelle. Si aucune game session n'a été créer, retourne null 
 
         if ($curr_game_session == null){
             return 0; //si aucune session de jeu n'a été créer, retourne qu'aucun joueur n'est en game.
@@ -429,11 +430,11 @@
      *              permet de garder le joueur connecté si le joueur se redirige vers une autre page du jeu et de le déconnecté sinon 
      * valeur d'output: aucune
      *  ******/
-    function connect_curr_player(){
+    public static function connect_curr_player(){
         include "conn.php";
         session_start();
 
-        $is_ingame = is_ingame(); //stocke dans une variable si le joueur est dans une partie ou non
+        $is_ingame = Self::is_ingame(); //stocke dans une variable si le joueur est dans une partie ou non
 
         if (isset($_SESSION["player_id"])){
             $player_id = $_SESSION["player_id"]; //récupère l'identifiant du joueur grâce à la variable session
@@ -450,7 +451,7 @@
      *  Mets à jour toutes les infos du joueur dans la base de données pour dire qu'il a joué c'est à dire qu'il a glissé et déposé le joueur de son choix sur la surface dédié à cet effet
      *  valeur d'output: un string qui dit si le jour a bien été mis à jour ou non
      *  ******/
-    function update_player_when_played(){
+    public static function update_player_when_played(){
         include "conn.php";
         session_start();
 
@@ -480,7 +481,7 @@
      *  Mets à jour toutes les infos du joueur dans la base de données pour dire qu'il a cliqué sur le joueur qu'il avait glissé et déposé
      *  valeur d'output: un string qui dit si le jour a bien été mis à jour ou non
      *  ******/
-    function update_player_when_clicked(){
+    public static function update_player_when_clicked(){
         include "conn.php";
         session_start();
         
@@ -500,7 +501,7 @@
      * met à jour la base de donnée pour dire que le jour viens de bouger depuis la page get_player.php à la page result.php
      * valeur d'output: aucune
      * ******/ 
-     function update_player_continued() {
+     public static function update_player_continued() {
         include "conn.php";
 
         $p_id = $_POST["player_id"]; //récupère l'identifiant du joueur actuel
@@ -513,7 +514,7 @@
      * met à jour la base de donnée pour dire que le jour viens de bouger depuis la page result.php à la page get_player.php
      * valeur d'output: aucune
      * ******/
-    function reset_player_continued() {
+    public static function reset_player_continued() {
         include "conn.php";
 
         $player_id = $_POST["p_id"]; //récupère l'identifiant du joueur actuel
@@ -528,10 +529,10 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function get_nbr_players_continued() {
+    public static function get_nbr_players_continued() {
         include "conn.php";
 
-        $curr_game_session = get_current_game_session(); //récupère la session de jeu actuelle
+        $curr_game_session = Self::get_current_game_session(); //récupère la session de jeu actuelle
 
         if ($curr_game_session != null){
             $request = "SELECT COUNT(*) FROM players WHERE continued = 1 AND logged = 1 AND ingame = 1 AND id_game_session =" . $curr_game_session["id"];
@@ -546,10 +547,10 @@
      * Récupère la liste des joueurs qui sont loggés et dans une partie
      * valeur d'output: une array php
      * ******/
-    function get_all_players_ingame(){
+    public static function get_all_players_ingame(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"]; //on récupère l'identifiant de la session de jeu actuelle
+        $id_curr_game_session = Self::get_current_game_session()["id"]; //on récupère l'identifiant de la session de jeu actuelle
 
         $request = "SELECT * FROM players WHERE logged = 1 AND ingame = 1 AND id_game_session = " . $id_curr_game_session;
         $elements = $conn->query($request); //on récupère la liste des joueurs loggés et dans la partie actuelle
@@ -564,8 +565,8 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function get_all_players_ingame_js(){
-        echo json_encode(get_all_players_ingame()); //on récupère l'array php des joueurs connectés au jeu et dans une partie. On l'encode en json puis en retourne cette version json
+    public static function get_all_players_ingame_js(){
+        echo json_encode(Self::get_all_players_ingame()); //on récupère l'array php des joueurs connectés au jeu et dans une partie. On l'encode en json puis en retourne cette version json
     }
 
     /****** 
@@ -574,7 +575,7 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function get_all_players_disconnected(){
+    public static function get_all_players_disconnected(){
         include "conn.php";
         $request = "SELECT * FROM players WHERE logged = 0 OR ingame = 0";
         $elements = $conn->query($request);
@@ -589,7 +590,7 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function count_all_players_online(){
+    public static function count_all_players_online(){
         include "conn.php";
 
         $request = "SELECT count(*) FROM players WHERE logged = 1";
@@ -604,10 +605,10 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function count_all_players_ingame(){
+    public static function count_all_players_ingame(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"]; //on récupère l'identifiant de la session de jeu actuelle
+        $id_curr_game_session = Self::get_current_game_session()["id"]; //on récupère l'identifiant de la session de jeu actuelle
 
         $request = "SELECT count(*) FROM players WHERE logged = 1 AND ingame = 1 AND id_game_session = " . $id_curr_game_session;
         $elements = $conn->query($request); //on récupère le nombre de joueurs loggés et dans la partie actuelle
@@ -622,10 +623,10 @@
      * Adapté pour la requête ajax de cette fonction
      * Utile pour afficher l'état de la bar de progression
      * ******/
-    function get_nbr_players_played(){
+    public static function get_nbr_players_played(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"]; // on récupère l'identifiant de la session de jeu actuelle
+        $id_curr_game_session = Self::get_current_game_session()["id"]; // on récupère l'identifiant de la session de jeu actuelle
         
         $request = "SELECT * FROM players WHERE p_played = 1 AND logged = 1 AND ingame = 1 AND id_game_session = " . $id_curr_game_session;
         $elements = $conn->query($request); //puis on récupère la liste des joueurs loggés, dans la partie actuelle et qui a déjà joué pendant cette partie
@@ -638,10 +639,10 @@
      * remets la valeur qui détermine si un joueur a déjà joué ou non pendant cette partie à zéro pour tous les joueurs connectés et dans la partie actuelle
      * valeur d'output: aucune  
      * ******/
-    function reset_played_player(){
+    public static function reset_played_player(){
         include "conn.php";
         $identifiant = $_POST["id"]; //plus utile, mais récupère l'identifiant du joueur actuel
-        $id_curr_game_session = get_current_game_session()["id"]; //récupère la session de jeu actuelle
+        $id_curr_game_session = Self::get_current_game_session()["id"]; //récupère la session de jeu actuelle
 
         $nbr_persons_played = "SELECT COUNT(*) FROM players WHERE p_played = 1 AND logged = 1 AND ingame = 1 AND id_game_session = " . $id_curr_game_session; //récupère le nombre de personnes qui a joué ce tour
 
@@ -655,10 +656,10 @@
      * remets la valeur qui détermine si un joueur a déjà joué ou non pendant cette partie à zéro pour uniquement le joueur actuel
      * valeur d'output: 1 ou 0
      * ******/
-    function reset_single_played_player(){
+    public static function reset_single_played_player(){
         include "conn.php";
         $identifiant = $_POST["id"]; //on récupère l'identifiant du joueur actuel donné en argument
-        $id_curr_game_session = get_current_game_session()["id"]; //on récupère l'identifiant de la session de jeu actuel
+        $id_curr_game_session = Self::get_current_game_session()["id"]; //on récupère l'identifiant de la session de jeu actuel
 
         $request = "UPDATE players SET time_spent = 0, p_played = 0 WHERE logged = 1 AND ingame = 1 AND id_game_session=" . $id_curr_game_session . " AND id=" . $identifiant;
         echo $conn->query($request); //mets à jour la base de données et retourne si la valeur a bien été mise à jour dans la base de données ou non par un booléen
@@ -670,7 +671,7 @@
      * 
      * très utilisé dans la plupart des autres fonctions php 
      * ******/
-    function get_curr_player(){
+    public static function get_curr_player(){
         include "conn.php";
         if(!isset($_SESSION)) 
         { 
@@ -696,8 +697,8 @@
      * Adapté pour la requête ajax de cette fonction
      * très utilisé dans la plupart de mes autres fonctions
      * ******/
-    function get_curr_player_js(){
-        $curr_player = get_curr_player(); //récupère l'array php du joueur actuel
+    public static function get_curr_player_js(){
+        $curr_player = Self::get_curr_player(); //récupère l'array php du joueur actuel
         echo json_encode($curr_player); //return cette array encodé en json
     }
 
@@ -705,7 +706,7 @@
      * Récupère le nom du joueur actuel
      * valeur d'output: string
      * ******/
-    function get_curr_player_name(){
+    public static function get_curr_player_name(){
         session_start();
         return $_SESSION["username"]; //on retourne la valeur stocké dans la variable session username
     }
@@ -716,8 +717,8 @@
      * 
      * Adapté à la requête ajax de cette fonction
      * ******/
-    function get_curr_player_name_js(){
-        echo get_curr_player_name(); //on récupère la valeur retourné par la fonction get_curr_player_name et on la return
+    public static function get_curr_player_name_js(){
+        echo Self::get_curr_player_name(); //on récupère la valeur retourné par la fonction get_curr_player_name et on la return
     }
 
     /****** 
@@ -726,7 +727,7 @@
      * 
      * Adapté à la requête ajax de cette fonction
      * ******/
-    function get_player_by_id() {
+    public static function get_player_by_id() {
         include "conn.php";
 
         $identifiant = $_POST["id"]; //on récupère l'identifiant du joueur donné en argument de la requête
@@ -739,7 +740,7 @@
      * Récupère toutes les informations de n'importe quel joueur grâce à son nom d'utilisateur et son mot de passe
      * valeur d'output: array php
      * ******/
-    function get_player_by_name_password($name, $pass_word) {
+    public static function get_player_by_name_password($name, $pass_word) {
         include "conn.php";
         
         $hash_psw = md5($pass_word); //on hache la valeur du mot de passe donné en argument
@@ -756,11 +757,11 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function get_player_by_name_password_js(){
+    public static function get_player_by_name_password_js(){
         $name = $_POST["name"]; //Récupère le nom d'utilisateur donné en argument
         $pass_word = $_POST["pass_word"]; //Récupère le mot de passe donné en argument
 
-        $player = get_player_by_name_password($name, $pass_word); //récupère l'array php avec toutes les infos du joueur spécifié par son nom d'utilisateur et son mot de passe
+        $player = Self::get_player_by_name_password($name, $pass_word); //récupère l'array php avec toutes les infos du joueur spécifié par son nom d'utilisateur et son mot de passe
 
         echo json_encode($player); //on return cette array récupéré encodé en json
     }
@@ -771,7 +772,7 @@
      * 
      * Adapté à la requête ajax de cette fonction
      * ******/
-    function save_name_password(){
+    public static function save_name_password(){
         session_start();
 
         $name = $_POST["name"]; //récupère le nom d'utilisateur donné en argument
@@ -787,7 +788,7 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function get_date_game_session_created(){
+    public static function get_date_game_session_created(){
         include "conn.php";
 
         $request = "SELECT datecreation FROM game_session WHERE isalive = 1";
@@ -805,7 +806,7 @@
      * pour éviter que l'id des joueurs ne soit juste un nombre qui s'incrémente de un 
      * chaque fois qu'un joueur s'inscrit
      * ******/
-    function uniqidReal($lenght = 13) {
+    public static function uniqidReal($lenght = 13) {
         // uniqid gives 13 chars, but you could adjust it to your needs.
         if (function_exists("random_bytes")) {
             $bytes = random_bytes(ceil($lenght / 2));
@@ -820,7 +821,7 @@
     /******
      * Pas utilisé mais est censé être l'équivalent du setInterval en js en php
      * ******/
-    function setInterval($f, $milliseconds) {
+    public static function setInterval($f, $milliseconds) {
         $seconds=(int)$milliseconds/1000;
         while(true)
         {
@@ -833,7 +834,7 @@
      * Choisis aléatoirement le secret à afficher à tous les joueurs
      * valeur d'output: aucune
      * ******/
-    function set_new_random_secret(){
+    public static function set_new_random_secret(){
         include "conn.php";
 
         $id_curr_game_session = $_SESSION['id_curr_game_session']; //récupère l'identifiant de la session de jeu actuelle
@@ -849,7 +850,7 @@
      * set les secrets découverts dans la base de données
      * valeur d'output: aucune
      * ******/
-    function unset_new_random_secret(){
+    public static function unset_new_random_secret(){
         include "conn.php";
 
         $id_curr_game_session = $_SESSION['id_curr_game_session']; //récupère l'identifiant de la session de jeu actuelle
@@ -862,17 +863,17 @@
      * affiche le secret qui est montré à tous les utilisateur ce tour
      * valeur d'output: une array php
      * ******/
-    function choose_random_secret(){
+    public static function choose_random_secret(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"]; //récupère l'identifiant de la session de jeu actuelle
+        $id_curr_game_session = Self::get_current_game_session()["id"]; //récupère l'identifiant de la session de jeu actuelle
         
         $getSecret = "SELECT * FROM mySecret, players WHERE players.ingame = 1 AND mySecret.random_choice = 1 AND mySecret.id_player = players.id AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session = " . $id_curr_game_session;
         $secret = $conn->query($getSecret); //récupère toutes les informations du secret choisi par la fonction set_new_random_secret et à afficher à tous les joueurs
         $check = $secret->fetch_array(); //ajoute les informations récupéré dans une array
 
         while ($check == null){ // si cette array est null, cela veut dire que le secret a été découvert
-            set_new_random_secret(); //on en set un nouveau dans la base de données
+            Self::set_new_random_secret(); //on en set un nouveau dans la base de données
             $secret = $conn->query($getSecret);
             $check = $secret->fetch_array(); //puis on récupère les infos de celui-ci dans $check
         }
@@ -886,9 +887,9 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function choose_random_secret_js(){
+    public static function choose_random_secret_js(){
         session_start();
-        $check = choose_random_secret(); //récupère les informations sur le secret actuellement affiché dans une array php
+        $check = Self::choose_random_secret(); //récupère les informations sur le secret actuellement affiché dans une array php
         echo json_encode($check); //encode cette array en json et le retourne
     }
 
@@ -896,10 +897,10 @@
      * récupère toutes les informations sur l'auteur du secret à afficher
      * valeur d'output: une array php
      * ******/
-    function get_author_random_message(){
+    public static function get_author_random_message(){
         include "conn.php";
 
-        $secret = choose_random_secret(); //récupère l'array php avec toutes les informations du secret 
+        $secret = Self::choose_random_secret(); //récupère l'array php avec toutes les informations du secret 
         $request = "SELECT * FROM players WHERE id =" . $secret["id_player"];
         $player = $conn->query($request); //récupère toutes les informations liés à l'auteur du secret actuel
 
@@ -912,9 +913,9 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function get_author_random_message_js(){
+    public static function get_author_random_message_js(){
         session_start();
-        $author = get_author_random_message(); //récupère l'array php avec toutes les informations sur l'auteur du secret affiché à tous les joueurs actuellement
+        $author = Self::get_author_random_message(); //récupère l'array php avec toutes les informations sur l'auteur du secret affiché à tous les joueurs actuellement
         echo json_encode($author); //encode cette array en json et le retourne
     }
 
@@ -924,10 +925,10 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function get_nbr_message_discovered(){
+    public static function get_nbr_message_discovered(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"]; //on récupère l'identifiant de la session de jeu en cours
+        $id_curr_game_session = Self::get_current_game_session()["id"]; //on récupère l'identifiant de la session de jeu en cours
 
         $request = "SELECT COUNT(*) FROM mySecret, players WHERE mySecret.discovered = 1 AND mySecret.id_player = players.id AND players.logged = 1 AND players.ingame = 1 AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session =" . $id_curr_game_session;
         $nbr_discovered = $conn->query($request);
@@ -939,7 +940,7 @@
     /****** 
      * met à jour le message dans la base de données pour dire qu'il a été découvert
      * ******/
-    function set_message_as_discovered(){
+    public static function set_message_as_discovered(){
         include "conn.php";
 
         $secret_discovered = "UPDATE mysecret SET discovered = 1 WHERE id=" . $_SESSION["secret_id"];
@@ -950,10 +951,10 @@
      * Récupère le nombre de secrets qui n'ont pas encore été découvert pendant la partie
      * valeur d'output: int
      * ******/
-    function get_nbr_secrets_not_discovered(){
+    public static function get_nbr_secrets_not_discovered(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"]; //on récupère d'abord l'id de la session de jeu actuel
+        $id_curr_game_session = Self::get_current_game_session()["id"]; //on récupère d'abord l'id de la session de jeu actuel
 
         $get_num_not_discovered = "SELECT COUNT(*) FROM mysecret, players WHERE mysecret.discovered = 0 AND players.id = mysecret.id_player AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.ingame = 1 AND players.id_game_session =" . $id_curr_game_session;
         $length = $conn->query($get_num_not_discovered);
@@ -965,14 +966,14 @@
     /****** 
      * Fais la même chose que la fonction get_nbr_secrets_not_discovered mais est adapté pour sa requête ajax
      * ******/
-    function get_nbr_secrets_not_discovered_js(){
-        echo get_nbr_secrets_not_discovered();
+    public static function get_nbr_secrets_not_discovered_js(){
+        echo Self::get_nbr_secrets_not_discovered();
     }
 
     /****** 
      * déconnecte un joueur grâce à son id 
      * ******/
-    function disconnect_player() {
+    public static function disconnect_player() {
         include "conn.php";
         
         $player_id = $_POST["p_id"]; //récupère l'id d'un joueur donné en argument de la fonction
@@ -991,10 +992,10 @@
      * utile car cela déconnecte totalement un joueur qui s'est mal déconnecté et cela reconnecte automatiquement un joueur s'il est en ligne grâce au système de coeur
      * valeur d'output : 1 ou 0
      * ******/
-    function disconnect_all_players_inactive() {
+    public static function disconnect_all_players_inactive() {
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"]; //récupère l'id de la session de jeu actuelle
+        $id_curr_game_session = Self::get_current_game_session()["id"]; //récupère l'id de la session de jeu actuelle
 
         $request = "UPDATE players SET logged=0, ingame=0 WHERE id_game_session=" . $id_curr_game_session . " AND id_p_choice = 0";
         $disconnect = $conn->query($request); //déconnecte tous les joueurs qui n'ont pas joué pendant ce tour
@@ -1005,7 +1006,7 @@
     /****** 
      * Fait la même chose que la fonction disconnect_all_players_inactive mais est adapté pour les requêtes ajax
      * *******/
-    function disconnect_all_players_inactive_js(){
+    public static function disconnect_all_players_inactive_js(){
         $disconnect = disconnect_all_players_inactive();
         echo $disconnect;
     }
@@ -1016,10 +1017,10 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function get_all_secrets_stored(){
+    public static function get_all_secrets_stored(){
         include "conn.php";
 
-        $id_curr_player = get_curr_player()["id"]; //récupère l'identifiant du joueur actuel
+        $id_curr_player = Self::get_curr_player()["id"]; //récupère l'identifiant du joueur actuel
 
         $request = "SELECT * FROM mySecret WHERE id_player=" . $id_curr_player;
         $output = $conn->query($request)->fetch_all(MYSQLI_ASSOC); //On récupère la liste de ses secrets dans la base de données et on les stocke dans une array php
@@ -1033,10 +1034,10 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function get_nbr_total_secrets(){
+    public static function get_nbr_total_secrets(){
         include "conn.php";
         
-        $curr_player = get_curr_player(); //on récupère l'identifiant du joueur
+        $curr_player = Self::get_curr_player(); //on récupère l'identifiant du joueur
         
         if ($curr_player != null){
             $request = "SELECT COUNT(*) FROM mySecret WHERE id_player=" . $curr_player["id"];
@@ -1054,10 +1055,10 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function add_new_secret(){
+    public static function add_new_secret(){
         include "conn.php";
 
-        $id_curr_player = get_curr_player()["id"]; //récupère l'identifiant du joueur actuel
+        $id_curr_player = Self::get_curr_player()["id"]; //récupère l'identifiant du joueur actuel
         $new_secret = htmlspecialchars($_POST["secret"], ENT_QUOTES); //on récupère le message renseigné par le joueur. Ici on a ajouté la fonction htmlspecialchars car dans certains cas, avec des caractères spéciaux, cela ne laisser pas le message s'enregistrer 
 
         $request = "INSERT INTO mysecret (p_secret, id_player, discovered, random_choice) VALUES ('" . $new_secret . "', '". $id_curr_player ."', 0, 0)";
@@ -1072,7 +1073,7 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function set_secret_as_disabled(){
+    public static function set_secret_as_disabled(){
         include "conn.php";
 
         $secret_id = $_POST["id"]; //récupère l'id du secret donné en argument
@@ -1088,7 +1089,7 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function set_secret_as_enabled(){
+    public static function set_secret_as_enabled(){
         include "conn.php";
 
         $secret_id = $_POST["id"]; //récupère l'id du secret donné en argument
@@ -1105,7 +1106,7 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function delete_secret(){
+    public static function delete_secret(){
         include "conn.php";
 
         $secret_id = $_POST["id"]; //récupère l'identifiant du secret
@@ -1122,10 +1123,10 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function get_nbr_secrets_enabled(){
+    public static function get_nbr_secrets_enabled(){
         include "conn.php";
 
-        $id_curr_player = get_curr_player()["id"]; //on récupère l'id du joueur
+        $id_curr_player = Self::get_curr_player()["id"]; //on récupère l'id du joueur
 
         $request = "SELECT COUNT(*) FROM mysecret WHERE (disabled=0 OR disabled IS NULL) AND id_player=" . $id_curr_player;
         $output = $conn->query($request)->fetch_array(); //on récupère le nombre de secrets dans la base de données qu'il a choisi de montrer à la prochaine partie
@@ -1139,10 +1140,10 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function get_leaderboard(){
+    public static function get_leaderboard(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"]; //on récupère l'id de la session de jeu actuelle
+        $id_curr_game_session = Self::get_current_game_session()["id"]; //on récupère l'id de la session de jeu actuelle
 
         $new_request = "SELECT * FROM players WHERE id_game_session = '" . $id_curr_game_session . "' ORDER BY score DESC";
         $leaderboard = $conn->query($new_request);
@@ -1157,7 +1158,7 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function update_score(){
+    public static function update_score(){
         include "conn.php";
 
         $bonus_score = 0;
@@ -1187,8 +1188,8 @@
      * permet de savoir si une partie a déjà commencé ou non
      * valeur d'output: 1 ou 0
      * ******/
-    function has_game_begun(){
-        $curr_game_session = get_current_game_session(); //on récupère la session de jeu en cours
+    public static function has_game_begun(){
+        $curr_game_session = Self::get_current_game_session(); //on récupère la session de jeu en cours
         if ($curr_game_session != null){
             return $curr_game_session["hasgamebegun"]; //si une session est en cours, on retourne si elle a déjà commencé ou pas 
         } else {
@@ -1199,8 +1200,8 @@
     /****** 
      * fait la même chose que la fonction has_game_begun() mais est adapté pour les requêtes ajax
      * ******/
-    function has_game_begun_js(){
-        echo has_game_begun();
+    public static function has_game_begun_js(){
+        echo Self::has_game_begun();
     }
 
     /****** 
@@ -1210,11 +1211,11 @@
      * valeur d'output: 1 ou 0 pour dire si le joueur a ou n'a pas le role admin dans cette partie
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function has_arrived_first(){
+    public static function has_arrived_first(){
         include "conn.php";
 
-        $player = get_curr_player(); //récupère les informations sur le joueur actuel
-        $id_curr_game_session = get_current_game_session()["id"]; //récupère l'id de la session de jeu
+        $player = Self::get_curr_player(); //récupère les informations sur le joueur actuel
+        $id_curr_game_session = Self::get_current_game_session()["id"]; //récupère l'id de la session de jeu
 
         $request = "SELECT COUNT(*) FROM players WHERE first_ingame=1 AND ingame=1 AND logged = 1 AND id_game_session='" . $id_curr_game_session . "'";
         $output = $conn->query($request)->fetch_array()[0]; //récupère le nombre de personnes qui ont le role admin pour la base de donnes
@@ -1244,10 +1245,10 @@
      * 
      * valeur d'output: aucune
      * ******/
-    function start_game(){
+    public static function start_game(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"]; //récupère l'id de la session de jeu actuel
+        $id_curr_game_session = Self::get_current_game_session()["id"]; //récupère l'id de la session de jeu actuel
         $request = "UPDATE game_session SET hasgamebegun = 1 WHERE id=" . $id_curr_game_session;
         $conn->query($request); //met à jour l'état de la partie en base de données
     }
@@ -1258,7 +1259,7 @@
      * Adapté pour la requête ajax de cette fonction
      * valeur d'output: string avec les caractères spéciaux décodés
      * ******/
-    function decode_secret(){
+    public static function decode_secret(){
         include "conn.php";
 
         $secret = $_POST["message"]; //récupère le secret choisi par le jeu en argument depuis la base de données.
@@ -1274,7 +1275,7 @@
      * valeur d'output: une array php encodé en json
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function get_chosen_player(){
+    public static function get_chosen_player(){
         include "conn.php";
 
         $identifiant = $_POST["id_p"]; //récupère l'id du joueur qui a été joué par le joueur actuel
@@ -1293,7 +1294,7 @@
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/
-    function get_current_game_session(){
+    public static function get_current_game_session(){
         include "conn.php";
 
         $request = "SELECT * FROM game_session WHERE isalive = 1";
@@ -1310,7 +1311,7 @@
     /****** 
      * crée une nouvelle session de jeu
      * ******/
-    function create_game_session(){
+    public static function create_game_session(){
         include "conn.php";
 
         $request = "INSERT INTO game_session (isalive, hasgamebegun, nbrplayers, result_clicked, continue_clicked) VALUES (1, 0, 0, 0, 0)";
@@ -1320,10 +1321,10 @@
     /****** 
      * termine la session de jeu de façon temporaire
      * ******/
-    function end_game(){
+    public static function end_game(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"]; //récupère l'id de la session de jeu actuelle
+        $id_curr_game_session = Self::get_current_game_session()["id"]; //récupère l'id de la session de jeu actuelle
 
         $request = "UPDATE game_session SET hasgamebegun = 0 WHERE id = " . $id_curr_game_session;
         $conn->query($request); //termine temporairement la partie
@@ -1333,7 +1334,7 @@
      * finis la session de jeu actuelle de façon permanente
      * valeur d'output: 1 ou 0 pour dire si la session de jeu a bien été arrété ou non
      * ******/
-    function kill_session(){
+    public static function kill_session(){
         include "conn.php";
 
         if(!isset($_SESSION)) 
@@ -1350,7 +1351,7 @@
     /****** 
      * fais la même chose que kill_session() mais est adapté pour la requête ajax
      * ******/
-    function kill_session_js(){
+    public static function kill_session_js(){
         $session_killed = kill_session();
         echo $session_killed;
     }
@@ -1358,7 +1359,7 @@
     /****** 
      * détruis toutes les variables sessions du joueur lorsqu'il se déconnecte totalement du jeu
      * ******/
-    function destroy_session_variable(){
+    public static function destroy_session_variable(){
         session_start(); //récupère toutes les variables sessions du joueurs
         session_unset(); //supprime toutes ces variables sessions
     }
@@ -1367,10 +1368,10 @@
      * met à jour la colonne result_clicked en base de données
      * Pour le jeu, cela veut dire que l'admin a cliqué sur le bouton "voir les résultats" et cela permet ainsi de pouvoir rediriger tous les joueurs à la page suivante
      * ******/
-    function set_result_clicked(){
+    public static function set_result_clicked(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"];
+        $id_curr_game_session = Self::get_current_game_session()["id"];
 
         $request = "UPDATE game_session SET result_clicked = 1 WHERE id=" . $id_curr_game_session;
         $output = $conn->query($request);
@@ -1382,10 +1383,10 @@
      * met à jour la colonne result_clicked en base de données
      * Pour le jeu, cela veut dire que les joueurs arrivent à un nouveau tour. Il faut donc reset le bouton result pour pouvoir bien rediriger les joueurs au bon moment lorsqu'ils en auront besoin
      * ******/
-    function reset_result_clicked(){
+    public static function reset_result_clicked(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"];
+        $id_curr_game_session = Self::get_current_game_session()["id"];
 
         $request = "UPDATE game_session SET result_clicked = 0 WHERE id = " . $id_curr_game_session;
         $output = $conn->query($request);
@@ -1396,10 +1397,10 @@
     /****** 
      * Récupère l'état actuel du bouton result pour savoir si l'admin a cliqué sur le bouton result ou pas
      * ******/
-    function get_state_result_button(){
+    public static function get_state_result_button(){
         include "conn.php";
 
-        $curr_game_session = get_current_game_session();
+        $curr_game_session = Self::get_current_game_session();
 
         if ($curr_game_session != null){
             $request = "SELECT result_clicked FROM game_session WHERE id=" . $curr_game_session["id"];
@@ -1415,10 +1416,10 @@
      * met à jour en base de donnée la colonne continue_clicked
      * Pour le jeu, cela veut dire que l'admin a cliqué sur le bouton "Continuer" et cela permet ainsi de pouvoir rediriger tous les joueurs à la page suivante
      * ******/
-    function set_continue_clicked(){
+    public static function set_continue_clicked(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"];
+        $id_curr_game_session = Self::get_current_game_session()["id"];
 
         $request = "UPDATE game_session SET continue_clicked = 1 WHERE id=" . $id_curr_game_session;
         $output = $conn->query($request);
@@ -1430,10 +1431,10 @@
      * met à jour la colonne continue_clicked en base de données
      * Pour le jeu, cela veut dire que les joueurs arrivent à un nouveau tour. Il faut donc reset le bouton continue pour pouvoir bien rediriger les joueurs au bon moment lorsqu'ils en auront besoin
      * ******/
-    function reset_continue_clicked(){
+    public static function reset_continue_clicked(){
         include "conn.php";
 
-        $id_curr_game_session = get_current_game_session()["id"];
+        $id_curr_game_session = Self::get_current_game_session()["id"];
 
         $request = "UPDATE game_session SET continue_clicked = 0 WHERE id=" . $id_curr_game_session;
         $output = $conn->query($request);
@@ -1444,10 +1445,10 @@
     /****** 
      * Récupère l'état actuel du continue result pour savoir si l'admin a cliqué sur le bouton continue ou pas
      * ******/
-    function get_state_continue_button(){
+    public static function get_state_continue_button(){
         include "conn.php";
 
-        $curr_game_session = get_current_game_session();
+        $curr_game_session = Self::get_current_game_session();
 
         if ($curr_game_session != null){
             $request = "SELECT continue_clicked FROM game_session WHERE id=" . $curr_game_session["id"];
@@ -1462,10 +1463,10 @@
     /****** 
      * fais en sorte que quand les joueurs submit leur choix de joueur, fait en sorte de ne pas ajouter pleins de points grâce à un glitch au niveau du bouton voir les résultats
      * ******/
-    function get_state_submitted(){
+    public static function get_state_submitted(){
         include "conn.php";
 
-        $id_curr_player = get_curr_player()["id"];
+        $id_curr_player = Self::get_curr_player()["id"];
 
         $request = "SELECT submitted FROM players WHERE id=" . $id_curr_player;
         $output = $conn->query($request)->fetch_array()[0];
@@ -1476,10 +1477,10 @@
     /****** 
      * change la valeur de submitted en base, pour que tous les joueurs petvent être redirigé vers une nouvelle page au bon moment
      * ******/
-    function set_submitted(){
+    public static function set_submitted(){
         include "conn.php";
 
-        $id_curr_player = get_curr_player()["id"];
+        $id_curr_player = Self::get_curr_player()["id"];
 
         $request = "UPDATE players SET submitted=1 WHERE id=" . $id_curr_player;
         $output = $conn->query($request);
@@ -1490,14 +1491,15 @@
     /****** 
      * change la valeur de submitted en base, pour que tous les joueurs petvent être redirigé vers une nouvelle page au bon moment
      * ******/
-    function reset_submitted(){
+    public static function reset_submitted(){
         include "conn.php";
 
-        $id_curr_player = get_curr_player()["id"];
+        $id_curr_player = Self::get_curr_player()["id"];
 
         $request = "UPDATE players SET submitted=0 WHERE id=" . $id_curr_player;
         $output = $conn->query($request);
 
         echo $output;
     }
+}
 ?>

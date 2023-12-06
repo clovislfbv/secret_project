@@ -204,7 +204,7 @@ $j(document).ready(function () {
         setDateLastLogged(player["id"])
         $j("form[name='secret_form']").attr('action', "addSecretOrPlay.php");
         $j("form[name='secret_form']").submit();
-        window.location.href = "addSecretOrPlay.php";
+        //window.location.href = "addSecretOrPlay.php";
       } else {
         player = JSON.parse(getPlayerByNamePassword(name, password));
         console.log(player);

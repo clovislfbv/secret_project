@@ -2,7 +2,7 @@
   session_start();
   require_once("helper.php");
   
-  if (!(isset($_SESSION["player_id"])) || !(is_ingame())){
+  if (!(isset($_SESSION["player_id"])) || !(Helper::is_ingame())){
     echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
   }
 ?>
@@ -86,13 +86,13 @@
                     echo "nom du joueur en train de jouer : " . $_SESSION["username"] . "<br>";
                     echo "vrai auteur du message : " . $_SESSION["id_answer_player"] . "<br>";*/
                     //$real_author = $_SESSION["id_answer_player"];
-                    $real_author = get_author_random_message();
+                    $real_author = Helper::get_author_random_message();
                     $username = $_SESSION["username"];
 
                     $_SESSION["secret_id"] = $post_variables[0];
-                    set_message_as_discovered();
+                    Helper::set_message_as_discovered();
 
-                    $total = get_nbr_secrets_not_discovered();
+                    $total = Helper::get_nbr_secrets_not_discovered();
 
                     if ($total == 0) {
                       echo "<script>setTimeout(function(){window.location.href = '../php/addSecretOrPlay.php';}, 120000)</script>";
@@ -108,7 +108,7 @@
                       $bonus_score = 0;
 
                       if ($post_variables[1] === $name_array["p_name"]){
-                        $time_spent = get_curr_player()["time_spent"] / 1000;
+                        $time_spent = Helper::get_curr_player()["time_spent"] / 1000;
                         $bonus_score = round(abs((1 - ($time_spent / 10 / 2)) * 10));
                         
                         echo "<div class='result_message text-primary'><h1 class='card-title' id='results-answer'>Bien joué !</h1><h3 class='message-found'>Tu as trouvé la personne qui a écrit ce secret !</h3></div>";

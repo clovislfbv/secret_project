@@ -38,7 +38,7 @@
                             if (isset($_SESSION["username"])){
                                 $player = $_SESSION["username"];
                                 $pass_word = $_SESSION["password"];
-                                $test = get_player_by_name_password($player, $pass_word);
+                                $test = Helper::get_player_by_name_password($player, $pass_word);
                                 $_SESSION["player_id"] = $test["id"];
                             } else {
                                 if (isset($_POST['username'])){
@@ -47,18 +47,18 @@
                                     $_SESSION["username"] = $player;
                                     $_SESSION["password"] = $pass_word;
 
-                                    $test = get_player_by_name_password($player, $pass_word);
+                                    $test = Helper::get_player_by_name_password($player, $pass_word);
                                     $_SESSION["player_id"] = $test["id"];
                                 } else {
                                     echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
                                 }
                             }
-                            if (is_ingame()){
-                                leave_ingame();
+                            if (Helper::is_ingame()){
+                                Helper::leave_ingame();
                             }
                             
-                            if (get_current_game_session() && get_nbr_players_ingame() == 0){
-                                kill_session();
+                            if (Helper::get_current_game_session() && Helper::get_nbr_players_ingame() == 0){
+                                Helper::kill_session();
                             }
 
                             echo $player;
