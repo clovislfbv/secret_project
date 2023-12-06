@@ -75,7 +75,7 @@
                     //var $j = jQuery.noConflict();
                     setTimeout(() => {
                       displayContinueButton();
-                    }, 2000);
+                    }, 5000);
                   </script>
                   <?php
                     include_once("conn.php");

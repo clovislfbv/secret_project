@@ -3,6 +3,10 @@
   include_once("conn.php");
   require_once("helper.php");
 
+  echo $_POST['username'];
+  echo $_POST['password'];
+  echo $_POST['mySecret'];
+
   if (!(isset($_POST['username']))){
     echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
   } else {    

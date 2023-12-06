@@ -347,12 +347,16 @@
     function is_ingame(){
         include "conn.php";
 
-        $id_curr_player = get_curr_player()["id"]; //récupère l'id du joueur par les variables sessions
+        $curr_player = get_curr_player(); //récupère l'id du joueur par les variables sessions
 
-        $request = "SELECT ingame FROM players WHERE id=" . $id_curr_player;
-        $output = $conn->query($request)->fetch_array(); // récupère la valeur se situant en base de données
+        if ($curr_player != null){
+            $request = "SELECT ingame FROM players WHERE id=" . $curr_player["id"];
+            $output = $conn->query($request)->fetch_array(); // récupère la valeur se situant en base de données
 
-        return $output[0]; //return cette valeur
+            return $output[0]; //return cette valeur
+        } else {
+            return 0;
+        }
     }
 
     /******
@@ -431,14 +435,16 @@
         session_start();
 
         $is_ingame = is_ingame(); //stocke dans une variable si le joueur est dans une partie ou non
-        $player_id = $_SESSION["player_id"]; //récupère l'identifiant du joueur grâce à la variable session
 
-        if ($is_ingame){
-            $request = "UPDATE players SET logged = 1, ingame = 1 WHERE id=" . $player_id;  // Si le joueur est dans une partie, on reconnecte le joueur et on le réinsère dans la partie
-        } else {
-            $request = "UPDATE players SET logged = 1 WHERE id=" . $player_id; //Sinon on reconnecte juste le joueur sans le réinsérer dans la partie
+        if (isset($_SESSION["player_id"])){
+            $player_id = $_SESSION["player_id"]; //récupère l'identifiant du joueur grâce à la variable session
+            if ($is_ingame){
+                $request = "UPDATE players SET logged = 1, ingame = 1 WHERE id=" . $player_id;  // Si le joueur est dans une partie, on reconnecte le joueur et on le réinsère dans la partie
+            } else {
+                $request = "UPDATE players SET logged = 1 WHERE id=" . $player_id; //Sinon on reconnecte juste le joueur sans le réinsérer dans la partie
+            }
+            $conn->query($request);
         }
-        $conn->query($request);
     }
 
     /******
@@ -1031,12 +1037,16 @@
     function get_nbr_total_secrets(){
         include "conn.php";
         
-        $id_curr_player = get_curr_player()["id"]; //on récupère l'identifiant du joueur
+        $curr_player = get_curr_player(); //on récupère l'identifiant du joueur
         
-        $request = "SELECT COUNT(*) FROM mySecret WHERE id_player=" . $id_curr_player;
-        $output = $conn->query($request)->fetch_array(); //on stocke le nombre de secrets
+        if ($curr_player != null){
+            $request = "SELECT COUNT(*) FROM mySecret WHERE id_player=" . $curr_player["id"];
+            $output = $conn->query($request)->fetch_array(); //on stocke le nombre de secrets
 
-        echo $output[0]; //puis on les retourne
+            echo $output[0]; //puis on les retourne
+        } else {
+            echo 0;
+        }
     }
 
     /****** 
@@ -1401,7 +1411,7 @@
         $id_curr_player = get_curr_player()["id"];
 
         $request = "UPDATE players SET submitted=1 WHERE id=" . $id_curr_player;
-        $output = $conn->query($request)->fetch_array()[0];
+        $output = $conn->query($request);
 
         echo $output;
     }

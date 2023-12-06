@@ -786,15 +786,11 @@ export function getNbrPlayersContinued(){
 }  
 
 export function displayContinueButton(){
-  setInterval(function() {
-    let nbr_continued = getNbrPlayersContinued();
-    let nbr_online = getNbrPlayersIngame();
-    console.log(hasArrivedFirst());
-    if (nbr_continued == nbr_online && hasArrivedFirst() == 1){
-      $j(".continue_button").removeClass("d-none");
-      $j(".wait4result").addClass("d-none");
-    }
-  }, 5000);
+  console.log(hasArrivedFirst());
+  if (hasArrivedFirst() == 1){
+    $j(".continue_button").removeClass("d-none");
+    $j(".wait4result").addClass("d-none");
+  }
 }
 
 export function disconnectPlayer(player_id){

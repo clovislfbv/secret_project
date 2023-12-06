@@ -269,7 +269,7 @@ $j(document).ready(function () {
   $j("#btn_secret").on('click', function (event) {
     $j("form[name='secret_form']").attr('action', "create_player.php");
     $j("form[name='secret_form']").submit();
-    window.location.href = "create_player.php";
+    // window.location.href = "create_player.php";
   })
 
   $j("form[name='secret_form']").submit(function () {
