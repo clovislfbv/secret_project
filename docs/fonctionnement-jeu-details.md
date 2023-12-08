@@ -1,9 +1,17 @@
 # Explication du fonctionnement du jeu
-Le schéma ci-dessus résume le fonctionnement de chaque fichiers pour le jeu.
+Les schéma ci-dessous résume le fonctionnement de chaque fichiers pour le jeu.
+<figure>
+<img src='../images/schema_summary_front.png' alt="schéma qui résume le fonctionnement des fichiers" style="border: 2px solid  gray; border-radius:15px">
+<figcaption style="display: flex; justify-content: center; color: grey">schéma résumant le fonctionnement des fichiers</figcaption>
 
-![schéma qui résume le fonctionnement des fichiers](../images/schema_summary_front.png)
+<br>
+<br>
 
+<img src="../images/second_schema.png" alt="schéma qui résume le fonctionnement des 'classes' au sein du jeu" style="border: 2px solid  gray; border-radius:15px">
 
+<figcaption style="display: flex; justify-content: center; color: grey">schéma résumant le fonctionnement des 'classes' au sein du jeu</figcaption>
+
+</figure>
 
 ### description un peu plus détaillé sur les fichiers affichés à l'utilisateur
 
@@ -32,10 +40,21 @@ Le schéma ci-dessus résume le fonctionnement de chaque fichiers pour le jeu.
 
 - [lottie-player/player/](../lottie-player/player/) : dossier permettant de loader le player dans le jeu pour pouvoir jouer les animations du dossier [lottie-player/](../lottie-player/)
 
-# Explication du système de coeur utilisé pour chaque joueur dans le jeu
+## Explication du système de coeur utilisé pour chaque joueur dans le jeu
 La déconnexion d'un joueur fût un de mes plus gros problèmes lorsque j'ai réalisé ce projet car je voulais que lorsqu'il quitte mon jeu, cela lui déconnecte du jeu totalement.
 
 Pour cela, j'ai fait un système de coeur humain pour chacun de mes joueurs. En effet, lorsque le joueur se situe dans l'une des pages du jeu, le joueur va automatiquement envoyer des requêtes chaque seconde à la base de données pour dire qu'il est bien connecté au jeu et qu'il est bien dans une partie ou non. Ce système me permet ainsi qu'à chaque tentative de fermer la page ou de changer de page, le joueur va être déconnecter automatiquement. Ainsi, si le joueur reviens sur l'une des pages du jeu, il sera reconnecté automatiquement grâce à ce système de coeur et déconnecté automatiquement s'il quitte le jeu.
 
-# Explication du système de choix de secret aléatoire pour l'affichage au joueur
+## Explication des status Logged et Ingame qu'un joueur peut avoir
+Pour que vous comprenez mieux quand les joueurs peuvent avoir ces status, voici un tableau résumant tout les cas possibles.
+
+| situations | logged | ingame |
+|---|:---:|:---:|
+| Lorsque le joueur viens de se connecter au jeu mais n'est pas dans une partie | x |  |
+| Lorsque le joueur est dans une partie | x | x |
+| Lorsque le joueur quitte une partie mais reste dans le jeu | x |  |
+| Lorsque le joueur se déconnecte définitivement du jeu |  |  |
+
+
+## Explication du système de choix de secret aléatoire pour l'affichage au joueur
 Lors du développement de cette fonctionnalité, j'ai eu un bug où le secret affiché aux joueurs, censé être le même pour tout le monde, n'était pas le même pour tout le monde. C'est pourquoi, pour afficher un nouveau message pour tous, j'utilise une colonne appelé `random_choice` dans ma base de données qui me permets de choisir par un booléen celui qui est actuellement affiché à tous les joueurs. Une fois que le tour est terminé, le secret qui était affiché est changé en tant que `discovered` dans la base de données grâce à la colonne du même nom et on relance ensuite la recherche d'un nouveau secret à découvrir parmi ceux qui n'ont pas été `discovered`

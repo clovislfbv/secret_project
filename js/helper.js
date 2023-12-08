@@ -1,5 +1,7 @@
+/******************************
+ * Début des variables globales
+ * ***************************/
 var $j = jQuery.noConflict();
-
 var random_secret; //generate a secret or return the current secret
 var changed = 0; //says if a secret have just been generated or not
 var author; //the random secret author
@@ -9,7 +11,13 @@ var min = 0; //min pour le leeaderboard
 var max = 5; //max pour le leaderboard
 var animation_finished = 0;
 var start_time = 0; //récupère la date et l'heure à laquelle le secret a été montré au joueur actuel
+/******************************
+ * Fin des variables globales
+ * ***************************/
 
+/**********************************************
+ * Début des fonctions pour jouer sur téléphone
+ * *******************************************/
 export function actionMobileInit() {
   document.addEventListener("touchstart", touchHandler, true);
   document.addEventListener("touchmove", touchHandler, true);
@@ -38,7 +46,14 @@ function touchHandler(event) {
   }[event.type], true, true, window, 1, touch.screenX, touch.screenY, touch.clientX, touch.clientY, false, false, false, false, 0, null);
   return touch.target.dispatchEvent(simulatedEvent);
 };
+/**********************************************
+ * Fin des fonctions pour jouer sur téléphone
+ * *******************************************/
 
+/****** 
+ * Cette fonction est utilisé dans le système de "coeur".
+ * Elle est appelé toutes les secondes dans script_game.js pour dire à la base de données que le joueur actuel est bien connecté au jeu.
+ * ******/
 export function ConnectCurrPlayer() {
   jQuery.ajax({
     type: "POST",
@@ -47,6 +62,9 @@ export function ConnectCurrPlayer() {
   });
 }
 
+/****** 
+ * Détruis toutes les variables sessions stockés sur le navigateur afin que le joueur ne puisse plus les accéder lorsqu'il se déconnecte
+ * ******/
 export function destroySessionVariable(){
   jQuery.ajax({
     type:"POST",
@@ -55,11 +73,14 @@ export function destroySessionVariable(){
   });
 }
 
+/****** 
+ * Lorsqu'un joueur se log, cette fonction est lancé pour vérifier si le joueur existe bien en base de données
+ * ******/
 export function checkPlayerExist(){
-  let doesPlayerExist; //a boolean from the checkPlayerExist function which says if a player exists or not
+  let doesPlayerExist; //un booleen qui sert d'output pour cette fonction
 
-  let usernameToCheck = $j("#username").val();
-  let passwordToCheck = $j("#password").val();
+  let usernameToCheck = $j("#username").val(); //récupère le nom d'utilisateur que le joueur a renseigné dans le champ 'username' dans '../php/index.php'
+  let passwordToCheck = $j("#password").val(); //récupère le mot de passe que le joueur a renseigné dans le champ 'password' dans '../php/index.php'
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
@@ -72,9 +93,13 @@ export function checkPlayerExist(){
   return doesPlayerExist;
 }
 
+/****** 
+ * Lorsque le joueur s'inscrit, cette fonction est lancé pour éviter les doublons de nom d'utilisateur
+ * ******/
 export function checkSeveralUsernames(){
-  let isUsernameUnique; //return a boolean which says if the username given by the user is already used by someone or not
-  let usernameToCheck = $j("#username").val();
+  let isUsernameUnique; //un booleen qui sert d'output pour cette fonction
+
+  let usernameToCheck = $j("#username").val(); //récupère le nom d'utilisateur que le joueur a renseigné dans le champ 'username' dans '../php/index.php'
 
   jQuery.ajax({
     type: "POST",
@@ -88,6 +113,9 @@ export function checkSeveralUsernames(){
   return isUsernameUnique;
 }
 
+/****** 
+ * Cette fonction permet de savoir si le joueur actuel est connecté ou jeu ou non
+ * ******/
 export function isLogged(){
   let is_logged;
   jQuery.ajax({
@@ -102,6 +130,11 @@ export function isLogged(){
   return is_logged;
 }
 
+/****** 
+ * Enregistre la date et l'heure à laquelle le joueur s'est connecté au jeu en base de données
+ * player_id : l'id du joueur actuel
+ * valeur d'output: booléen (1 ou 0)
+ * ******/
 export function setDateLastLogged(player_id){
   jQuery.ajax({
     type: "POST",
@@ -109,16 +142,22 @@ export function setDateLastLogged(player_id){
     data: {action: "set_date_last_logged", p_id: player_id},
     async: false,
     success: function (success){
-      //console.log(success);
+      console.log(success);
     },
     error: function (err){
-      //console.log(err);
+      console.log(err);
     }
   })
 }
 
+/****** 
+ * Récupère la date et l'heure à laquel le joueur s'est connecté
+ * player_id : l'id du joueur actuel
+ * valeur d'output: datetime en millisecondes
+ * ******/
 export function getDateLastLogged(player_id){
-  let date_last_logged;
+  let date_last_logged; //la variable servant d'output pour cette fonction
+
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
@@ -128,11 +167,17 @@ export function getDateLastLogged(player_id){
       date_last_logged = res;
     }
   })
+
   return date_last_logged;
 }
 
+/****** 
+ * Fonction permettant de dire si le joueur est dans une partie ou non
+ * valeur d'output : booléen (1 ou 0)
+ * ******/
 function isIngame(){
-  let is_ingame;
+  let is_ingame; //la variable servant d'output pour cette fonction
+
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
@@ -142,11 +187,19 @@ function isIngame(){
       is_ingame = res;
     }
   })
+
   return is_ingame;
 }
 
+/****** 
+ * Récupère toutes les informations d'un joueur grâce à son nom d'utilisateur et son mot de passe
+ * playerName : Le nom du joueur dont vous voulez récupérer les informations
+ * password : le mot de passe du joueur dont vous voulez récupérer les informations
+ * valeur d'output : une array encodé en json
+ * ******/
 export function getPlayerByNamePassword(playerName, password){
-  let player;
+  let player; //variable servant d'output pour cette fonction
+
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
@@ -159,6 +212,9 @@ export function getPlayerByNamePassword(playerName, password){
   return player;
 }
 
+/******
+ * Enregistre le nom d'utilisateur et le mot de passe du joueur dans des variables sessions
+ * ******/
 export function SaveNamePassword(playerName, password){
   jQuery.ajax({
     type: "POST",
@@ -175,19 +231,17 @@ export function SaveNamePassword(playerName, password){
 }
 
 /*******
- * update the played variable if a player drags a button to the dropper
+ * Met à jour les données du joueur actuel en base de données lorsqu'il drag un bouton jusqu'au dropper
  *******/
 export function updatePlayerWhenPlayed(choice) {
-  let timeSpent = (new Date() - start_time);
-  //console.log("temps joué : " + timeSpent)
+  let timeSpent = (new Date() - start_time); //récupère le temps qu'a mis le joueur entre le moment où le secret actuel a été révélé et le moment où le joueur actuel a joué
+  
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
     data: {action: "update_player_when_played", chosen_player: choice, time_spent: timeSpent},
     success: function (data) {
-      updateProgressBar();
-    },
-    error: function (err){
+      updateProgressBar(); //une fois que les données du joueur ont été mise à jour en db, on appelle updateProgressBar pour mettre à jour le visuel de la barre à l'utilisateur
     },
   });
 }
@@ -296,10 +350,10 @@ export function resetPlayedPlayer(identifiant){
     url: "../php/helper.php",
     data: {action: "reset_played_player", id: identifiant},
     success: function (res){
-      //console.log(res);
+      console.log(res);
     },
     error: function (err) {
-      //console.log(err);
+      console.log(err);
     }
   })
 }
@@ -420,19 +474,6 @@ function endGame(){
   })
 }
 
-var initialCount = 60;
-var count = initialCount;
-export function timer_game() {
-  count = count - 1;
-  if (count <= -1) {
-      count = initialCount;
-      var el = $j(".circle-timer");
-      el.before( el.clone(true) ).remove();
-  }
-
-  $j(".count").text(count);
-}
-
 export function leaveInGame(p_id){
   jQuery.ajax({
     type: "POST",
@@ -484,7 +525,7 @@ export function hasArrivedFirst(){
       output = res;
     },
     error: function (err){
-      //console.log(err);
+      console.log(err);
     }
   })
   return output;
@@ -714,7 +755,7 @@ export function unsetNewRandomSecret() {
       window.location.href = "../php/get_player.php";
     },
     error: function (err) {
-      //console.log(err);
+      console.log(err);
     }
   })
 }

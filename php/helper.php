@@ -327,7 +327,7 @@
 
     /****** 
      * Récupère la date et l'heure de la dernière fois à laquelle le joueur s'est loggé
-     * valeur d'output: timestamp
+     * valeur d'output: temps en millisecondes
      * 
      * Adapté pour la requête ajax de cette fonction
      * ******/

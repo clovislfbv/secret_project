@@ -1,4 +1,4 @@
-import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated, getPlayerByNamePassword, getNbrPlayersIngame, getDateLastLogged, setDateLastLogged, OverlayOn, OverlayOff, SaveNamePassword, timer_game, getCurrentGameSession, getStateContinueButton, getStateResultButton, resetResultClicked, setContinueClicked, setResultClicked, resetContinueClicked, getStateSubmitted, setSubmitted, resetSubmitted } from "./helper.js";
+import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated, getPlayerByNamePassword, getNbrPlayersIngame, getDateLastLogged, setDateLastLogged, OverlayOn, OverlayOff, SaveNamePassword, getCurrentGameSession, getStateContinueButton, getStateResultButton, resetResultClicked, setContinueClicked, setResultClicked, resetContinueClicked, getStateSubmitted, setSubmitted, resetSubmitted } from "./helper.js";
 
 var $j = jQuery.noConflict();
 
@@ -602,7 +602,6 @@ $j(document).ready(function () {
         })*/
         console.log("test SECRET");
         showSecret();
-        // setInterval(timer_game, 1000);
         shown = 1;
       }, 2500)
       //  }
