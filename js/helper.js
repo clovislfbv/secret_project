@@ -568,95 +568,93 @@ export function hasArrivedFirst(){
  * Cette fonction permet de faire attendre le joueur s'il y a qu'un seul joueur présent dans la partie actuelle
  * ******/
 export function loading(){
-  var save = 0; 
-  var LottiePlayer = document.getElementById("myLottie"); //points to the locker animation
-  var animation_finished = 0; //variable that says if the lock animation is finished or not
-  setInterval(function() {
+  var save = 0; //lorsque la fonction est lancé, cette variable est set à 0 car elle permet de dire que aucun secret n'a été montré actuellement
+  var LottiePlayer = document.getElementById("myLottie"); //pointe vers l'animation du cadenas
+  var animation_finished = 0; //variable qui dit si l'animation du cadenas est terminé ou non
+  setInterval(function() { //on met un set interval pour pouvoir demander à un intervalle de temps si une partie a commencé ou non et pour aussi savoir combien de joueur il y a actuellement dans la partie
 
-    LottiePlayer.addEventListener("complete", function () {
-      animation_finished = 1;
+    LottiePlayer.addEventListener("complete", function () { //lorsque l'animation du cadenas est terminé,
+      animation_finished = 1; //on set la variable animation_finished à 1, ce qui veut dire dans notre cas que l'animation du cadenas s'est bien terminé
     });
 
-    let nbr_messages_discovered = getNbrMessagesDiscovered();
-    let total_players_logged = getNbrPlayersIngame();
+    let nbr_messages_discovered = getNbrMessagesDiscovered(); //on récupère le nombre de secrets qui a été découvert car si aucun secrets n'a été découvert, on affiche le cadenas sinon on affiche directement le nouveau secret a affiché 
+    let total_players_logged = getNbrPlayersIngame(); //on récupère le nombre de personnes actuellement dans la partie pour afficher le cadenas s'il y a qu'un seul joueur dans la partie
 
-    if (total_players_logged < 2) {
-      setTimeout(function() {
+    if (total_players_logged < 2) { //on check s'il y a qu'un seul joueur dans la partie
+      setTimeout(function() { //Si c'est le cas, on attend un petit peu et on recheck une nouvelle fois qu'il y a bien qu'un seul joueur dans la partie actuellement. Cela permet d'afficher le cadenas uniquement quand les joueurs se sont déconnectés par volonté et pas automatiquement lorsqu'ils changent de page dans le jeu
         if (total_players_logged < 2) {
-          if (!($j(".secret_and_progress").hasClass("d-none"))){
+          if (!($j(".secret_and_progress").hasClass("d-none"))){ //Si un secret était déjà affiché, on set la variable set à 1, ce qui nous permettra d'afficher à nouveau le cadenas si le nombre de joueur revient à 2 ou plus
             save = 1;
           }
 
-          shown = 0;
+          shown = 0; //ensuite on set la variable shown à zéro qui nous permet de cacher le secret actuel pendant que le cadenas est affiché
 
-          /*$j("#main_title").css({
-            "margin-bottom": "0%",
-          })*/
-          $j("#cadenas").removeClass("d-none");
-          if ($j(".start_game").hasClass("d-none") && $j(".player").data('draggable') && !($j(".player").draggable( "option", "disabled"))) {
+          $j("#cadenas").removeClass("d-none"); //on affiche le cadenas
+          if ($j(".start_game").hasClass("d-none") && $j(".player").data('draggable') && !($j(".player").draggable( "option", "disabled"))) { //on rend les joueurs disabled pour que le joueur actuel ne puisse plus drag de joueurs pendant que le cadenas est affiché
             $j(".player").draggable("disable");
           }
-          $j(".start_game").addClass("d-none");
-          $j(".secret_and_progress").addClass("d-none");
-          $j(".waiting-players").removeClass("d-none");
-          $j(".waiting-admin").addClass("d-none")
+          $j(".start_game").addClass("d-none"); //Tant qu'il y a qu'un seul joueur de connecté, on cache le bouton permettant de commencer la partie
+          $j(".secret_and_progress").addClass("d-none"); //on cache le secret actuellement affiché s'il l'est
+          $j(".waiting-players").removeClass("d-none"); //on montre un message disant qu'on est en attente que d'autres joueurs rejoignent la partie
+          $j(".waiting-admin").addClass("d-none") //on cache le message "en attente que l'admin commence la partie"
 
-          endGame();
+          endGame(); //on set la game comme fini en base de données pour pouvoir laisser une personne rentrer
           
-          if (dropped == 1){
+          if (dropped == 1){ //comme on veut uniquement afficher le cadenas, on cache le joueur qui a été droppé s'il y en a un
             let value = $j(".secret_id_played").val().split("-");
             $j("#"+value[1]+"-"+value[2]).addClass("d-none")
           }
 
-          LottiePlayer.seek(0);
-          LottiePlayer.stop();
+          LottiePlayer.seek(0); //on met l'animation du cadenas à la frame 0
+          LottiePlayer.stop(); //et on met le cadenas en pause jusqu'à ce qu'un nouveau joueur rejoint la partie
         }
       }, 5000);
     }
 
-    console.log(total_players_logged + " " + animation_finished + " " + $j("#cadenas").length + " " + !($j("#cadenas").hasClass("d-none")) + " " + hasGameBegun());
+    /****** 
+     * La partie de code juste en dessous de ce commentaire permet de faire les actions une fois qu'un nouveau joueur a rejoint la partie
+     * ******/
     if (total_players_logged > 1 && animation_finished == 0 && $j("#cadenas").length && !($j("#cadenas").hasClass("d-none")) && hasGameBegun()){
-      if ($j(".start_game").hasClass("d-none") && nbr_messages_discovered > 0){
+      if ($j(".start_game").hasClass("d-none") && nbr_messages_discovered > 0){ //s'il y a un message ou plus qui a été découvert, on dit que le jeu a déjà commencé et on anime le cadenas
         startGame();
       }
-      if (nbr_messages_discovered > 0){
-        LottiePlayer.setSpeed(1);
-        LottiePlayer.play();
-        setTimeout(function() {
-          animation_finished = 1;
-          /*$j("#main_title").css({
-            "margin-bottom": "13%",
-          })*/
-          $j("#cadenas").addClass("d-none");
-          if ($j(".player").data('draggable') && $j(".player").draggable( "option", "disabled")){
-            $j(".player").draggable("enable");
+      if (nbr_messages_discovered > 0){ //si le nombre de messages qui a été découvert est bien égale à un ou plus. Dans ce cas-ci, le joueur n'a pas encore pu dragg-droppé d'autres joueurs
+        LottiePlayer.setSpeed(1); //on set la vitesse de l'animation du cadenas à un
+        LottiePlayer.play(); //et on commence à jouer l'animation
+        setTimeout(function() { //une fois que l'animation est terminé
+          animation_finished = 1; //on set animation_finished à un pour dit que l'animation s'est bien terminé
+          $j("#cadenas").addClass("d-none"); //on cache le cadenas
+          if ($j(".player").data('draggable') && $j(".player").draggable( "option", "disabled")){ //s'il y a des éléments qui sont draggable et désactivé
+            $j(".player").draggable("enable"); //On les réactivent
           }    
-          $j(".secret_and_progress").removeClass("d-none");
-          $j("progress-players").removeClass("d-none");
-          $j(".wait4").addClass("d-none");
-          $j(".player").draggable({revert: true})
+          $j(".secret_and_progress").removeClass("d-none"); //on affiche le secret actuel
+          $j("progress-players").removeClass("d-none"); //on affiche la bar de progression des joueurs
+          $j(".wait4").addClass("d-none"); //on cache le message d'attente que tous les joueurs ont joué
+          $j(".player").draggable({revert: true}) //on set les joueurs à réversible si le joueur a joué mais ne les a pas déposé au bon endroit
         }, 2500)
       } else {
-        if (save == 1) {
-          LottiePlayer.setSpeed(1);
+        if (save == 1) { //Si le joueur avait droppé un autre joueur
+          LottiePlayer.setSpeed(1); //on joue l'animation du cadenas
           LottiePlayer.play();
           setTimeout(function() {
-            animation_finished = 1;
-            /*$j("#main_title").css({
-              "margin-bottom": "13%",
-            })*/
-            $j("#cadenas").addClass("d-none");
+            animation_finished = 1; //une fois que l'animation est terminé, on fait en sorte qu'il s'arrête au bon moment
+            $j("#cadenas").addClass("d-none"); //on cache et on affiche les éléments qu'il faut pour que ça n'affiche que le cadenas et un message pour accompagner le joueur
             $j(".secret_and_progress").removeClass("d-none");
             $j("progress-players").removeClass("d-none");
             $j(".wait4").addClass("d-none");
             save = 0;
             $j(".player").draggable({revert: true})
 
-            if (dropped == 1){
-              let value = $j(".secret_id_played").val().split("-");
-              $j("#" + value[1] + "-" + value[2]).draggable( "option", "revert", false);
-              $j("#" + value[1] + "-" + value[2]).draggable("disable", 1);
-              $j("#" + value[1] + "-" + value[2]).on("click",function (e) {
+            if (dropped == 1){//si un joueur a été droppé dans la zone de droppage 
+              let value = $j(".secret_id_played").val().split("-"); //on récupère ses infos
+              $j("#" + value[1] + "-" + value[2]).draggable( "option", "revert", false); //on le set en reversible désactivé pour ne pas qu'il revienne à sa position initiale
+              $j("#" + value[1] + "-" + value[2]).draggable("disable", 1); //on le désactive pour ne pas que le joueur puisse le draggé ailleurs
+              $j("#" + value[1] + "-" + value[2]).on("click",function (e) { 
+                /******
+                * Ensuite on ajoute un event listener pour que quand il soit cliqué par le joueur actuel, 
+                * cela le remette à sa place initiale, que le joueur actuel puisse placer d'autres personnes dans la zone de droppage 
+                * et que tout cela soit mis à jour en base de données
+                * ******/
                 $j(".wait4").addClass("d-none");
                 let chosen_player = value;
                 updatePlayerWhenClicked(chosen_player[1]);
@@ -677,26 +675,26 @@ export function loading(){
             }
           }, 2500)
         } else {
-          /*$j("#main_title").css({
-            "margin-bottom": "0%",
-          })*/
-          //console.log(hasArrivedFirst());
-          if (hasArrivedFirst() == 1){
+          //si on est dans aucun des 2 premiers cas, cela veut dire que l'on est dans le cas du tout début de la partie et que l'on doit montrer le bouton à l'admin de la partie
+          if (hasArrivedFirst() == 1){ //Si le joueur actuel est arrivé en premier dans la partie, cela veut dire qu'il est "admin de la partie" donc il faut lui montrer le bouton commencer la partie
             $j(".start_game").removeClass("d-none");
             $j(".waiting-admin").addClass("d-none");
-          } else {
+          } else { //Si ce n'est pas le cas, on n'affiche pas le bouton mais on affiche un message pour attendre que l'admin clique sur le bouton
             $j(".start_game").addClass("d-none");
             $j(".waiting-admin").removeClass("d-none");
           }
         }
       }
-      $j(".waiting-players").addClass("d-none");
+      $j(".waiting-players").addClass("d-none"); //une fois que tous ces cas ont été fait, on cache tout au joueur pour laisser de la place au secret qui va s'afficher
     }
   }, 5000)
 }
 
+/****** 
+ * Récupère la liste de tous les secrets que le joueur a enregistré pour les afficher sur la page addSecretOrPlay.php
+ * ******/
 export function getAllSecretsStored(){
-  let all_secrets_stored;
+  let all_secrets_stored; //variable qui sert d'output pour cette fonction
 
   jQuery.ajax({
     type: "POST",
@@ -710,19 +708,25 @@ export function getAllSecretsStored(){
   return all_secrets_stored;
 }
 
+/****** 
+ * Lorsque le joueur essaye d'enregistrer un nouveau secret sur son compte, cette fonction permet de checker s'il n'a pas déjà enregistré un de ses secrets dans le jeu
+ * ******/
 export function checkSecretAlreadyStored(secretToCheck){
-  let all_secrets = JSON.parse(getAllSecretsStored());
-  let found = 0;
-  all_secrets.forEach(function(element){
+  let all_secrets = JSON.parse(getAllSecretsStored()); //on récupère la liste des secrets que le joueur a enregistré
+  let found = 0; //on set la variable found à 0 pour dire qu'on a pas encore trouvé de secret qui ont le même contenu que le secret que le joueur essaye d'enregistrer
+  all_secrets.forEach(function(element){ //on parcourt ensuite chaque secret enregistré par le joueur et on check si chacun est égale à celui que le joueur est en train d'essayer d'enregistrer
     if (secretToCheck == decodeSecret(element.p_secret)){
-      found = 1
+      found = 1 //si on trouve 2 secret identique, on set found à 1
     }
   })
-  return found;
+  return found; //on retourne la variable found pour dire si le secret a bien été trouvé dans la liste ou non
 }
 
+/****** 
+ * récupère le nombre de secrets enregistré par le joueur actuel
+ * ******/
 export function getNbrTotalSecrets(){
-  var nbr_total_secrets; //an int from the getNbrTotalSecrets function that says the number of secrets that the user added to the game
+  var nbr_total_secrets; //variable qui sert d'output pour cette fonction
 
   jQuery.ajax({
     type: "POST",
@@ -736,14 +740,17 @@ export function getNbrTotalSecrets(){
   return nbr_total_secrets;
 }
 
+/****** 
+ * affiche dynamiquement le nombre de secrets sur la page addSecretOrPlay.php
+ * ******/
 export function displayNbrTotalSecrets(){
-  let nbr_secrets = getNbrTotalSecrets();
-  if (nbr_secrets != 1){
-    $j(".total_secrets").text("Vous avez " + nbr_secrets + " secrets. Que voulez-vous faire ?")
+  let nbr_secrets = getNbrTotalSecrets(); //récupère le nombre total de secrets
+  if (nbr_secrets != 1){ //si le nombre de secrets est supérieur à 0
+    $j(".total_secrets").text("Vous avez " + nbr_secrets + " secrets. Que voulez-vous faire ?") //on affiche notre message au pluriel
   } else {
-    $j(".total_secrets").text("Vous avez " + nbr_secrets + " secret. Que voulez-vous faire ?")
+    $j(".total_secrets").text("Vous avez " + nbr_secrets + " secret. Que voulez-vous faire ?") //sinon au singulier
   }
-  setInterval(function (){
+  setInterval(function (){ //on ajoute un setInterval pour pouvoir faire des requêtes à la base de données à un certains interval pour modifier l'affichage si besoin
     nbr_secrets = getNbrTotalSecrets();
     if (nbr_secrets != 1){
       $j(".total_secrets").text("Vous avez " + nbr_secrets + " secrets. Que voulez-vous faire ?")
@@ -753,10 +760,13 @@ export function displayNbrTotalSecrets(){
   }, 1500)
 }
 
+/****** 
+ * enregistre un nouveau secret en base de données pour le joueur actuel 
+ * ******/
 export function addNewSecret(){
-  var WasSecretadded; //a boolean from the addNewSecret function which says if a new secret has successfuly been added or not
+  var WasSecretadded; //variable qui sert d'output pour cette fonction
 
-  let new_secret = $j("#mySecret").val();
+  let new_secret = $j("#mySecret").val(); //récupère le valeur que le joueur a renseigné
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
@@ -769,6 +779,9 @@ export function addNewSecret(){
   return WasSecretadded;
 }
 
+/****** 
+ * récupère l'auteur du message affiché
+ * */
 export function getAuthorRandomSecret(){
   jQuery.ajax({
     type:"POST",
@@ -776,19 +789,22 @@ export function getAuthorRandomSecret(){
     data: {action: "get_author_random_secret"},
     async: false,
     success: function (res){
-      author = JSON.parse(res);
+      author = JSON.parse(res); //modifie la variable globale
     }
   })
-  return author
+  return author //et retourne cette variable
 }
 
+/****** 
+ * permet de dire à la base de données que l'on n'a plus besoin d'afficher le secret actuel car il a déjà été découvert
+ * ******/
 export function unsetNewRandomSecret() {
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
     data: {action: "unset_new_random_secret"},
     success: function () {
-      window.location.href = "../php/get_player.php";
+      window.location.href = "../php/get_player.php"; //une fois que la valeur en base de données a bien été changé, on redirige le joueur vers la page get_player.php pour jouer un nouveau tour
     },
     error: function (err) {
       console.log(err);
@@ -796,7 +812,9 @@ export function unsetNewRandomSecret() {
   })
 }
 
-
+/****** 
+ * Choisis aléatoirement un secret parmi ceux enregistré par les joueurs actuellement connectés et accepté pour être joué cette partie
+ * ******/
 export function chooseRandomSecret(){
   jQuery.ajax({
     type: "POST",
@@ -804,8 +822,7 @@ export function chooseRandomSecret(){
     data: {action: "choose_random_secret"},
     async: false,
     success: function (result) {
-      //console.log(result);
-      if (random_secret != result){
+      if (random_secret != result){ //dans la fonction showSecret, cette fonction est appelé plusieurs fois donc si le secret affiché est différent que celui récupéré par la requête ajax, on change avec la valeur récupéré de la requête ajax
         changed = 1;
         random_secret = result;
       }
@@ -814,26 +831,38 @@ export function chooseRandomSecret(){
   return random_secret;
 }
 
+/****** 
+ * met à jour la base de donnée pour dire que le jour viens de bouger depuis la page get_player.php à la page result.php
+ * p_id : identifiant du joueur actuel
+ * valeur d'output: aucune
+ * ******/ 
 export function updatePlayerContinued(p_id){
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
     data: {action: "update_player_continued", player_id: p_id},
-    async: false,
   })
 }
 
+/****** 
+ * met à jour la base de donnée pour dire que le jour viens de bouger depuis la page result.php à la page get_player.php
+ * player_id : identifiant du joueur actuel
+ * valeur d'output: aucune
+ * ******/
 export function resetPlayerContinued(player_id) {
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
     data: {action: "reset_player_continued", p_id: player_id},
-    async: false,
   })
 }
 
+/****** 
+ * récupère le nombre de joueur qui ont bougé de la page get_player.php à la page result.php
+ * valeur d'output: int
+ * ******/
 export function getNbrPlayersContinued(){
-  var nbr_continued; //nbr of players who clicked on the continue button
+  var nbr_continued; //variable qui sert d'output pour cette fonction
 
   jQuery.ajax({
     type: "POST",
@@ -842,49 +871,58 @@ export function getNbrPlayersContinued(){
     async: false,
     success: function(res) {
       nbr_continued = res;
+    },
+    error: function(err){
+      console.log(err);
     }
   })
   return nbr_continued;
 }  
 
+/****** 
+ * affiche le bouton continuer uniquement pour le joueur admin
+ * ******/
 export function displayContinueButton(){
-  console.log(hasArrivedFirst());
   if (hasArrivedFirst() == 1){
     $j(".continue_button").removeClass("d-none");
     $j(".wait4result").addClass("d-none");
   }
 }
 
+/****** 
+ * déconnecte le joueur actuel
+ * ******/
 export function disconnectPlayer(player_id){
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
     data: {action: "disconnect_player", p_id: player_id},
-    /*success: function () {
-      //console.log("player has been successfuly disconnected"); 
-    },*/
     error: function (err) {
-      //console.log(err);
+      console.log(err);
     }
   });
 }
 
+/****** 
+ * déconnecte tous les joueurs qui n'ont pas joué ce tour
+ * utile car cela déconnecte totalement un joueur qui s'est mal déconnecté et cela reconnecte automatiquement un joueur s'il est en ligne grâce au système de coeur
+ * ******/
 export function disconnectAllPlayersInactive(){
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
     data: {action: "disconnect_all_players_inactive"},
-    success: function () {
-      console.log("All players inactive disconnected");
-    },
     error: function (err) {
       console.log(err);
     }
   })
 }
 
+/******
+ * récupère le nombre de secrets découverts
+ * ******/
 export function getNbrMessagesDiscovered(){
-  var nbrDiscovered; //nbr of secrets already discovered by the players online
+  var nbrDiscovered; //variable qui sert d'output pour cette fonction
 
   jQuery.ajax({
     type: "POST",
@@ -898,28 +936,38 @@ export function getNbrMessagesDiscovered(){
   return nbrDiscovered;
 }
 
+/****** 
+ * montre le secret random à tous les joueurs
+ * ******/
 export function showSecret() {
-  shown = 1;
-  start_time = new Date();
-  let timerLottie = document.getElementById("timerLottie");
-  console.log("test_show_SECRET");
-  //console.log("le chronomètre a commencé")
-  if (!($j(".start_game").hasClass("d-none"))){
+  shown = 1; //change la variable shown à 1 pour dire que un secret est bien montré à tous
+  start_time = new Date(); //cette variable permet de récupéré l'heure et la date à laquelle le secret a été montré au joueur actuel. Cette date est surtout utile pour le calcul des points bonus
+  let timerLottie = document.getElementById("timerLottie"); //cette variable pointe sur l'animation du timer du tour
+  
+  if (!($j(".start_game").hasClass("d-none"))){ //cache le bouton "commencer la partie" s'il n'a pas déjà été caché
     $j('.start_game').addClass('d-none');
   }
 
-  if (getNbrSecretsNotDiscovered() == 0){
+  /****** 
+   * Début du code dont j'ai pas compris l'utilité
+   * ******/
+
+  if (getNbrSecretsNotDiscovered() == 0){ 
     let value = $j(".secret_id_played").val();
     $j(".secret_id_played").val(value + "-0-0");
     window.location.href = "../php/result.php";
   }
 
-  $j(".player").draggable({revert: true});
+  /****** 
+   * Fin du code dont j'ai pas compris l'utilité
+   * ******/
 
-  $j("#droppable-player").droppable({
-    over: function(event, ui) {
-      if (dropped == 1) {
-        $j(this).addClass("ui-state-error");
+  $j(".player").draggable({revert: true}); //mets tous les boutons joueurs à réversible vers leur position initiale si le joueur ne les a pas déposé dans la zone droppable
+
+  $j("#droppable-player").droppable({ //initialise la zone de droppage pour que le joueur actuel fasse son choix
+    over: function(event, ui) { //si le joueur actuel prend un bouton joueur et le fais passer sur la zone sans la dropper
+      if (dropped == 1) { //s'il y a déjà un bouton déjà dans la zone de drop,
+        $j(this).addClass("ui-state-error"); on
       } else {
         $j(this).addClass("ui-state-highlight");
       }
