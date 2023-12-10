@@ -839,10 +839,10 @@
 
         $id_curr_game_session = $_SESSION['id_curr_game_session']; //récupère l'identifiant de la session de jeu actuelle
 
-        $request = "SELECT mysecret.id FROM mySecret, players WHERE players.ingame = 1 AND mySecret.random_choice = 0 AND mySecret.discovered = 0 AND mySecret.id_player = players.id AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session = '" . $id_curr_game_session . "' ORDER BY RAND() LIMIT 1";
+        $request = "SELECT mysecret.id FROM mysecret, players WHERE players.ingame = 1 AND mysecret.random_choice = 0 AND mysecret.discovered = 0 AND mysecret.id_player = players.id AND (mysecret.disabled=0 OR mysecret.disabled IS NULL) AND players.id_game_session = '" . $id_curr_game_session . "' ORDER BY RAND() LIMIT 1";
         $idSecret = $conn->query($request)->fetch_array()[0]; //sélectionne un secret aléatoire parmi tous ceux qui n'ont pas été découvert et récupère l'id de celui-ci
 
-        $setMarker = "UPDATE mySecret SET random_choice = 1 WHERE id='" . $idSecret . "'";
+        $setMarker = "UPDATE mysecret SET random_choice = 1 WHERE id='" . $idSecret . "'";
         $conn2->query($setMarker); //mets à jour la base de données pour dire qu'il faut afficher, pour l'instant, uniquement ce secret à tous les joueurs
     }
 
@@ -855,7 +855,7 @@
 
         $id_curr_game_session = $_SESSION['id_curr_game_session']; //récupère l'identifiant de la session de jeu actuelle
 
-        $unsetMarker = "UPDATE mySecret, players SET mySecret.random_choice = 0 WHERE mySecret.discovered = 1";
+        $unsetMarker = "UPDATE mysecret, players SET mysecret.random_choice = 0 WHERE mysecret.discovered = 1";
         $conn2->query($unsetMarker); //mets à jour la base de données pour dire que les secrets découverts ont bien été découvert et que l'on n'a plus besoin de les afficher à tous les joueurs
     }
 
@@ -868,7 +868,7 @@
 
         $id_curr_game_session = Self::get_current_game_session()["id"]; //récupère l'identifiant de la session de jeu actuelle
         
-        $getSecret = "SELECT * FROM mySecret, players WHERE players.ingame = 1 AND mySecret.random_choice = 1 AND mySecret.id_player = players.id AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session = " . $id_curr_game_session;
+        $getSecret = "SELECT * FROM mysecret, players WHERE players.ingame = 1 AND mysecret.random_choice = 1 AND mysecret.id_player = players.id AND (mysecret.disabled=0 OR mysecret.disabled IS NULL) AND players.id_game_session = " . $id_curr_game_session;
         $secret = $conn->query($getSecret); //récupère toutes les informations du secret choisi par la fonction set_new_random_secret et à afficher à tous les joueurs
         $check = $secret->fetch_array(); //ajoute les informations récupéré dans une array
 
@@ -930,7 +930,7 @@
 
         $id_curr_game_session = Self::get_current_game_session()["id"]; //on récupère l'identifiant de la session de jeu en cours
 
-        $request = "SELECT COUNT(*) FROM mySecret, players WHERE mySecret.discovered = 1 AND mySecret.id_player = players.id AND players.logged = 1 AND players.ingame = 1 AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.id_game_session =" . $id_curr_game_session;
+        $request = "SELECT COUNT(*) FROM mysecret, players WHERE mysecret.discovered = 1 AND mysecret.id_player = players.id AND players.logged = 1 AND players.ingame = 1 AND (mysecret.disabled=0 OR mysecret.disabled IS NULL) AND players.id_game_session =" . $id_curr_game_session;
         $nbr_discovered = $conn->query($request);
         $nbr_discovered_array = $nbr_discovered->fetch_array(); //on récupère le nombre de messages qui ont été découvert lors de cette session de jeu dans une array php
 
@@ -956,7 +956,7 @@
 
         $id_curr_game_session = Self::get_current_game_session()["id"]; //on récupère d'abord l'id de la session de jeu actuel
 
-        $get_num_not_discovered = "SELECT COUNT(*) FROM mysecret, players WHERE mysecret.discovered = 0 AND players.id = mysecret.id_player AND (mySecret.disabled=0 OR mySecret.disabled IS NULL) AND players.ingame = 1 AND players.id_game_session =" . $id_curr_game_session;
+        $get_num_not_discovered = "SELECT COUNT(*) FROM mysecret, players WHERE mysecret.discovered = 0 AND players.id = mysecret.id_player AND (mysecret.disabled=0 OR mysecret.disabled IS NULL) AND players.ingame = 1 AND players.id_game_session =" . $id_curr_game_session;
         $length = $conn->query($get_num_not_discovered);
         $total = $length->fetch_array(); //on récupère le nombre total de secret qui n'ont pas été découvert
 
@@ -1022,7 +1022,7 @@
 
         $id_curr_player = Self::get_curr_player()["id"]; //récupère l'identifiant du joueur actuel
 
-        $request = "SELECT * FROM mySecret WHERE id_player=" . $id_curr_player;
+        $request = "SELECT * FROM mysecret WHERE id_player=" . $id_curr_player;
         $output = $conn->query($request)->fetch_all(MYSQLI_ASSOC); //On récupère la liste de ses secrets dans la base de données et on les stocke dans une array php
 
         echo json_encode($output); //On encode cette array php et on la retourne
@@ -1040,7 +1040,7 @@
         $curr_player = Self::get_curr_player(); //on récupère l'identifiant du joueur
         
         if ($curr_player != null){
-            $request = "SELECT COUNT(*) FROM mySecret WHERE id_player=" . $curr_player["id"];
+            $request = "SELECT COUNT(*) FROM mysecret WHERE id_player=" . $curr_player["id"];
             $output = $conn->query($request)->fetch_array(); //on stocke le nombre de secrets
 
             echo $output[0]; //puis on les retourne
@@ -1111,7 +1111,7 @@
 
         $secret_id = $_POST["id"]; //récupère l'identifiant du secret
 
-        $request = "DELETE FROM mySecret WHERE id=" . $secret_id;
+        $request = "DELETE FROM mysecret WHERE id=" . $secret_id;
         $output = $conn->query($request); //supprime définitivement le secret de la base de données
 
         echo $output; //retourne si le secret a bien été supprimé ou non

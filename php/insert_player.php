@@ -40,7 +40,7 @@ if (!(isset($_SESSION["player_id"]))){
   $output = $conn->query($insert_player);
   echo $output;
   if ($output) {
-    $update_secret = "UPDATE mySecret SET discovered = 0, random_choice = 0 WHERE id_player=" . $player_id;
+    $update_secret = "UPDATE mysecret SET discovered = 0, random_choice = 0 WHERE id_player=" . $player_id;
     $conn->query($update_secret);
   
     $update_nbr_players = "UPDATE game_session SET nbrplayers = nbrplayers + 1 WHERE id = '" . $id_curr_game_session . "'";

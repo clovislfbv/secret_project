@@ -247,7 +247,7 @@ export function updatePlayerWhenPlayed(choice) {
 }
 
 /*******
- * update the played variable if a player clicks on the button on the dropper
+ * Met à jour les données du joueur actuel en base de données lorsqu'il clique sur un bouton déjà posé sur le dropper
  *******/
 export function updatePlayerWhenClicked(){
   jQuery.ajax({
@@ -256,7 +256,7 @@ export function updatePlayerWhenClicked(){
     data: {action: "update_player_when_clicked"},
     async: false,
     success: function (msg) {
-      updateProgressBar();
+      updateProgressBar(); //une fois que les données du joueur ont été mise à jour en db, on appelle updateProgressBar pour mettre à jour le visuel de la barre à l'utilisateur
     },
     error: function (err){
     },
@@ -264,10 +264,10 @@ export function updatePlayerWhenClicked(){
 }
 
 /*******
- * get the number of players currently playing the game
+ * Récupère le nombre de joueur en ligne actuellement
  *******/
 export function getNbrPlayersOnline(){
-  let totalPlayersOnline = 0; //return value nbr all players currently online for the function getNbrPlayersOnline
+  let totalPlayersOnline = 0; //variable servant d'output pour cette fonction
 
   jQuery.ajax({
     type:"POST",
@@ -282,8 +282,12 @@ export function getNbrPlayersOnline(){
   return totalPlayersOnline;
 }
 
+/****** 
+ * Récupère le nombre de joueur dans une partie actuellement
+ * ******/
 export function getNbrPlayersIngame(){
-  let totalPlayersIngame = 0
+  let totalPlayersIngame = 0 //variable servant d'output pour cette fonction
+
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
@@ -315,25 +319,26 @@ export function getNbrPlayersPlayed(){
 }
 
 /*******
- * update the progressbarValue compared to the number of players online and the number of players who already played during this turn
+ * met à jour le visuel de la barre de progression en fonction du nombre de joueurs en ligne et du nombre de joueurs qui ont déjà joué
  *******/
 export function updateProgressBar(){
-  let progressbarValue; //current progressbar's value
+  let progressbarValue; //la valeur actuelle de la barre de progression
 
-  var totalPlayersPlayed2 = getNbrPlayersPlayed();
-  var totalPlayersOnline2 = getNbrPlayersIngame();
+  var totalPlayersPlayed2 = getNbrPlayersPlayed(); //récupère le nombre de joueurs qui ont déjà joué
+  var totalPlayersOnline2 = getNbrPlayersIngame(); //récupère le nombre de joueurs dans la partie actuelle
 
-  progressbarValue = (totalPlayersPlayed2 / totalPlayersOnline2) * 100;
-  if (totalPlayersOnline2 > 1){
+  progressbarValue = (totalPlayersPlayed2 / totalPlayersOnline2) * 100; //calcule la valeur de la barre de progression
+  
+  if (totalPlayersOnline2 > 1){ //s'il y a plus d'un joueur dans la partie actuelle, on affiche et on met à jour la barre de progression
     $j("#progress-bar-players").css("width", progressbarValue + "%");
     $j(".progress-bar").text(totalPlayersPlayed2 + "/" + totalPlayersOnline2 + " joueurs");
     
-    if (progressbarValue === 100 && $j(".result_button").hasClass("d-none") && hasArrivedFirst() == 1){
+    if (progressbarValue === 100 && $j(".result_button").hasClass("d-none") && hasArrivedFirst() == 1){ //si la barre de progression est à 100% et que le joueur actuel a le rôle "admin", on affiche le bouton résultat
       setTimeout(function () {
         $j(".result_button").removeClass("d-none");
         $j("#progress-players").addClass("d-none");
       }, 4000);
-    } else if (progressbarValue < 100 && $j(".start_button").hasClass("d-none") && $j("#cadenas").hasClass("d-none")){
+    } else if (progressbarValue < 100 && $j(".start_button").hasClass("d-none") && $j("#cadenas").hasClass("d-none")){ //sinon on laisse afficher "en attente des autres joueurs"
       $j(".result_button").addClass("d-none");
       $j("#progress-players").removeClass("d-none");
     }
@@ -342,7 +347,8 @@ export function updateProgressBar(){
 }
 
 /*******
- * reset the p_played variable of every players to 0 
+ * Reset la variable p_played de tous les joueurs en base de données
+ * identifiant : l'id du joueur actuel
  *******/
 export function resetPlayedPlayer(identifiant){
   jQuery.ajax({
@@ -359,10 +365,10 @@ export function resetPlayedPlayer(identifiant){
 }
 
 /*******
- * return an array of all players who are currently playing the game
+ * retourne une array contenant tous les joueurs dans une partie actuellement
  *******/
 function getAllPlayersIngame() {
-  var test; //array of all players currently online
+  var test; //variable servant d'output pour cette fonction
 
   jQuery.ajax({
   type:"POST", 
@@ -382,11 +388,10 @@ function getAllPlayersIngame() {
 }
 
 /*******
- * return an array of all players who disconnected from the game
+ * retourne une array contenant tous les joueurs déconnectés
  *******/
 function getAllPlayersDisconnected() {
-  let test2; //array of all players disconnected
-
+  let test2; //variable servant d'output pour cette fonction
   jQuery.ajax({
   type:"POST", 
   url: "../php/helper.php",
@@ -396,14 +401,17 @@ function getAllPlayersDisconnected() {
       test2 = res;
   },
   error: function (err) {
-      //console.log(err);
+      console.log(err);
   }
   });
   return test2;
 }
 
+/******
+ * Récupère la date et l'heure à laquelle la partie actuelle a été créé
+ * ******/
 export function getDateGameSessionCreated(){
-  var date_game_session_created;
+  var date_game_session_created; //variable servant d'output pour cette fonction
 
   jQuery.ajax({
     type: "POST",
@@ -414,11 +422,15 @@ export function getDateGameSessionCreated(){
       date_game_session_created = output;
     }
   })
+
   return date_game_session_created;
 }
 
+/****** 
+ * Récupère toutes les informations en base de données du joueur actuel
+ * ******/
 export function getcurrPlayer() {
-  var currPlayer; //return value for the getcurrPlayer function
+  var currPlayer; //variable servant d'output pour cette fonction
 
   jQuery.ajax({
     type: "POST",
@@ -433,10 +445,10 @@ export function getcurrPlayer() {
 }
 
 /*******
- * return the name of the player currently playing
+ * recupère le nom du joueur actuel
  *******/
 export function getCurrPlayerName () {
-  var test3; //name of the player currently playing
+  var test3; //variable servant d'output pour cette fonction
 
   jQuery.ajax({
     type:"POST",
@@ -445,15 +457,17 @@ export function getCurrPlayerName () {
     async: false,  
     success: function (result) {
       test3 = result;
-      //console.log("Received curr player's name");
     }
   })
   return test3;
 }
 
-
+/****** 
+ * Récupère toutes les informations en base de données d'un joueur grâce à son id
+ * identifiant : l'id du joueur dont vous voulez récupérer les informations
+ * ******/
 export function getPlayerById(identifiant) {
-  let player; //player returned by getPlayerById
+  let player; //variable servant d'output pour cette fonction
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
@@ -466,6 +480,9 @@ export function getPlayerById(identifiant) {
   return player;
 }
 
+/****** 
+ * termine la partie actuelle en base de données
+ * ******/
 function endGame(){
   jQuery.ajax({
     type:"POST",
@@ -474,6 +491,10 @@ function endGame(){
   })
 }
 
+/******
+ * Fais quitter le joueur actuel de la partie actuelle
+ * p_id : l'id du joueur actuel
+ * ******/
 export function leaveInGame(p_id){
   jQuery.ajax({
     type: "POST",
@@ -482,6 +503,9 @@ export function leaveInGame(p_id){
   })
 }
 
+/*******
+ * dértuis toutes les variables sessions stockés sur le navigateur
+ * *******/
 export function killSession(){
   jQuery.ajax({
     type:"POST",
@@ -489,16 +513,20 @@ export function killSession(){
     data: {action: "kill_session"},
     async: false,
     success: function (res){
-      //console.log(res);
+      console.log(res);
     },
     error: function (err){
-      //console.log(err);
+      console.log(err);
     }
   })
 }
 
+/******
+ * Récupère toutes les informations de la partie actuelle en base de données
+ * ******/
 export function getCurrentGameSession(){
-  let game_session;
+  let game_session; //variable servant d'output pour cette fonction
+
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
@@ -513,8 +541,13 @@ export function getCurrentGameSession(){
   })
 }
 
+/******
+ * dis si le joueur actuel est le premier à être arrivé dans la partie actuelle
+ * Si le joueur actuel est arrivé le premier, il devient l'admin de la partie actuelle
+ * ******/
 export function hasArrivedFirst(){
-  let output;
+  let output; //variable servant d'output pour cette fonction
+
   jQuery.ajax({
     type: "POST",
     url: "../php/helper.php",
@@ -531,9 +564,11 @@ export function hasArrivedFirst(){
   return output;
 }
 
+/******
+ * Cette fonction permet de faire attendre le joueur s'il y a qu'un seul joueur présent dans la partie actuelle
+ * ******/
 export function loading(){
-  let output = "";
-  var save = 0;
+  var save = 0; 
   var LottiePlayer = document.getElementById("myLottie"); //points to the locker animation
   var animation_finished = 0; //variable that says if the lock animation is finished or not
   setInterval(function() {
@@ -579,6 +614,7 @@ export function loading(){
       }, 5000);
     }
 
+    console.log(total_players_logged + " " + animation_finished + " " + $j("#cadenas").length + " " + !($j("#cadenas").hasClass("d-none")) + " " + hasGameBegun());
     if (total_players_logged > 1 && animation_finished == 0 && $j("#cadenas").length && !($j("#cadenas").hasClass("d-none")) && hasGameBegun()){
       if ($j(".start_game").hasClass("d-none") && nbr_messages_discovered > 0){
         startGame();

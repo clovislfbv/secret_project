@@ -1,3 +1,8 @@
+<?php
+    include_once("conn.php");
+    require_once("helper.php");
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,10 +36,6 @@
                             </svg>
                         </span>
                         <?php
-                            include_once("conn.php");
-                            require_once("helper.php");
-                            session_start();
-
                             if (isset($_SESSION["username"])){
                                 $player = $_SESSION["username"];
                                 $pass_word = $_SESSION["password"];

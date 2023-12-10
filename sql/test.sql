@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : jeu. 30 nov. 2023 à 15:55
+-- Généré le : ven. 08 déc. 2023 à 16:20
 -- Version du serveur : 10.10.2-MariaDB
 -- Version de PHP : 8.0.26
 
@@ -20,6 +20,28 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `test`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `example`
+--
+
+DROP TABLE IF EXISTS `example`;
+CREATE TABLE IF NOT EXISTS `example` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`json`)),
+  `text` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf16 COLLATE=utf16_general_ci;
+
+--
+-- Déchargement des données de la table `example`
+--
+
+INSERT INTO `example` (`id`, `json`, `text`) VALUES
+(2, '{\"foo\": \"bar\"}', NULL),
+(3, NULL, '{\"foo\": \"bar\"}');
 
 -- --------------------------------------------------------
 
@@ -81,6 +103,30 @@ CREATE TABLE IF NOT EXISTS `players` (
   `id_game_session` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2226 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `truc`
+--
+
+DROP TABLE IF EXISTS `truc`;
+CREATE TABLE IF NOT EXISTS `truc` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `password` (`password`(250)),
+  KEY `name` (`name`(250))
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf16 COLLATE=utf16_general_ci;
+
+--
+-- Déchargement des données de la table `truc`
+--
+
+INSERT INTO `truc` (`id`, `name`, `password`) VALUES
+(1, 'name', 'password'),
+(2, 'name', 'password');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
