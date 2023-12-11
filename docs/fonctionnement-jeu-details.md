@@ -1,17 +1,19 @@
 # Explication du fonctionnement du jeu
 Les schéma ci-dessous résume le fonctionnement de chaque fichiers pour le jeu.
-<figure>
-<img src='../images/schema_summary_front.png' alt="schéma qui résume le fonctionnement des fichiers" style="border: 2px solid  gray; border-radius:15px">
-<figcaption style="display: flex; justify-content: center; color: grey">schéma résumant le fonctionnement des fichiers</figcaption>
+<table><tr><td>
+    <img src='../images/schema_summary_front.png' alt="schéma qui résume le fonctionnement des fichiers">
+</td></tr></table>
+
+<p align="center">schéma résumant le fonctionnement des fichiers</p>
 
 <br>
 <br>
 
-<img src="../images/second_schema.png" alt="schéma qui résume le fonctionnement des 'classes' au sein du jeu" style="border: 2px solid  gray; border-radius:15px">
+<table><tr><td>
+    <img src="../images/second_schema.png" alt="schéma qui résume le fonctionnement des 'classes' au sein du jeu">
+</td></tr></table>
 
-<figcaption style="display: flex; justify-content: center; color: grey">schéma résumant le fonctionnement des 'classes' au sein du jeu</figcaption>
-
-</figure>
+<p align="center">schéma résumant le fonctionnement des 'classes' au sein du jeu</p>
 
 ### description un peu plus détaillé sur les fichiers affichés à l'utilisateur
 

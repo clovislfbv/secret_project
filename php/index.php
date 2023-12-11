@@ -95,7 +95,7 @@
                       </div>
                       <div class="modal-body">
                         <p class="text-primary">
-                          <textarea class="form-control border-primary" id="mySecret" name="mySecret" placeholder="Renseignez votre secret" aria-label="With textarea" onkeypress="success_secret()"></textarea>
+                          <textarea class="form-control border-primary" id="mySecret" name="mySecret" placeholder="Renseignez votre secret" aria-label="With textarea" onkeyup="success_secret()"></textarea>
                         </p>
                       </div>
                       <div class="modal-footer">

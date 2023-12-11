@@ -967,135 +967,132 @@ export function showSecret() {
   $j("#droppable-player").droppable({ //initialise la zone de droppage pour que le joueur actuel fasse son choix
     over: function(event, ui) { //si le joueur actuel prend un bouton joueur et le fais passer sur la zone sans la dropper
       if (dropped == 1) { //s'il y a déjà un bouton déjà dans la zone de drop,
-        $j(this).addClass("ui-state-error"); on
+        $j(this).addClass("ui-state-error"); //on change la couleur de la zone en rouge
       } else {
-        $j(this).addClass("ui-state-highlight");
+        $j(this).addClass("ui-state-highlight"); //sinon on la remet en couleur normale
       }
-      $j(this).removeClass("correct");
-      $j(this).removeClass("normal text-primary");
+      $j(this).removeClass("correct"); //on enlève la couleur verte si le joueur actuel avait déjà déposé un bouton joueur dans la zone de drop
+      $j(this).removeClass("normal text-primary"); //on enlève la couleur orange
     },
-    drop: function( event, ui ) {
-      if (dropped === 0){
-        $j(".wait4").removeClass("d-none");
-        ui.draggable.draggable( "option", "revert", false);
-        ui.draggable.position({
+    drop: function( event, ui ) { //au moment où le joueur actuel essaye de dropper un bouton joueur dans la zone de drop
+      if (dropped === 0){ //s'il n'y a personne dans la zone
+        $j(".wait4").removeClass("d-none"); //on affiche le message d'attente que tous les joueurs aient joué
+        ui.draggable.draggable( "option", "revert", false); //on enlève la possibilité de revenir à la position initiale
+        ui.draggable.position({ //on positionne le bouton joueur au centre de la zone de drop
           my: "center",
           at: "center",
           of: $j(this),
         });
-        $j(this).removeClass( "ui-state-highlight" );
-        $j(this).addClass("correct");
-        ui.draggable.draggable("disable", 1);
-        $j("wait4").removeClass("d-none");
-        dropped = 1;
-        let chosen_player = ui.draggable[0].id.split("-");
-        updatePlayerWhenPlayed(chosen_player[1]);
+        $j(this).removeClass( "ui-state-highlight" ); //on enlève la couleur orange
+        $j(this).addClass("correct"); //on met la couleur verte
+        ui.draggable.draggable("disable", 1); //on désactive le bouton joueur pour que le joueur actuel ne puisse plus le draggé ailleurs
+        dropped = 1; //on set dropped à 1 pour dire qu'il y a bien un bouton joueur dans la zone de drop
+        let chosen_player = ui.draggable[0].id.split("-"); //on récupère les infos du bouton joueur qui a été droppé
+        updatePlayerWhenPlayed(chosen_player[1]); //on met à jour la base de données pour dire que le joueur actuel a joué
 
-        let value = $j(".secret_id_played").val()
-        if (!(value.indexOf("-") > -1)){
-          $j(".secret_id_played").val(value + "-" + chosen_player[0] + "-" + chosen_player[1]);
+        let value = $j(".secret_id_played").val() //on récupère la valeur de la variable secrète qui contient les infos du secret actuel
+        if (!(value.indexOf("-") > -1)){ //si la valeur de la variable secrète ne contient pas de tiret, 
+          $j(".secret_id_played").val(value + "-" + chosen_player[0] + "-" + chosen_player[1]); //on ajoute les infos du bouton joueur qui a été droppé
         }
 
-        
-        $j(ui.draggable).on("click",function (e) {
-          $j(".wait4").addClass("d-none");
-          let chosen_player = JSON.parse(getChosenPlayer());
-          updatePlayerWhenClicked(chosen_player[1]);
-          $j(ui.draggable).draggable( "option", "revert", true);
-          $j("#res_button").addClass("d-none");
-          $j(".progress").removeClass("d-none");
-          $j(ui.draggable).css({
+        $j(ui.draggable).on("click",function (e) { //on ajoute un event listener pour que quand il soit cliqué par le joueur actuel,
+          $j(".wait4").addClass("d-none"); //on cache le message d'attente que tous les joueurs aient joué
+          let chosen_player = JSON.parse(getChosenPlayer()); //on récupère les infos du bouton joueur qui a été droppé
+          updatePlayerWhenClicked(chosen_player[1]); //on met à jour la base de données pour dire que le joueur actuel a cliqué sur le bouton joueur
+          $j(ui.draggable).draggable( "option", "revert", true); //on remet la possibilité de revenir à la position initiale
+          $j("#res_button").addClass("d-none"); //on cache le bouton continuer
+          $j(".progress").removeClass("d-none"); //on affiche la bar de progression des joueurs
+          $j(ui.draggable).css({ //on remet le bouton joueur à sa position initiale
             'top': '0px',
             'left': '0px',
             'position': 'relative'
           });
-          $j(".secret_id_played").val($j(".secret_id_played").val().replace("-" + chosen_player["p_name"] + "-" + chosen_player["id"], ""));
-          $j("#droppable-player").removeClass("correct");
-          $j("#droppable-player").addClass("normal text-primary");
-          dropped = 0;
-          $j(ui.draggable).draggable("enable", 1);
+          $j(".secret_id_played").val($j(".secret_id_played").val().replace("-" + chosen_player["p_name"] + "-" + chosen_player["id"], "")); //on enlève les infos du bouton joueur qui a été droppé
+          $j("#droppable-player").removeClass("correct"); //on enlève la couleur verte
+          $j("#droppable-player").addClass("normal text-primary"); //on met la couleur orange
+          dropped = 0; //on set dropped à 0 pour dire qu'il n'y a plus de bouton joueur dans la zone de drop
+          $j(ui.draggable).draggable("enable", 1); //on réactive le bouton joueur pour que le joueur actuel puisse le draggé ailleurs
         });
 
       } else {
-        $j(ui.draggable).css({
+        $j(ui.draggable).css({ //si la zone de drop est déjà occupé, on remet le bouton joueur à sa position initiale
           'top': '0px',
           'left': '0px',
           'position': 'relative'
         });
-        $j(this).addClass("correct");
-        $j(this).removeClass("normal text-primary");
-        $j(this).removeClass("ui-state-highlight");
-        $j(this).removeClass("ui-state-error");
+        $j(this).addClass("correct"); //on met la couleur verte
+        $j(this).removeClass("normal text-primary"); //on enlève la couleur orange
+        $j(this).removeClass("ui-state-highlight"); //on enlève la couleur orange
+        $j(this).removeClass("ui-state-error"); //on enlève la couleur rouge
       }
     },
-    out: function(event, ui) {
-      $j(this).removeClass("ui-state-error")
-      $j(this).removeClass("ui-state-highlight")
-      if (dropped == 1){
-        $j(this).addClass("correct")
-        $j(this).removeClass("normal text-primary")
+    out: function(event, ui) { //si le joueur actuel prend un bouton joueur et le drop hors de la zone de drop
+      $j(this).removeClass("ui-state-error") //on enlève la couleur rouge
+      $j(this).removeClass("ui-state-highlight")  //on enlève la couleur orange
+      if (dropped == 1){ //si la zone de drop est déjà occupé
+        $j(this).addClass("correct") //on met la couleur verte
+        $j(this).removeClass("normal text-primary") //on enlève la couleur orange
       } else {
-        $j(this).removeClass("correct")
-        $j(this).addClass("normal text-primary")
+        $j(this).removeClass("correct") //on enlève la couleur verte
+        $j(this).addClass("normal text-primary") //on met la couleur orange
       }
     },
   });
 
-  $j(".secret_and_progress").removeClass('d-none');
-  $j('#start_button').addClass('d-none');
+  $j(".secret_and_progress").removeClass('d-none'); //on affiche le secret actuel
+  $j('#start_button').addClass('d-none'); //on cache le bouton commencer la partie
 
-  timerLottie.seek(0);
+  timerLottie.seek(0); //on met l'animation du timer à la frame 0
 
-  timerLottie.addEventListener("complete", function(){
+  timerLottie.addEventListener("complete", function(){ //lorsque l'animation du timer est terminé
 
-    let currPlayer = JSON.parse(getcurrPlayer());
-    updatePlayerContinued(currPlayer["id"]);
+    let currPlayer = JSON.parse(getcurrPlayer()); //on récupère les infos du joueur actuel
+    updatePlayerContinued(currPlayer["id"]); //on met à jour la base de données pour dire que le joueur actuel a bougé de la page get_player.php à la page result.php
 
-    if ($j(".secret_id_played").val().split("-").length == 1){
+    if ($j(".secret_id_played").val().split("-").length == 1){ //si la variable secrète ne contient pas de tiret, cela veut dire que le joueur actuel n'a pas droppé de bouton joueur dans la zone de drop
       let value = $j(".secret_id_played").val();
-      $j(".secret_id_played").val(value + "-0-0");
+      $j(".secret_id_played").val(value + "-0-0"); //on ajoute donc les infos d'un bouton joueur qui n'existe pas pour pouvoir continuer le jeu
     } else {
-      author = getAuthorRandomSecret();
+      author = getAuthorRandomSecret(); //sinon on récupère l'auteur du secret actuel
 
-      let id_chosen_player = $j(".secret_id_played").val().split("-")[2];
-      console.log(id_chosen_player, author["id"], currPlayer["id"], currPlayer["time_spent"]);
-      if (getStateSubmitted() == 0){
-        updateScore(id_chosen_player, author["id"], currPlayer["id"], currPlayer["time_spent"]/1000);
-        setSubmitted();
+      let id_chosen_player = $j(".secret_id_played").val().split("-")[2]; //on récupère l'id du bouton joueur qui a été droppé
+      if (getStateSubmitted() == 0){ //ce if permets d'update le score en base de données qu'une seule fois
+        updateScore(id_chosen_player, author["id"], currPlayer["id"], currPlayer["time_spent"]/1000); //on met à jour le score du joueur actuel
+        setSubmitted(); //on dit à la base de données que le score a bien été mis à jour
       }
     }
 
-    shown = 0;
+    shown = 0; //on set la variable shown à 0 pour dire qu'il n'y a plus de secret affiché
 
-    setResultClicked();
+    setResultClicked(); //on dit à la base de données que le joueur actuel a cliqué sur le bouton continuer
 
-    console.log("time's up !!!!!!!!!!!!")
-    $j("#result_form").submit();
-    check_only_one_time = 0
+    $j("#result_form").submit(); //on soumet le formulaire pour aller à la page result.php
+    check_only_one_time = 0 //on set la variable check_only_one_time à 0 pour pouvoir réutiliser la fonction checkOnlyOneTime
   });
 
   setInterval(function() {
-    let random_message = JSON.parse(chooseRandomSecret());
-    $j("#secret_message").text(decodeSecret(random_message["p_secret"]));
-    $j("#secret_message").css({
+    let random_message = JSON.parse(chooseRandomSecret()); //on récupère un secret aléatoire parmi ceux enregistré par les joueurs actuellement connectés et accepté pour être joué cette partie
+    $j("#secret_message").text(decodeSecret(random_message["p_secret"])); //on affiche le secret actuel
+    $j("#secret_message").css({ //on set la taille du textarea en fonction de la taille du secret
       "height" : $j("#secret_message").scrollHeight + "px",
     })
-    /*$j("#secret_message").css({
-      "width" : $j("#secret_message").val().length * 9,
-    })*/
-    if ($j(".secret_id_played").val().length == 0){
-      $j(".secret_id_played").val(random_message["0"]);
+
+    if ($j(".secret_id_played").val().length == 0){ 
+      $j(".secret_id_played").val(random_message["0"]); //on ajoute les infos du secret actuel dans la variable secrète
     }
 
-    $j(".start_game").css({
+    $j(".start_game").css({ //on cache le bouton commencer la partie
       "height": "0",
     })
-  }, 1500) // NOUBLIE PAS DE CHANGER CETTE VALUE
-  author = getAuthorRandomSecret();
+  }, 1500)
+  author = getAuthorRandomSecret(); //on récupère l'auteur du secret actuel
 }
 
+/******
+ * récupère le nombre de secrets qui n'ont pas encore été découvert pendant la partie
+ * ******/
 export function getNbrSecretsNotDiscovered(){
-  let nbrSecretsNotDiscovered; //nbr of secrets not discovered yet
+  let nbrSecretsNotDiscovered; //variable qui sert d'output pour cette fonction
 
   jQuery.ajax({
     type: "POST",
@@ -1109,6 +1106,9 @@ export function getNbrSecretsNotDiscovered(){
   return nbrSecretsNotDiscovered;
 }
 
+/******
+ * set le message actuel comme découvert en base de données
+ * ******/
 export function setMessageAsDiscovered(){
   jQuery.ajax({
     type: "POST",
@@ -1117,8 +1117,13 @@ export function setMessageAsDiscovered(){
   })
 }
 
+/******
+ * set le secret donné en paramètre comme désactivé en base de données
+ * id_secret : identifiant du secret à désactivé
+ * valeur d'output: 1 ou 0
+ * ******/
 export function setSecretAsDisabled(id_secret){
-  var isSecretDisabled; //boolean to say if a secret has successfully been set as disabled or not
+  var isSecretDisabled; //variable qui sert d'output pour cette fonction
 
   jQuery.ajax({
     type:"POST",
@@ -1132,8 +1137,13 @@ export function setSecretAsDisabled(id_secret){
   return isSecretDisabled;
 }
 
+/******
+ * set le secret donné en paramètre comme activé en base de données
+ * id_secret : identifiant du secret à activé
+ * valeur d'output: 1 ou 0
+ * ******/
 export function setSecretAsEnabled(id_secret){
-  var isSecretEnabled; //boolean to say if a secret has successfully been set as enabled or not
+  var isSecretEnabled; //variable qui sert d'output pour cette fonction
 
   jQuery.ajax({
     type:"POST",
@@ -1147,23 +1157,30 @@ export function setSecretAsEnabled(id_secret){
   return isSecretEnabled;
 }
 
+/******
+ * supprime le secret donné en paramètre de la base de données
+ * id_secret : identifiant du secret à supprimer
+ * valeur d'output: 1 ou 0
+ * ******/
 export function deleteSecret(id_secret){
-  var wasSecretDeleted;
+  var wasSecretDeleted; //variable qui sert d'output pour cette fonction
 
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
     data: {action: "delete_secret", id: id_secret},
     success: function (res) {
-      //console.log(res);
       wasSecretDeleted = res;
     }
   })
   return wasSecretDeleted;
 }
 
+/******
+ * active un overlay pour empêcher le joueur de faire des actions pendant que le jeu cherche à connecter son compte
+ * ******/ 
 export function OverlayOn(){
-  $j("#overlay").css({
+  $j("#overlay").css({ //on set les propriétés css de l'overlay pour que l'affichage soit correct
     "position": "fixed", /* Sit on top of the page content */
     "display": "block", /* Hidden by default */
     "width": "100%", /* Full width (cover the whole page) */
@@ -1177,11 +1194,14 @@ export function OverlayOn(){
     "cursor": "pointer", /* Add a pointer on hover */
   })
 
-  $j("#loader_start").removeClass("d-none")
+  $j("#loader_start").removeClass("d-none") //on affiche l'overlay
 }
 
+/******
+ * désactive l'overlay
+ * ******/
 export function OverlayOff(){
-  $j("#overlay").css({
+  $j("#overlay").css({ //on set les propriétés css de l'overlay pour que l'affichage soit correct
     "position": "fixed", /* Sit on top of the page content */
     "display": "none", /* Hidden by default */
     "width": "100%", /* Full width (cover the whole page) */
@@ -1194,11 +1214,15 @@ export function OverlayOff(){
     "z-index": "2", /* Specify a stack order in case you're using a different order for other elements */
     "cursor": "pointer", /* Add a pointer on hover */
   })
-  $j("#loader_start").addClass("d-none")
+  $j("#loader_start").addClass("d-none") //on cache l'overlay
 }
 
+/******
+ * récupère le nombre de secrets activés
+ * valeur d'output: 1 ou 0
+ * ******/
 export function getNbrSecretsEnabled(){
-  let nbrSecretsEnabled;
+  let nbrSecretsEnabled; //variable qui sert d'output pour cette fonction
 
   jQuery.ajax({
     type:"POST",
@@ -1212,8 +1236,12 @@ export function getNbrSecretsEnabled(){
   return nbrSecretsEnabled;
 }
 
+/******
+ * récupère le classement actuel
+ * valeur d'output: array
+ * ******/
 export function getLeaderboard() {
-  let currLeaderboard; //get the current leaderboard
+  let currLeaderboard; //variable qui sert d'output pour cette fonction
 
   jQuery.ajax({
     type: "POST",
@@ -1227,29 +1255,35 @@ export function getLeaderboard() {
   return currLeaderboard;
 }
 
+/******
+ * fonction permettant de modifier quels joueurs à afficher dans le classement
+ * minimum : le rang minimum à afficher
+ * maximum : le rang maximum à afficher
+ * ******/
 export function setMinMax(minimum, maximum) {
-  min = minimum;
+  min = minimum; //on set les variables globales min et max avec leur valeurs respectives
   max = maximum;
 
 }
 
+/******
+ * affiche le classement actuel
+ * ******/
 export function displayLeaderboard() {
   let first_test = 1;
   let unique = 0;
   setInterval(function() {
-    var curr_leaderboard = JSON.parse(getLeaderboard());
-    //console.log(curr_leaderboard)
-    let currPlayer = JSON.parse(getcurrPlayer());
-    let nbr_players = curr_leaderboard.length;
-    //console.log(nbr_players);
-    let nbrSecretsNotDiscovered = getNbrSecretsNotDiscovered();
-    let counter = 1;
-    var output = "";
-    let rank;
-    let rank_previous;
-    let id = currPlayer["id"];
+    var curr_leaderboard = JSON.parse(getLeaderboard()); //on récupère le classement actuel
+    let currPlayer = JSON.parse(getcurrPlayer()); //on récupère les infos du joueur actuel
+    let nbr_players = curr_leaderboard.length; //on récupère le nombre de joueurs dans le classement actuel
+    let nbrSecretsNotDiscovered = getNbrSecretsNotDiscovered(); //on récupère le nombre de secrets qui n'ont pas encore été découvert pendant la partie
+    let counter = 1; //variable qui sert à afficher le nombre de steps qui faut dans le podium à afficher
+    var output = ""; //variable qui sert à afficher le classement actuel
+    let rank; //variable qui sert à afficher le rang du joueur actuel
+    let rank_previous; //variable qui sert à afficher le joueur qui est juste devant le joueur actuel
+    let id = currPlayer["id"]; //on récupère l'id du joueur actuel
 
-    for (let i = min; i < max; i++){
+    for (let i = min; i < max; i++){ 
       if (i < nbr_players){
         if (nbrSecretsNotDiscovered == 0) {
           if (counter < 4) {
