@@ -84,7 +84,8 @@
                             <div class="total-secrets">
                                 <h3 class="total_secrets">
                                     <script type="module">
-                                        import { displayNbrTotalSecrets } from "../js/helper.js";
+                                        import { displayNbrTotalSecrets, actionMobileInit } from "../js/helper.js";
+                                        actionMobileInit();
 
                                         displayNbrTotalSecrets();
                                     </script>

@@ -254,7 +254,7 @@ $j(document).ready(function () {
   //   $j("#btn_login").prop("disabled", true);
   // })
 
-  $j("#btn_register").on("click", function (e, t) {
+  $j("#btn_register").click(function (e, t) {
     console.log(e, t);
     if (checkSeveralUsernames() != 0) {
       $j("#connModal").modal("show")
@@ -617,18 +617,6 @@ $j(document).ready(function () {
     //     "margin-bottom": "10%",
     //   });
     // }
-
-    let currPlayer = getcurrPlayer();
-
-    if (window.location.pathname == "/secret_project/php/index.php" && currPlayer) {
-      disconnectPlayer(JSON.parse(currPlayer["id"]));
-      destroySessionVariable();
-      currGameSession = getCurrentGameSession();
-      nbr_players_ingame = getNbrPlayersIngame();
-      if (currGameSession != null && nbr_players_ingame == 0) {
-        killSession();
-      }
-    }
 
     if (!($j("#cadenas").hasClass("d-none"))) {
       if (!($j(".start_game").hasClass("d-none"))) {

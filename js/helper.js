@@ -1236,7 +1236,7 @@ export function setMinMax(minimum, maximum) {
 export function displayLeaderboard() {
   let first_test = 1;
   let unique = 0;
-  // setInterval(function() {
+  setInterval(function() {
     var curr_leaderboard = JSON.parse(getLeaderboard());
     //console.log(curr_leaderboard)
     let currPlayer = JSON.parse(getcurrPlayer());
@@ -1388,7 +1388,7 @@ export function displayLeaderboard() {
 
       $j(".list-group").html(output);
     }, time + 1000)
-  // }, 3000);
+  }, 3000);
 }
 
 export function updateScore(id_player, id_player_chosen, id_curr_player, time_spent) {

@@ -14,6 +14,18 @@
     <title>Discover my secret</title>
   </head>
   <body>
+    <script>
+      import { destroySessionVariable, getCurrentGameSession, getNbrPlayersIngame, killSession, actionMobileInit } from "../js/helper.js";
+
+      actionMobileInit();
+      disconnectPlayer(JSON.parse(currPlayer["id"]));
+      destroySessionVariable();
+      currGameSession = getCurrentGameSession();
+      nbr_players_ingame = getNbrPlayersIngame();
+      if (currGameSession != null && nbr_players_ingame == 0) {
+        killSession();
+      }
+    </script>
     <div id="overlay">
       <div class="body-players" id="loading-body">
         <div class="d-flex d-none" id="loader_start">
@@ -62,7 +74,7 @@
                       <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
                     </svg>
                   </span>
-                  <input type="text" class="form-control border-primary" id="password" name="password" placeholder="Renseignez votre mot de passe" aria-label="password" onkeypress="success()"/>
+                  <input type="text" class="form-control border-primary" id="password" name="password" placeholder="Renseignez votre mot de passe" aria-label="password" onkeyup="success()"/>
                 </div>
                 <div class="all_buttons">
                   <div class="login">
