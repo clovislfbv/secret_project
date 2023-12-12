@@ -126,6 +126,9 @@
                         <div class="invalid-feedback d-none" id="secret-already-saved" style="display: block;">
                             Vous avez déjà enregistré ce secret.
                         </div>
+                        <div class="invalid-feedback d-none" id="nbr-secret-max" style="display: block;">
+                            Vos modifications n'ont pas été enregistré car vous êtes limité à 5 secrets actifs maximum.
+                        </div>
                     </p>
                 </div>
                 <div class="modal-footer">
@@ -156,6 +159,9 @@
                     </div>
                     <div class="invalid-feedback d-none" id="edits-not-saved" style="display: block;">
                         Vos modifications n'ont pas été enregistré car vous devez avoir au moins un secret actif pour jouer.
+                    </div>
+                    <div class="invalid-feedback d-none" id="nbr-secret-max-list" style="display: block;">
+                        Vos modifications n'ont pas été enregistré car vous êtes limité à 5 secrets actifs maximum.
                     </div>
                     <div class="card border-primary">
                         <div class="card-body">

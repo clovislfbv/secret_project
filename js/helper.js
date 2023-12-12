@@ -337,7 +337,7 @@ export function updateProgressBar(){
       setTimeout(function () {
         $j(".result_button").removeClass("d-none");
         $j("#progress-players").addClass("d-none");
-      }, 4000);
+      }, 2000);
     } else if (progressbarValue < 100 && $j(".start_button").hasClass("d-none") && $j("#cadenas").hasClass("d-none")){ //sinon on laisse afficher "en attente des autres joueurs"
       $j(".result_button").addClass("d-none");
       $j("#progress-players").removeClass("d-none");

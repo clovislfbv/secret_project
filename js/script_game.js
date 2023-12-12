@@ -177,15 +177,16 @@ $j(document).ready(function () {
 
     let id_chosen_player = $j(".secret_id_played").val().split("-")[2];
     console.log(id_chosen_player, author_random_message["id"], currPlayer["id"], currPlayer["time_spent"]);
-    updateScore(id_chosen_player, author_random_message["id"], currPlayer["id"], currPlayer["time_spent"] / 1000);
+    if (getStateSubmitted() == 0){
+      updateScore(id_chosen_player, author_random_message["id"], currPlayer["id"], currPlayer["time_spent"] / 1000);
+      setSubmitted();
+    }
     shown = 0;
     result_clicked = 1;
     toto_clicked = 0;
     resetContinueClicked();
     setResultClicked();
-    setTimeout(function () {
-      $j("#result_form").submit();
-    }, 1500);
+    $j("#result_form").submit();
   })
 
   $j("#btn_login").on("click", function (e, t) {
@@ -286,18 +287,23 @@ $j(document).ready(function () {
       e.preventDefault();
       $j("#secret-already-saved").removeClass("d-none");
     } else {
-      if (addNewSecret()) {
-        $j("#mySecret").val("");
-        $j("#add_secret_modal").modal("hide");
-        $j(".success_secret").addClass("show");
-        setTimeout(() => {
-          $j(".success_secret").removeClass("show");
-        }, 3000);
+      if (getNbrSecretsEnabled() < 5){
+        if (addNewSecret()) {
+          $j("#mySecret").val("");
+          $j("#add_secret_modal").modal("hide");
+          $j(".success_secret").addClass("show");
+          setTimeout(() => {
+            $j(".success_secret").removeClass("show");
+          }, 3000);
+        } else {
+          console.log("Erreur insertion secret");
+        }
       } else {
-        console.log("Erreur insertion secret");
+        e.preventDefault();
+        $j("#nbr-secret-max").removeClass("d-none");
       }
-    }
-  })
+    } 
+  });
 
   function display_player_secrets() {
     let all_secrets = JSON.parse(getAllSecretsStored());
@@ -317,6 +323,7 @@ $j(document).ready(function () {
 
   $j("#btn_list_secrets").on("click", function (e) {
     $j("#edits-not-saved").addClass("d-none");
+    $j("#nbr-secret-max-list").addClass("d-none");
     $j("#edits-not-saved").css({
       "margin-bottom": "0",
     });
@@ -358,6 +365,7 @@ $j(document).ready(function () {
         console.log("disabled");
         display_player_secrets();
         $j("#edits-not-saved").addClass("d-none");
+        $j("#nbr-secret-max-list").addClass("d-none");
         $j("#edits-not-saved").css({
           "margin-bottom": "0",
         });
@@ -376,8 +384,15 @@ $j(document).ready(function () {
         display_player_secrets();
       }
     } else {
-      setSecretAsEnabled(new_id);
-      display_player_secrets();
+      if (getNbrSecretsEnabled() < 5) {
+        setSecretAsEnabled(new_id);
+        display_player_secrets();
+      } else {
+        $j(this).addClass("active");
+        display_player_secrets();
+        $j("#nbr-secret-max-list").removeClass("d-none");
+        e.preventDefault();
+      }
     }
   });
 
@@ -423,6 +438,7 @@ $j(document).ready(function () {
       result_clicked = 0;
       toto_clicked = 1;
       setContinueClicked();
+      resetSubmitted();
     }, 500);
   })
 
@@ -579,7 +595,8 @@ $j(document).ready(function () {
   }
 
   setInterval(function () {
-    if ((main_title == 0) && (window.location.pathname != "/secret_project/php/index.php")) {
+    console.log(window.location.pathname + " " + main_title)
+    if ((window.location.pathname != "/secret_project/php/index.php" && window.location.pathname != "/secret_project/php/") && main_title == 0) {
       ConnectCurrPlayer();
     }
 
