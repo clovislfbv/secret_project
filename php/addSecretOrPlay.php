@@ -1,7 +1,7 @@
 <?php
-    include_once("conn.php");
+    // session_start();
+    // include_once("conn.php");
     require_once("helper.php");
-    session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,6 +66,16 @@
                         ?>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link current text-primary disabled" data-toggle="tab">
+                            <p class="nbr_players_ingame text-primary">Nombre de joueurs dans une partie actuellement : 
+                                <?php
+                                    require_once("helper.php");
+                                    echo Helper::count_all_players_ingame();
+                                ?>
+                            </p>
+                        </a>
+                    </li>
                     </ul>
                 </div>
                 <div id="main_title">
@@ -84,8 +94,15 @@
                             <div class="total-secrets">
                                 <h3 class="total_secrets">
                                     <script type="module">
-                                        import { displayNbrTotalSecrets, actionMobileInit } from "../js/helper.js";
+                                        import { disconnectAllPlayers, getCurrentGameSession, getNbrPlayersIngame, killSession, displayNbrTotalSecrets, actionMobileInit } from "../js/helper.js";
                                         actionMobileInit();
+
+                                        disconnectAllPlayers();
+                                        setTimeout(function (){
+                                            if (getCurrentGameSession() && getNbrPlayersIngame() == 0){
+                                                killSession();
+                                            }
+                                        }, 3000);
 
                                         displayNbrTotalSecrets();
                                     </script>

@@ -52,7 +52,6 @@
                 </div>
                 <?php
                     require_once "helper.php";
-                    session_start();
 
                     if (isset($_SESSION["player_id"])){
                         leave_ingame();   

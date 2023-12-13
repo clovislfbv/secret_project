@@ -2,6 +2,17 @@ h3, div {
     text-align: center;
 }
 
+.top {
+    height: 10%;
+    display: flex;
+}
+
+.bottom {
+    display: flex;
+    height: 90%;
+    flex-direction: row;
+}
+
 #mySecret {
     min-height: 12vh;
 }
@@ -47,7 +58,7 @@ body {
 #card-body {
     display: flex;
     justify-content: space-between;
-    flex-flow: row nowrap;
+    flex-flow: column nowrap;
     height: 100%;
 }
 

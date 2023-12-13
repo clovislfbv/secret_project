@@ -904,6 +904,20 @@ export function disconnectPlayer(player_id){
 }
 
 /****** 
+ * déconnecte tous les joueurs en game au cas où si un joueur s'est mal déconnecté
+ * ******/
+export function disconnectAllPlayers(){
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "disconnect_all_players"},
+    error: function (err) {
+      console.log(err);
+    }
+  });
+}
+
+/****** 
  * déconnecte tous les joueurs qui n'ont pas joué ce tour
  * utile car cela déconnecte totalement un joueur qui s'est mal déconnecté et cela reconnecte automatiquement un joueur s'il est en ligne grâce au système de coeur
  * ******/
@@ -1283,7 +1297,7 @@ export function displayLeaderboard() {
     let rank_previous; //variable qui sert à afficher le joueur qui est juste devant le joueur actuel
     let id = currPlayer["id"]; //on récupère l'id du joueur actuel
 
-    for (let i = min; i < max; i++){ 
+    for (let i = min; i < max; i++){ //on parcourt le classement actuel entre le rang minimum et le rang maximum à afficher au joueur dans le 
       if (i < nbr_players){
         if (nbrSecretsNotDiscovered == 0) {
           if (counter < 4) {

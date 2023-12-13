@@ -5,10 +5,8 @@ var $j = jQuery.noConflict();
 var shown = 0;
 
 var LottiePlayer = document.getElementById("myLottie"); //points to the locker animation
-var hidden = 0;
 var author_random_message;
 let result_clicked = 0;
-var toto_clicked = 0;
 var NbrPlayersOnline;
 var main_title = 0;
 
@@ -16,8 +14,6 @@ $j(document).ready(function () {
 
   let save_body = $j("#card-body").html();
   let save_background = 0;
-  let btn_login_clicked = 0;
-  let btn_register_clicked = 0;
   let start_button_clicked = 0;
   let toto_clicked = 0;
   let submit_once = 0;
@@ -79,7 +75,6 @@ $j(document).ready(function () {
 
   window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
     const portrait = e.matches;
-    console.log(screen.orientation.type);
     if (portrait) {
       if (window.location.pathname != "/secret_project/php/get_player.php") {
         $j("#card-body").css({
@@ -134,13 +129,6 @@ $j(document).ready(function () {
       $j(".column-third").data("height", "150px");
     }
   })
-
-  // check_orientation()
-
-
-  // $j(window).on("orientationchange", function(event) {
-  //   check_orientation();
-  // })
 
   $j('#page-selection').on("page", function (event, num) {
     let minimum = (num * 5) - 5;
@@ -205,7 +193,6 @@ $j(document).ready(function () {
         setDateLastLogged(player["id"])
         $j("form[name='secret_form']").attr('action', "addSecretOrPlay.php");
         $j("form[name='secret_form']").submit();
-        //window.location.href = "addSecretOrPlay.php";
       } else {
         player = JSON.parse(getPlayerByNamePassword(name, password));
         console.log(player);
@@ -250,11 +237,6 @@ $j(document).ready(function () {
     }
   })
 
-  // $j("form[name='secret_form']").submit(function (){
-  //   $j("#btn_login").off();
-  //   $j("#btn_login").prop("disabled", true);
-  // })
-
   $j("#btn_register").click(function (e, t) {
     console.log(e, t);
     if (checkSeveralUsernames() != 0) {
@@ -270,7 +252,6 @@ $j(document).ready(function () {
   $j("#btn_secret").on('click', function (event) {
     $j("form[name='secret_form']").attr('action', "create_player.php");
     $j("form[name='secret_form']").submit();
-    // window.location.href = "create_player.php";
   })
 
   $j("form[name='secret_form']").submit(function () {
@@ -414,9 +395,6 @@ $j(document).ready(function () {
       setTimeout(function () {
         setAnimationFinished(1);
         $j("#cadenas").addClass("d-none");
-        /*$j("#main_title").css({
-          "margin-bottom": "13%",
-        })*/
         showSecret();
         start_button_clicked = 1;
         shown = 1;
@@ -486,11 +464,6 @@ $j(document).ready(function () {
       tooOld = null;
     }
     console.log(now);
-    // console.log(getDateGameSessionCreated() + " " + getNbrPlayersIngame() + " " + hasGameBegun());
-
-    // if (tooOld || (getNbrPlayersIngame() <= 1 && hasGameBegun() == 0)) {
-    //   killSession();
-    // } else {
     if (hasGameBegun() == 1){
       e.preventDefault();
       $j("#connModal").modal("show")
@@ -505,9 +478,6 @@ $j(document).ready(function () {
       checkCloseX = 1;
     }
     else { checkCloseX = 0; }
-
-    //console.log(checkCloseX);
-    //console.log(window.closed)
   })
 
   function ConfirmLeave() {
@@ -521,24 +491,10 @@ $j(document).ready(function () {
       }
     }, 3000)
     disconnectPlayer(currPlayer["id"]);
-    // setTimeout(function () {
-    //   NbrPlayersOnline = getNbrPlayersIngame();
-    //   if (NbrPlayersOnline == 0){
-    //     killSession();
-    //   }
-    //   currPlayer = JSON.parse(getcurrPlayer());
-    //   if (currPlayer["logged"] == 0){
-    //     destroySessionVariable();
-    //   }
-    // }, 10000);
   }
 
   function realDisconnect() {
     console.log("real disconnect");
-    // NbrPlayersOnline = getNbrPlayersIngame();
-    // if (NbrPlayersOnline == 1){
-    //   killSession();
-    // }
     leaveInGame();
     let currPlayer = JSON.parse(getcurrPlayer());
     destroySessionVariable();
@@ -548,20 +504,13 @@ $j(document).ready(function () {
   if (window.location.pathname != "/secret_project/php/index.php") {
     var prevKey = "";
     $j(document).keydown(function (e) {
-      /*if (e.key=="F5") {
-        window.onbeforeunload = ConfirmLeave;
-      }*/
       if (e.key.toUpperCase() == "W" && prevKey == "CONTROL") {
         window.onbeforeunload = realDisconnect;
       }
-      /*else if (e.key.toUpperCase() == "R" && prevKey == "CONTROL") {
-        window.onbeforeunload = ConfirmLeave;
-      }*/
       else if (e.key.toUpperCase() == "F4" && (prevKey == "ALT" || prevKey == "CONTROL")) {
         window.onbeforeunload = realDisconnect;
       }
       prevKey = e.key.toUpperCase();
-      //console.log("key:"+prevKey);
     });
   }
 
@@ -583,57 +532,34 @@ $j(document).ready(function () {
         }
       }
     }
-    /*$j(document).keydown(function (e) {
-      currentKey = e.key.toUpperCase();
-    })
-    if (event) {
-      console.log("test");
-      if (checkCloseX == 1 || ((prevKey == "CONTROL" || prevKey == "ALT") && (currentKey != "R" && currentKey != "F5"))){
-        ConfirmLeave();
-      }
-    }*/
   }
 
   setInterval(function () {
     console.log(window.location.pathname + " " + main_title)
-    if ((window.location.pathname != "/secret_project/php/index.php" && window.location.pathname != "/secret_project/php/") && main_title == 0) {
+    if ((window.location.pathname != "/secret_project/php/index.php" && window.location.pathname != "/secret_project/php/" && window.location.pathname != "/secret_project/php/helper.php") && main_title == 0) {
       ConnectCurrPlayer();
+    } 
+
+    if (window.location.pathname == "/secret_project/php/index.php" || window.location.pathname == "/secret_project/php/"){
+      $j(".nbr_players_online").text("Nombre de joueurs en ligne actuellement : " + getNbrPlayersOnline());
     }
 
-    // if (window.location.pathname == "/secret_project/php/index.php" && $j("#btn_login").prop('disabled')){
-    //   success();
-    // }
-
     if (window.location.pathname == "/secret_project/php/get_player.php" && $j("#cadenas").length && !($j("#cadenas").hasClass("d-none")) && $j(".start_game").hasClass("d-none") && hasGameBegun() == 1 && shown == 0 && start_button_clicked == 0) {
-      // console.log("truc secret");
-      // setTimeout(function(){
-      //   if (start_button_clicked == 0 && $j("#cadenas").length && !($j("#cadenas").hasClass("d-none"))){
       console.log("truc secret 2")
       LottiePlayer.setSpeed(1);
       LottiePlayer.play();
       setTimeout(function () {
         setAnimationFinished(1);
         $j("#cadenas").addClass("d-none");
-        /*$j("#main_title").css({
-          "margin-bottom": "13%",
-        })*/
         console.log("test SECRET");
         showSecret();
         shown = 1;
       }, 2500)
-      //  }
-      //}, 3000)
     }
 
-    // if (window.location.pathname == "/secret_project/php/addSecretOrPlay.php" && getNbrSecretsEnabled() > 1) {
-    //   $j("#edits-not-saved").addClass("d-none");
-    //   $j("#edits-not-saved").css({
-    //     "margin-bottom": "0",
-    //   });
-    //   $j(".zone-secrets-enabled").css({
-    //     "margin-bottom": "10%",
-    //   });
-    // }
+    if (window.location.pathname == "/secret_project/php/addSecretOrPlay.php"){
+      $j(".nbr_players_ingame").text("Nombre de joueurs dans une partie actuellement : " + getNbrPlayersIngame());
+    }
 
     if (!($j("#cadenas").hasClass("d-none"))) {
       if (!($j(".start_game").hasClass("d-none"))) {
@@ -666,7 +592,7 @@ $j(document).ready(function () {
     console.log(result_clicked);
     console.log(!($j("#result_btn").hasClass("d-none")));
 
-    if (window.location.pathname == "/secret_project/php/get_player.php" && getStateResultButton() == 1 && result_clicked == 0 && $j("#result_btn").length) {
+    if (window.location.pathname == "/secret_project/php/get_player.php" && shown == 1 && getStateResultButton() == 1 && result_clicked == 0 && $j("#result_btn").length) {
       let currPlayer = JSON.parse(getcurrPlayer());
       updatePlayerContinued(JSON.parse(getcurrPlayer())["id"]);
       resetContinueClicked();
@@ -694,22 +620,16 @@ $j(document).ready(function () {
       }
     }
 
-    console.log(window.location.pathname == "/secret_project/php/result.php" && $j(".continue_button").hasClass("d-none") && getStateContinueButton() == 1 && toto_clicked == 0 && $j(".pressToto").length);
-
     if (window.location.pathname == "/secret_project/php/result.php" && $j(".continue_button").hasClass("d-none") && getStateContinueButton() == 1 && toto_clicked == 0 && $j(".pressToto").length) {
-      setTimeout(function () {
-        unset_secret();
-        if (!($j("#cadenas").hasClass("d-none"))) {
-          $j("#cadenas").addClass("d-none");
-        }
-        result_clicked = 1;
-        toto_clicked = 1;
-        submit_once = 0;
+      unset_secret();
+      if (!($j("#cadenas").hasClass("d-none"))) {
+        $j("#cadenas").addClass("d-none");
+      }
+      result_clicked = 1;
+      toto_clicked = 1;
+      submit_once = 0;
 
-        resetSubmitted();
-        /*let currPlayerId = JSON.parse(getcurrPlayer())["id"];
-        resetPlayedPlayer(currPlayerId);*/
-      }, 500);
+      resetSubmitted();
     }
   }, 1500);
 });

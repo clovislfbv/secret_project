@@ -15,7 +15,7 @@ if (!(isset($_SESSION["player_id"]))){
     echo "test   11 1 11 1 1 1 1 1 1 11 1";
     Helper::create_game_session();
     $request = "UPDATE players SET first_ingame=1 WHERE id=" . $player_id;
-    $conn->query($request);
+    $GLOBALS['conn']->query($request);
   };
   
   $curr_game_session = Helper::get_current_game_session();
@@ -37,22 +37,22 @@ if (!(isset($_SESSION["player_id"]))){
   echo $id_curr_game_session;
   
   $insert_player = "UPDATE players SET id_game_session =" . $id_curr_game_session . ", p_played = 0 WHERE id=" . $player_id;
-  $output = $conn->query($insert_player);
+  $output = $GLOBALS['conn']->query($insert_player);
   echo $output;
   if ($output) {
     $update_secret = "UPDATE mysecret SET discovered = 0, random_choice = 0 WHERE id_player=" . $player_id;
-    $conn->query($update_secret);
+    $GLOBALS['conn']->query($update_secret);
   
     $update_nbr_players = "UPDATE game_session SET nbrplayers = nbrplayers + 1 WHERE id = '" . $id_curr_game_session . "'";
-    $conn->query($update_nbr_players);
+    $GLOBALS['conn']->query($update_nbr_players);
 
     $request = "UPDATE players SET score = 0, submitted = 0 WHERE id= " . $player_id;
-    $conn->query($request);
+    $GLOBALS['conn']->query($request);
 
     Helper::insert_ingame();
   };
   
-  mysqli_close($conn);
+  // mysqli_close($conn);
 }
 
 ?>

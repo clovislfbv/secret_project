@@ -1,3 +1,6 @@
+<?php
+  require_once("helper.php");
+?>
 <!doctype html>
 <html lang="fr">
   <head>
@@ -43,7 +46,13 @@
     <div class="row">
       <div class="card whole_thing border-primary big-box">
         <div class="card-body" id="card-body">
-          <div class="col-6 left">
+          <div class="top"><p class="nbr_players_online text-primary">Nombre de joueurs en ligne actuellement : 
+          <?php
+            echo Helper::count_all_players_online();
+          ?>
+        </p></div>
+        <div class="bottom">
+        <div class="col-6 left">
             <div class="card title border-primary">
               <div class="card-body" id="title" data-toggle="tooltip" data-placement="left" title="Cliquez pour vous déconnecter">
                 <div class="tooltip left" role="tooltip">
@@ -116,6 +125,7 @@
             </div>
           </div>
           </div>
+        </div>
         </div>
       </div>
     </div>
