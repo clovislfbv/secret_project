@@ -82,7 +82,6 @@
                           loading();
 
                           let currPlayer = JSON.parse(getcurrPlayer());
-                          console.log(currPlayer);
                           let currPlayerId = currPlayer["id"];
                           
                           resetPlayedPlayer(currPlayerId);

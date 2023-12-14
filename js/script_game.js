@@ -536,7 +536,7 @@ $j(document).ready(function () {
 
   setInterval(function () {
     console.log(window.location.pathname + " " + main_title)
-    if ((window.location.pathname != "/secret_project/php/index.php" && window.location.pathname != "/secret_project/php/" && window.location.pathname != "/secret_project/php/helper.php") && main_title == 0) {
+    if ((window.location.pathname != "/secret_project/php/index.php" && window.location.pathname != "/secret_project/php/") && main_title == 0) {
       ConnectCurrPlayer();
     } 
 

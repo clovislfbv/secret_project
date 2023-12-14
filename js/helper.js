@@ -141,9 +141,6 @@ export function setDateLastLogged(player_id){
     url: "../php/helper.php",
     data: {action: "set_date_last_logged", p_id: player_id},
     async: false,
-    success: function (success){
-      console.log(success);
-    },
     error: function (err){
       console.log(err);
     }
@@ -221,9 +218,6 @@ export function SaveNamePassword(playerName, password){
     url: "../php/helper.php",
     async: false,
     data: {action: "save_name_password", name: playerName, pass_word: password},
-    success: function(res) {
-      //console.log(res);
-    },
     error: function(err) {
       //console.log(err);
     }
@@ -554,7 +548,6 @@ export function hasArrivedFirst(){
     data: {action: "has_arrived_first"},
     async: false,
     success: function (res){
-      //console.log(res);
       output = res;
     },
     error: function (err){
@@ -1337,8 +1330,6 @@ export function displayLeaderboard() {
         rank++;
       }
   
-      //console.log($j(".comments-leaderboard").html());
-  
       if (rank_previous != null && $j(".comments-leaderboard").html() != "Tu es actuellement au rang " + rank + " au classement actuel avec un score de " + curr_leaderboard[rank-1]["score"] + " points.<br>Tu es juste derrière " + rank_previous["p_name"] + " qui a un score de " + rank_previous["score"] + " points."){
         $j(".comments-leaderboard").html("Tu es actuellement au rang " + rank + " au classement actuel avec un score de " + curr_leaderboard[rank-1]["score"] + " points.<br>Tu es juste derrière " + rank_previous["p_name"] + " qui a un score de " + rank_previous["score"] + " points.");
         first_test = 0;
@@ -1381,7 +1372,6 @@ export function displayLeaderboard() {
         setTimeout( function(){ 
         third.addClass('is-visible');
         var h = third.data('height');
-        //console.log(h);
         third.find('.scoreboard__podium-base').css('height', h).addClass('is-expanding');
           }, time);
         time += 2250;

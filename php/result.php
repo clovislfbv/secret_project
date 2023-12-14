@@ -52,7 +52,6 @@
 
                         setInterval(function(){
                           $j(".current_score").text(JSON.parse(getcurrPlayer())["score"] + " points");
-                          console.log($j(".current_score").text());
                         }, 1500)
                       </script>
                     </a>
@@ -95,7 +94,7 @@
                     $total = Helper::get_nbr_secrets_not_discovered();
 
                     if ($total == 0) {
-                      echo "<script type='module'>import { ConnectCurrPlayer, leaveInGame } from '../js/helper.js';ConnectCurrPlayer();leaveInGame();setTimeout(function(){window.location.href = '../php/addSecretOrPlay.php';}, 120000)</script>";
+                      echo "<script type='module'>import { ConnectCurrPlayer, leaveInGame } from '../js/helper.js';leaveInGame();setTimeout(function(){window.location.href = '../php/addSecretOrPlay.php';}, 120000)</script>";
                       echo "<div class='end card border-primary text-primary'><div class='card-body' id='game-finished-body'><div class='id='end-title'><h2 class='comments'>Jeu terminé !</h2></div><h4 class='comments card-subtitle mb-2 text-muted'>Voici le classement finale !</h4></div></div>";
                       echo "<div class='all_players'><div id='final_leaderboard' class='final_leaderboard text-primary'><div class='card-header leaderboard' style='background-color:black; border: 1px solid #FF550B;'><h1 class='final-leaderboard-title'>classement finale des scores </h1></div><div class='list-group list-group-flush list-players'></div></div><div class='pagination-container pagination-final-leaderboard'><div id='page-selection'></div></div></div>";
                     } else {

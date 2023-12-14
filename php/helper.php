@@ -999,19 +999,25 @@
     }
 
     /******
-     * déconnecte tous les joueurs qui sont connectés au jeu en général lorsque le joueur actuel se connecte
+     * déconnecte tous les joueurs qui sont connectés au jeu en général lorsque le joueur actuel arrive dans la page d'index ou dans la page addSecretOrPlay
+     * l'intérêt de cette fonction est de déconnecter tous les joueurs qui se sont mal déconnecté et de reconnecter automatiquement les joueurs qui sont en ligne grâce au système de coeur
+     * Cela permet que lorsque l'on veut afficher le nombre de joueurs connectés au jeu en général ou en partie, on ne compte pas les joueurs qui se sont mal déconnecté
      * ******/
     public static function disconnect_all_players() {
-        $player_id = Self::get_curr_player()["id"]; //récupère l'identifiant du joueur actuel
-
-        $count_logged = "SELECT COUNT(*) FROM players WHERE logged = 1 AND id != " . $player_id; //récupère le nombre de joueurs connectés au jeu en général
+        $count_logged = "SELECT COUNT(*) FROM players WHERE logged = 1"; //récupère le nombre de joueurs connectés au jeu en général
         $status = $GLOBALS['conn']->query($count_logged)->fetch_array();
 
         $output = 0; //par défaut, on initialise la valeur d'output à faux
 
         if ($status[0] > '0'){ //si il y a au moins un joueur connecté au jeu en général, on les déconnecte tous
-            $disconnect = "UPDATE players SET logged = 0 WHERE logged = 1 AND id != " . $player_id;
-            $output = $GLOBALS['conn']->query($disconnect);
+            $player = Self::get_curr_player(); //récupère toutes les informations du joueur actuel
+            if ($player != null){
+                $disconnect = "UPDATE players SET logged = 0 WHERE logged = 1 AND id != " . $player["id"]; //puis on déconnecte tous les joueurs sauf le joueur actuel s'il est connecté
+                $output = $GLOBALS['conn']->query($disconnect);
+            } else {
+                $disconnect = "UPDATE players SET logged = 0 WHERE logged = 1"; //sinon on déconnecte tous les joueurs
+                $output = $GLOBALS['conn']->query($disconnect);
+            }
         }
 
         return $output; //on retourne si la déconnexion a bien eu lieu ou non

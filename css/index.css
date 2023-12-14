@@ -2,17 +2,6 @@ h3, div {
     text-align: center;
 }
 
-.top {
-    height: 10%;
-    display: flex;
-}
-
-.bottom {
-    display: flex;
-    height: 90%;
-    flex-direction: row;
-}
-
 #mySecret {
     min-height: 12vh;
 }
@@ -58,7 +47,7 @@ body {
 #card-body {
     display: flex;
     justify-content: space-between;
-    flex-flow: column nowrap;
+    flex-flow: row nowrap;
     height: 100%;
 }
 
@@ -105,9 +94,15 @@ body {
     font-size: 4vw;
 }
 
+.nbr_players_online{
+    height: 2%;
+    display: flex;
+    justify-content: flex-end;
+}
+
 .username_input {
     padding-top: 3%;
-    height: 30%;
+    height: 25%;
 }
 
 .secret_input {
@@ -116,7 +111,7 @@ body {
     align-items: stretch;
     padding-top: 5%;
     margin-top: 5%;
-    height: 30%;
+    height: 25%;
 }
 
 .middle {
@@ -196,7 +191,7 @@ form {
 .all_buttons {
     display: flex;
     flex-direction: row;
-    height: 45%;
+    height: 35%;
     justify-content: space-around;
     align-items: center;
 }
