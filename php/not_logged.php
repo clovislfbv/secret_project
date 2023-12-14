@@ -1,3 +1,6 @@
+<?php
+require_once "helper.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,8 +54,6 @@
                     </div>
                 </div>
                 <?php
-                    require_once "helper.php";
-
                     if (isset($_SESSION["player_id"])){
                         leave_ingame();   
                     }

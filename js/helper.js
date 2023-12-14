@@ -1290,7 +1290,7 @@ export function displayLeaderboard() {
     let rank_previous; //variable qui sert à afficher le joueur qui est juste devant le joueur actuel
     let id = currPlayer["id"]; //on récupère l'id du joueur actuel
 
-    for (let i = min; i < max; i++){ //on parcourt le classement actuel entre le rang minimum et le rang maximum à afficher au joueur dans le 
+    for (let i = 0; i < 5; i++){ //on parcourt le classement actuel entre le rang minimum et le rang maximum à afficher au joueur dans le 
       if (i < nbr_players){
         if (nbrSecretsNotDiscovered == 0) {
           if (counter < 4) {
