@@ -20,7 +20,7 @@
     <link rel="stylesheet" type="text/css" href="../css/result.css">
     <script src="../js/jquery.js"></script>
     <script src="../js/jquery-ui.min.js"></script>
-    <script src="../js/jquery.bootpag.js"></script>
+    <script src="../js/jquery.bootpag.min.js"></script>
     <script src="../lottie-player/player/node_modules/@dotlottie/player-component/dist/dotlottie-player.js" type="module"></script>
     <script src="../js/script_game.js" type="module"></script>
   </head>
