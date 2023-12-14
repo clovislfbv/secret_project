@@ -20,7 +20,7 @@
     <link rel="stylesheet" type="text/css" href="../css/result.css">
     <script src="../js/jquery.js"></script>
     <script src="../js/jquery-ui.min.js"></script>
-    <script src="../jquery-bootpag/lib/jquery.bootpag.js"></script>
+    <script src="../js/jquery.bootpag.js"></script>
     <script src="../lottie-player/player/node_modules/@dotlottie/player-component/dist/dotlottie-player.js" type="module"></script>
     <script src="../js/script_game.js" type="module"></script>
   </head>
@@ -95,8 +95,8 @@
 
                     if ($total == 0) {
                       echo "<script type='module'>import { ConnectCurrPlayer, leaveInGame } from '../js/helper.js';leaveInGame();setTimeout(function(){window.location.href = '../php/addSecretOrPlay.php';}, 120000)</script>";
-                      echo "<div class='end card border-primary text-primary'><div class='card-body' id='game-finished-body'><div class='id='end-title'><h2 class='comments'>Jeu terminé !</h2></div><h4 class='comments card-subtitle mb-2 text-muted'>Voici le classement finale !</h4></div></div>";
-                      echo "<div class='all_players'><div id='final_leaderboard' class='final_leaderboard text-primary'><div class='card-header leaderboard' style='background-color:black; border: 1px solid #FF550B;'><h1 class='final-leaderboard-title'>classement finale des scores </h1></div><div class='list-group list-group-flush list-players'></div></div><div class='pagination-container pagination-final-leaderboard'><div id='page-selection'></div></div></div>";
+                      echo "<div class='end card border-primary text-primary'><div class='card-body' id='game-finished-body'><div class='id='end-title'><h2 class='comments'>Jeu terminé !</h2></div><h4 class='comments card-subtitle mb-2 text-muted'>Voici le classement final !</h4></div></div>";
+                      echo "<div class='all_players'><div id='final_leaderboard' class='final_leaderboard text-primary'><div class='card-header leaderboard' style='background-color:black; border: 1px solid #FF550B;'><h1 class='final-leaderboard-title'>classement final des scores </h1></div><div class='list-group list-group-flush list-players'></div></div><div class='pagination-container pagination-final-leaderboard'><div id='page-selection'></div></div></div>";
                     } else {
                       echo "<div class='results border-primary card'><div class='results-card-body card-body'>";
                       
