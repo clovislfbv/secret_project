@@ -234,12 +234,11 @@ body {
 #progress-players {
     height: 20%;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .tartampion {
-    position: absolute;
-    bottom: 0;
     width: 100%;
 }
 
@@ -370,6 +369,7 @@ body {
 /* ------------------------------------LE CSS CUSTOM DE "GUESS_SECRET"------------------------------------------- */
 
 .waiting-players {
+    font-size: 3vh;
     height: 20%;
 }
 
@@ -416,6 +416,7 @@ body {
     font-weight: bold;
     display: flex;
     align-items: center;
+    text-align: justify;
 }
 
 .container-guess-secret .wrapper .container-secret-message .text-secrets {

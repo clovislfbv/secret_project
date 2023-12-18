@@ -47,6 +47,8 @@ La déconnexion d'un joueur fût un de mes plus gros problèmes lorsque j'ai ré
 
 Pour cela, j'ai fait un système de coeur humain pour chacun de mes joueurs. En effet, lorsque le joueur se situe dans l'une des pages du jeu, le joueur va automatiquement envoyer des requêtes chaque seconde à la base de données pour dire qu'il est bien connecté au jeu et qu'il est bien dans une partie ou non. Ce système me permet ainsi qu'à chaque tentative de fermer la page ou de changer de page, le joueur va être déconnecter automatiquement. Ainsi, si le joueur reviens sur l'une des pages du jeu, il sera reconnecté automatiquement grâce à ce système de coeur et déconnecté automatiquement s'il quitte le jeu.
 
+Conseil si vous voulez reprendre ce jeu et l'améliorer : N'UTILISEZ PAS CE SYSTEME DE COEUR !!!! En petit commité, ce jeu fonctionne très bien mais pour des parties à 20 personnes ou plus, ce jeu est injouable. Tout simplement car parfois, sur certaines pages, je déconnecte les autres joueurs inactifs au cas où s'ils se sont mal déconnectés. Or, si 20 personnes se connectent simultanément, cela va tous les faire déconnecter et faire crash le jeu de leur côté par la même occasion. C'est pourquoi, je vous conseille soit d'utiliser un autre système ou alors d'utiliser ce système mais faire des rooms d'une dizaine de personnes et adapter le jeu pour pas qu'il crache
+
 ## Explication des status Logged et Ingame qu'un joueur peut avoir
 Pour que vous comprenez mieux quand les joueurs peuvent avoir ces status, voici un tableau résumant tout les cas possibles.
 
