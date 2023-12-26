@@ -328,6 +328,7 @@ export function updateProgressBar(){
     $j(".progress-bar").text(totalPlayersPlayed2 + "/" + totalPlayersOnline2 + " joueurs");
     
     if (progressbarValue === 100 && $j(".result_button").hasClass("d-none") && hasArrivedFirst() == 1){ //si la barre de progression est à 100% et que le joueur actuel a le rôle "admin", on affiche le bouton résultat
+      $j(".current_admin_description").html("Joueur admin actuel:<br>" + getCurrentAdmin());
       setTimeout(function () {
         $j(".result_button").removeClass("d-none");
         $j("#progress-players").addClass("d-none");
@@ -533,6 +534,27 @@ export function getCurrentGameSession(){
       console.log(err);
     }
   })
+
+  return game_session;
+}
+
+export function getCurrentAdmin(){
+  let current_admin;
+
+  jQuery.ajax({
+    type: "POST",
+    url: "../php/helper.php",
+    data: {action: "get_current_admin"},
+    async: false,
+    success: function (res){
+      current_admin = res
+    },
+    error: function(err){
+      console.log(err);
+    }
+  })
+
+  return current_admin;
 }
 
 /******
@@ -578,6 +600,11 @@ export function loading(){
         if (total_players_logged < 2) {
           if (!($j(".secret_and_progress").hasClass("d-none"))){ //Si un secret était déjà affiché, on set la variable set à 1, ce qui nous permettra d'afficher à nouveau le cadenas si le nombre de joueur revient à 2 ou plus
             save = 1;
+          }
+
+          if (getCurrentAdmin() != getcurrPlayer()["p_name"]){
+            hasArrivedFirst();
+            $j(".current_admin_description").html("Joueur admin actuel:<br>" + getCurrentAdmin());
           }
 
           shown = 0; //ensuite on set la variable shown à zéro qui nous permet de cacher le secret actuel pendant que le cadenas est affiché
@@ -676,6 +703,7 @@ export function loading(){
             $j(".start_game").addClass("d-none");
             $j(".waiting-admin").removeClass("d-none");
           }
+          $j(".current_admin_description").html("Joueur admin actuel:<br>" + getCurrentAdmin());
         }
       }
       $j(".waiting-players").addClass("d-none"); //une fois que tous ces cas ont été fait, on cache tout au joueur pour laisser de la place au secret qui va s'afficher
@@ -877,6 +905,7 @@ export function getNbrPlayersContinued(){
  * ******/
 export function displayContinueButton(){
   if (hasArrivedFirst() == 1){
+    $j(".current_admin_description").html("Joueur admin actuel:<br>" + getCurrentAdmin());
     $j(".continue_button").removeClass("d-none");
     $j(".wait4result").addClass("d-none");
   }
@@ -1708,11 +1737,11 @@ export function displayAllPlayersOnline(){
             
               if (all_players_disconnected_2[index]["id"] == element["id"]){
                 if (!($j("#"+element["p_name"]+"-"+element["id"]).hasClass("d-none"))){
+                  $j(".current_admin_description").html("Joueur admin actuel:<br>" + getCurrentAdmin());
                   console.log(element["p_name"]+"-"+element["id"]);
                   $j("#"+element["p_name"]+"-"+element["id"]).addClass("d-none");
 
                   if (changed == 1 && value.length > 1 && ((value[1] == element["p_name"] && value[2] == element["id"]) || (author["p_name"] == element["p_name"] && author["id"] == element["id"]))){
-                  
                       changed = 0;
                       getAuthorRandomSecret();
                       $j(".secret_id_played").val($j(".secret_id_played").val().replace("-"+value[1]+"-"+value[2], ""));
@@ -1728,13 +1757,6 @@ export function displayAllPlayersOnline(){
                       $j("#droppable-player").addClass("normal text-primary");
                       $j("#"+value[1]+"-"+value[2]).draggable({revert : true})
                   }
-                    /*else {
-                    $j("#"+value[1]+"-"+value[2]).position({
-                      my: "center",
-                      at: "center",
-                      of: $j("#"+value[1]+"-"+value[2]),
-                    });
-                  }*/
                 }
               }
             }

@@ -16,6 +16,9 @@ if (!(isset($_SESSION["player_id"]))){
     Helper::create_game_session();
     $request = "UPDATE players SET first_ingame=1 WHERE id=" . $player_id;
     $GLOBALS['conn']->query($request);
+
+    $request = "UPDATE game_session SET current_admin=" . $player_id . " WHERE id=" . Helper::get_current_game_session()["id"];
+    $GLOBALS['conn']->query($request);
   };
   
   $curr_game_session = Helper::get_current_game_session();

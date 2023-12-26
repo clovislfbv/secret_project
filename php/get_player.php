@@ -1,31 +1,44 @@
 <?php
-  session_start();
-  require_once("helper.php");
+session_start();
+require_once("helper.php");
 
-  if (!(isset($_SESSION["player_id"])) || !(Helper::is_ingame())){
-    echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
-  }
+if (!(isset($_SESSION["player_id"])) || !(Helper::is_ingame())) {
+  echo "<meta http-equiv = 'refresh' content='0; not_logged.php'>";
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="utf-8" /> 
-    <title>Secret Transfo Numérique</title>
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../css/jquery-ui.structure.css">
-    <link rel="stylesheet" type="text/css" href="../css/jquery-ui.theme.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <link rel="stylesheet" type="text/css" href="../css/theme.css">
-    <link rel="stylesheet" type="text/css" href="../css/get_player.css">
-    <script src="../js/jquery.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-    <script src="../js/bootstrap/bootstrap.js"></script>
-    <script src="../lottie-player/player/node_modules/@dotlottie/player-component/dist/dotlottie-player.js" type="module"></script> 
-    <script src="../js/script_game.js" type="module" type="text/javascript"></script>
-  </head>
-  <body>
-    <div class="container">
-      <div class="row">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Secret Transfo Numérique</title>
+  <link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="../css/jquery-ui.structure.css">
+  <link rel="stylesheet" type="text/css" href="../css/jquery-ui.theme.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <link rel="stylesheet" type="text/css" href="../css/theme.css">
+  <link rel="stylesheet" type="text/css" href="../css/get_player.css">
+  <script src="../js/jquery.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+  <script src="../js/bootstrap/bootstrap.js"></script>
+  <script src="../lottie-player/player/node_modules/@dotlottie/player-component/dist/dotlottie-player.js" type="module"></script>
+  <script src="../js/script_game.js" type="module" type="text/javascript"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="whole_and_current_admin">
+        <div class="card current_admin border-primary text-primary">
+          <div class="card-body" id="current_admin">
+            <h5 class="current_admin_description">
+              Joueur admin actuel:<br>
+              <?php
+                echo Helper::get_current_admin();
+              ?>
+            </h5>
+          </div>
+        </div>
         <div class="card whole_thing border-primary big-box">
           <div class="card-body" id="card-body">
             <div class="top">
@@ -39,20 +52,20 @@
                           <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"></path>
                         </svg>
                       </span>
-                      <?php 
-                        if (isset($_SESSION["username"])){
-                          echo $_SESSION["username"];
-                        };
+                      <?php
+                      if (isset($_SESSION["username"])) {
+                        echo $_SESSION["username"];
+                      };
                       ?>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link current_score text-primary disabled" href="#" data-toggle="tab">
                       <?php
-                        require_once("helper.php");
-                        if (isset($_SESSION["player_id"])){
-                          echo Helper::get_curr_player()["score"] . " points";
-                        };
+                      require_once("helper.php");
+                      if (isset($_SESSION["player_id"])) {
+                        echo Helper::get_curr_player()["score"] . " points";
+                      };
                       ?>
                     </a>
                   </li>
@@ -64,7 +77,7 @@
             </div>
             <div class="body-main">
               <div class="col-6 left">
-                <h5 class="list-players-comments text-primary">liste des joueurs connectés</h5> 
+                <h5 class="list-players-comments text-primary">liste des joueurs connectés</h5>
                 <div id="all_players">
                   <div class="players card border-primary text-primary" id="draggable-player">
                     <div class='card-body' id="body-card">
@@ -74,7 +87,18 @@
                       </div>
                       <div class='players-list'>
                         <script type="module">
-                          import { displayAllPlayersOnline, resetPlayedPlayer, resetPlayerContinued, loading, getcurrPlayer, disconnectPlayer, getNbrPlayersIngame, actionMobileInit, resetResultClicked, resetContinueClicked} from "../js/helper.js"
+                          import {
+                            displayAllPlayersOnline,
+                            resetPlayedPlayer,
+                            resetPlayerContinued,
+                            loading,
+                            getcurrPlayer,
+                            disconnectPlayer,
+                            getNbrPlayersIngame,
+                            actionMobileInit,
+                            resetResultClicked,
+                            resetContinueClicked
+                          } from "../js/helper.js"
                           var $j = jQuery.noConflict();
 
                           actionMobileInit();
@@ -83,7 +107,7 @@
 
                           let currPlayer = JSON.parse(getcurrPlayer());
                           let currPlayerId = currPlayer["id"];
-                          
+
                           resetPlayedPlayer(currPlayerId);
                           resetPlayerContinued(currPlayerId);
                           resetResultClicked();
@@ -120,7 +144,7 @@
                             </div>
                           </div>
                         </div>
-                        <div id="droppable-player" class="guess_secret droppable-player ui-widget-header text-primary normal border-primary">       
+                        <div id="droppable-player" class="guess_secret droppable-player ui-widget-header text-primary normal border-primary">
                           <h5>
                             Drag-drop ici la personne qui aurait écrit ce secret selon toi
                           </h5>
@@ -154,5 +178,7 @@
         </div>
       </div>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>

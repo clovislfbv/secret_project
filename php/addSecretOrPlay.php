@@ -79,7 +79,7 @@
                     </ul>
                 </div>
                 <div id="main_title">
-                    <h1><a href="index.php" class="main_title text-primary">Discover my secret</a></h1>
+                    <h1 id="title"><a href="index.php" class="main_title text-primary">Discover my secret</a></h1>
                 </div>
                 </div>
                 <div class="body-main">

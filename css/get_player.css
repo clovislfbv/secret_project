@@ -58,18 +58,8 @@ body {
 }
 
 .whole_thing {
-    height: 80%;
-    min-width: 100%;
-    max-width: 100%;
+    width: 85%;
 }
-
-/* .container {
-    position: absolute;
-    left: 15%;
-    top: 15%;
-    width: 80%;
-    height: 100%;
-} */
 
 .start_game {
     padding-top: 20px; 
@@ -81,7 +71,6 @@ body {
 }
 
 .players-list {
-    /*width: inherit;*/
     display: flex;
     flex-wrap: wrap;
 }
@@ -168,7 +157,7 @@ body {
     justify-content: space-between;
     flex-direction: column;
     height: 80vh;
-    width: 60vw;
+    width: 100%;
 }
 
 #all_players {
@@ -213,6 +202,18 @@ body {
     justify-content: center;
 }
 
+.current_admin {
+    width: 15%;
+}
+
+#current_admin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #000;
+}
+
 .current_player_comments {
     padding : 10px;
 }
@@ -222,8 +223,8 @@ body {
     text-align: center;
     display: flex;
     justify-content: center;
-    align-items: center;
-    font-size: 2.5vh;
+    align-items: flex-end;
+    font-size: calc(2.5vh + 0.25vw);
 }
 
 .current {
@@ -566,4 +567,9 @@ body {
 
 .question-guess {
     width: 50%;
+}
+
+.whole_and_current_admin {
+    display: flex;
+    flex-direction: row;
 }

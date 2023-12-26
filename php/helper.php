@@ -63,7 +63,7 @@
                 break;
     
             case "get_player_by_id":
-                Helper::get_player_by_id();
+                Helper::get_player_by_id_js();
                 break;
     
             case "reset_played_player":
@@ -216,6 +216,10 @@
     
             case "get_current_game_session":
                 Helper::get_current_game_session();
+                break;
+            
+            case "get_current_admin":
+                Helper::get_current_admin_js();
                 break;
     
             case "set_result_clicked":
@@ -734,17 +738,21 @@
 
     /****** 
      * Récupère toutes les informations de n'importe quel joueur grâce à son identfiant
-     * valeur d'output: une array php encodé en json
-     * 
-     * Adapté à la requête ajax de cette fonction
+     * valeur d'output: une array php
      * ******/
-    public static function get_player_by_id() {
-
-
-        $identifiant = $_POST["id"]; //on récupère l'identifiant du joueur donné en argument de la requête
-
+    public static function get_player_by_id($identifiant) {
         $request = "SELECT * FROM players WHERE id=" . $identifiant;
-        echo json_encode($GLOBALS['conn']->query($request)->fetch_array()); //on récupère toutes les informations du joueur correspndant, on les ajoute dans une array php et on retourne cette array encodé en json
+        return $GLOBALS['conn']->query($request)->fetch_array(); //on récupère toutes les informations du joueur correspndant, on les ajoute dans une array php et on retourne cette array encodé en json
+    }
+
+    /****** 
+     * Fait la même chose que la fonction get_player_by_id mais est adapté à la requête ajax de cette fonction
+     * ******/
+    public static function get_player_by_id_js(){
+        $identifiant = $_POST["id"];
+        
+        $player = Self::get_player_by_id($identifiant);
+        echo json_encode($player);
     }
 
     /******
@@ -1051,7 +1059,7 @@
      * Fait la même chose que la fonction disconnect_all_players_inactive mais est adapté pour les requêtes ajax
      * *******/
     public static function disconnect_all_players_inactive_js(){
-        $disconnect = disconnect_all_players_inactive();
+        $disconnect = Self::disconnect_all_players_inactive();
         echo $disconnect;
     }
 
@@ -1256,31 +1264,43 @@
      * Adapté pour la requête ajax de cette fonction
      * ******/
     public static function has_arrived_first(){
-
-
         $player = Self::get_curr_player(); //récupère les informations sur le joueur actuel
-        $id_curr_game_session = Self::get_current_game_session()["id"]; //récupère l'id de la session de jeu
 
-        $request = "SELECT COUNT(*) FROM players WHERE first_ingame=1 AND ingame=1 AND logged = 1 AND id_game_session='" . $id_curr_game_session . "'";
-        $output = $GLOBALS['conn']->query($request)->fetch_array()[0]; //récupère le nombre de personnes qui ont le role admin pour la base de donnes
+        $request = "SELECT current_admin FROM game_session WHERE isalive = 1";
+        $output = $GLOBALS['conn']->query($request)->fetch_array()[0]; //récupère la valeur de l'id du joueur qui a le role admin
 
-        if ($output == "0"){ //s'il y a aucune personnes qui a ce role, on mets tous le monde sans ce role pour etre sûr que vraiment personne ne l'a, puis on attribue le role a une personne au hasard
-            $reset_everyone = "UPDATE players SET first_ingame = 0";
+        if ($output == "0" || $output == "NULL"){ //s'il y a aucune personnes qui a ce role, on mets tous le monde sans ce role pour etre sûr que vraiment personne ne l'a, puis on attribue le role a une personne au hasard
+            $reset_everyone = "UPDATE players SET first_ingame = 0"; //le joueur qui exécute cette fonction est censé être en partie donc on n'a pas besoin de vérifier l'id de la session de jeu actuelle
             $GLOBALS['conn']->query($reset_everyone); //enleve le role admin de toutes les personnes de la base de données
 
-            $request = "UPDATE players SET first_ingame=1 WHERE id=" . $player["id"];
+            $request = "UPDATE players SET first_ingame=1 WHERE id=" . $player["id"]; //comme la personne qui demande 
             $output = $GLOBALS['conn']->query($request)->fetch_array()[0]; //attribue le role admin a une personne au hasard
+
+            $request = "UPDATE game_session SET current_admin = '" . $output .  "' WHERE isalive = 1";
+            $GLOBALS["conn"]->query($request);
+
             echo $output; //puis on retourne le role actuel de la personne
-        } else if ($output != "1"){ //s'il y a plus d'une personne avec ce role et que le joueur actuel a ce role, on retire le role admin du joueur actuel
-            $reset_someone = "UPDATE players SET first_ingame = 0 WHERE first_ingame = 1 AND ingame = 1 AND logged=1 AND id_game_session ='" . $id_curr_game_session . "' ORDER BY RAND() LIMIT 1";
-            $output = $GLOBALS['conn']->query($reset_someone); //enleve le role admin du joueur actuel
-
-            $status_curr = "SELECT first_ingame FROM players WHERE id=" . $player["id"];
-            $output = $GLOBALS['conn']->query($status_curr); //recupère le role du joueur actuel
-
-            echo $output; //retourne l'état du joueur actuel
         } else {
-            echo $player["first_ingame"]; //si une seule personne a le role admin, on ne fait rien et on retourne le role du joueur actuel car il peut avoir le role admin ou alors rien du tout
+            $check_player = Self::get_player_by_id($output);
+            if ($check_player["ingame"] == "1"){
+                if ($output == $player["id"]){
+                    echo 1; //si l'id retourné est celui du joueur actuel, on retourne uniquement 1 car on a déjà modifié ses données en db donc pas besoin de le faire une seconde fois
+                } else {
+                    $request = "UPDATE players SET first_ingame = 0 WHERE id=" . $player["id"]; //Si l'id retourné n'est pas égale à celui du joueur actuel, on le modifie en db au cas où si ce n'est pas déjà fait
+                    echo 0;
+                }
+            } else {
+                $reset_everyone = "UPDATE players SET first_ingame = 0"; //le joueur qui exécute cette fonction est censé être en partie donc on n'a pas besoin de vérifier l'id de la session de jeu actuelle
+                $GLOBALS['conn']->query($reset_everyone); //enleve le role admin de toutes les personnes de la base de données
+
+                $request = "UPDATE players SET first_ingame=1 WHERE id=" . $player["id"]; //comme la personne qui demande est censé être en partie
+                $output = $GLOBALS['conn']->query($request); //on lui attribue le role admin a une personne au hasard
+
+                $request = "UPDATE game_session set current_admin = '" . $player["id"] . "' WHERE isalive=1";
+                $GLOBALS["conn"]->query($request); //on modifie l'admin actuel du côté de la session de jeu
+                var_dump($output);
+                echo $output; //puis on retourne le role actuel de la personne
+            }
         }
     }
 
@@ -1290,8 +1310,6 @@
      * valeur d'output: aucune
      * ******/
     public static function start_game(){
-
-
         $id_curr_game_session = Self::get_current_game_session()["id"]; //récupère l'id de la session de jeu actuel
         $request = "UPDATE game_session SET hasgamebegun = 1 WHERE id=" . $id_curr_game_session;
         $GLOBALS['conn']->query($request); //met à jour l'état de la partie en base de données
@@ -1362,6 +1380,19 @@
         $GLOBALS['conn']->query($request);
     }
 
+    public static function get_current_admin(){
+        $id_curr_game_session = Self::get_current_game_session()["id"];
+        $request = "SELECT current_admin FROM game_session WHERE id=" . $id_curr_game_session;
+        $output = $GLOBALS['conn']->query($request)->fetch_array();
+
+        return Self::get_player_by_id($output[0])["p_name"];
+    }
+
+    public static function get_current_admin_js(){
+        $admin = Self::get_current_admin();
+        echo $admin;
+    }
+
     /****** 
      * termine la session de jeu de façon temporaire
      * ******/
@@ -1396,7 +1427,7 @@
      * fais la même chose que kill_session() mais est adapté pour la requête ajax
      * ******/
     public static function kill_session_js(){
-        $session_killed = kill_session();
+        $session_killed = Self::kill_session();
         echo $session_killed;
     }
 
