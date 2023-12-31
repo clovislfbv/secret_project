@@ -1,0 +1,14 @@
+on: [push]
+name: Linux_Container_Workflow
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        steps:
+        # checkout the repo
+        - name: 'Checkout GitHub Action'
+          uses: actions/checkout@main
+
+        - name: Build Docker image
+          run: |
+            docker-compose up -d
