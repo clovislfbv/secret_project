@@ -11,6 +11,10 @@ var min = 0; //min pour le leeaderboard
 var max = 5; //max pour le leaderboard
 var animation_finished = 0;
 var start_time = 0; //récupère la date et l'heure à laquelle le secret a été montré au joueur actuel
+var special_chars;
+  getFileContent('../special-chars.txt').then(array => {
+    special_chars = array;
+  })
 /******************************
  * Fin des variables globales
  * ***************************/
@@ -62,6 +66,18 @@ export function ConnectCurrPlayer() {
   });
 }
 
+export function getFileContent(filename) {
+  return fetch(filename)
+    .then(response => response.text())
+    .then(data => {
+      // Here's the content of the file
+      return data.split('\n');
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
 /****** 
  * Détruis toutes les variables sessions stockés sur le navigateur afin que le joueur ne puisse plus les accéder lorsqu'il se déconnecte
  * ******/
@@ -80,11 +96,11 @@ export function checkPlayerExist(){
   let doesPlayerExist; //un booleen qui sert d'output pour cette fonction
 
   let usernameToCheck = $j("#username").val(); //récupère le nom d'utilisateur que le joueur a renseigné dans le champ 'username' dans '../php/index.php'
-  let passwordToCheck = $j("#password").val(); //récupère le mot de passe que le joueur a renseigné dans le champ 'password' dans '../php/index.php'
+  //let passwordToCheck = $j("#password").val(); récupère le mot de passe que le joueur a renseigné dans le champ 'password' dans '../php/index.php'
   jQuery.ajax({
     type:"POST",
     url: "../php/helper.php",
-    data: {action: "check_player_exist", username: usernameToCheck, password: passwordToCheck},
+    data: {action: "check_player_exist", username: usernameToCheck}, //, password: passwordToCheck},
     async: false,
     success: function (res){
       doesPlayerExist = res;
@@ -207,6 +223,16 @@ export function getPlayerByNamePassword(playerName, password){
     }
   })
   return player;
+}
+
+export function hasSpecialChar(str) {
+  let invalid_username = 0;
+  for (let i = 0; i < special_chars.length; i++) {
+    if (str.includes(special_chars[i])) {
+      invalid_username = 1;
+    }
+  }
+  return invalid_username;
 }
 
 /******
@@ -1671,12 +1697,10 @@ export function displayAllPlayersOnline(){
           "justify-content": "normal",
           "align-items": "normal",
         })
-        // $j(".players-list").html("<ul class='players-list-ul'></ul>")
         all_players_logged.forEach(function(element){
           if (!(element["id"] in already_displayed)){
             already_displayed[element["id"]] = element["p_name"];
             if (element["id"] == JSON.parse(getcurrPlayer())["id"]){
-              //document.getElementsByClassName("players-list-ul")[0].innerHTML += "<li><div class='btn player ui-widget-content " + colors[index_colors] + "' id='" + element.p_name + "-" + element["id"] + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'/><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'/></svg>"+"<nbsp>"+ " " +"<b>"+element.p_name+"</b></nbsp></div></li>";
               document.getElementsByClassName("players-list")[0].innerHTML += "<div class='btn player ui-widget-content " + colors[index_colors] + "' id='" + element.p_name + "-" + element["id"] + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'/><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'/></svg>"+"<nbsp>"+ " " +"<b>"+element.p_name+"</b></nbsp></div>";
             } else {
               document.getElementsByClassName("players-list")[0].innerHTML += "<div class='btn player ui-widget-content " + colors[index_colors] + "' id='" + element.p_name + "-" + element["id"] + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-circle' viewBox='0 0 16 16'><path d='M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'/><path fill-rule='evenodd' d='M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z'/></svg>"+"<nbsp>"+ " " +element.p_name+"</nbsp></div>";
@@ -1728,14 +1752,14 @@ export function displayAllPlayersOnline(){
 
       let all_players_disconnected = JSON.parse(getAllPlayersDisconnected());
       all_players_disconnected.forEach(function(element){
-        if ($j("#"+element["p_name"]+"-"+element["id"]).length > 0){
+        if (!hasSpecialChar(element["p_name"]) && $j("#"+element["p_name"]+"-"+element["id"]).length > 0){
           setTimeout(function(){
             let all_players_disconnected_2 = JSON.parse(getAllPlayersDisconnected());
             let index;
             for (index = all_players_disconnected_2.length-1; index > 0 && element["id"] <= all_players_disconnected_2[index]["id"]; index--){
               console.log(all_players_disconnected_2[index]);
             
-              if (all_players_disconnected_2[index]["id"] == element["id"]){
+              if (!hasSpecialChar(element["p_name"]) && all_players_disconnected_2[index]["id"] == element["id"]){
                 if (!($j("#"+element["p_name"]+"-"+element["id"]).hasClass("d-none"))){
                   $j(".current_admin_description").html("Joueur admin actuel:<br>" + getCurrentAdmin());
                   console.log(element["p_name"]+"-"+element["id"]);

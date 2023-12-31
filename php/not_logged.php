@@ -2,7 +2,7 @@
 require_once "helper.php";
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,7 +55,7 @@ require_once "helper.php";
                 </div>
                 <?php
                     if (isset($_SESSION["player_id"])){
-                        leave_ingame();   
+                        Helper::leave_ingame();   
                     }
                 ?>
                 <script type="module">

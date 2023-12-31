@@ -1,4 +1,4 @@
-import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated, getPlayerByNamePassword, getNbrPlayersIngame, getDateLastLogged, setDateLastLogged, OverlayOn, OverlayOff, SaveNamePassword, getCurrentGameSession, getStateContinueButton, getStateResultButton, resetResultClicked, setContinueClicked, setResultClicked, resetContinueClicked, getStateSubmitted, setSubmitted, resetSubmitted } from "./helper.js";
+import { updatePlayerWhenPlayed, updatePlayerWhenClicked, chooseRandomSecret, updatePlayerContinued, getcurrPlayer, unsetNewRandomSecret, disconnectPlayer, getAuthorRandomSecret, updateScore, hasGameBegun, decodeSecret, showSecret, setAnimationFinished, getNbrPlayersOnline, resetPlayedPlayer, setMinMax, getLeaderboard, startGame, getNbrPlayersContinued, ConnectCurrPlayer, destroySessionVariable, setMessageAsDiscovered, killSession, getNbrMessagesDiscovered, getNbrSecretsNotDiscovered, checkSeveralUsernames, checkPlayerExist, addNewSecret, getAllSecretsStored, checkSecretAlreadyStored, setSecretAsEnabled, setSecretAsDisabled, deleteSecret, getNbrTotalSecrets, getNbrSecretsEnabled, leaveInGame, getDateGameSessionCreated, getPlayerByNamePassword, getNbrPlayersIngame, getDateLastLogged, setDateLastLogged, OverlayOn, OverlayOff, SaveNamePassword, getCurrentGameSession, getStateContinueButton, getStateResultButton, resetResultClicked, setContinueClicked, setResultClicked, resetContinueClicked, getStateSubmitted, setSubmitted, resetSubmitted, hasSpecialChar } from "./helper.js";
 
 var $j = jQuery.noConflict();
 
@@ -11,7 +11,6 @@ var NbrPlayersOnline;
 var main_title = 0;
 
 $j(document).ready(function () {
-
   let save_body = $j("#card-body").html();
   let save_background = 0;
   let start_button_clicked = 0;
@@ -165,7 +164,7 @@ $j(document).ready(function () {
 
     let id_chosen_player = $j(".secret_id_played").val().split("-")[2];
     console.log(id_chosen_player, author_random_message["id"], currPlayer["id"], currPlayer["time_spent"]);
-    if (getStateSubmitted() == 0){
+    if (getStateSubmitted() == 0) {
       updateScore(id_chosen_player, author_random_message["id"], currPlayer["id"], currPlayer["time_spent"] / 1000);
       setSubmitted();
     }
@@ -182,51 +181,61 @@ $j(document).ready(function () {
     if (checkPlayerExist() != 0) {
       let name = $j("#username").val();
       let password = $j("#password").val();
-      var player = JSON.parse(getPlayerByNamePassword(name, password));
-      console.log(player["date_last_logged"])
-      if (player["logged"] == 0) {
-        let second_player = getcurrPlayer();
-        if (second_player != null) {
-          disconnectPlayer(JSON.parse(second_player));
-          destroySessionVariable();
-        }
-        setDateLastLogged(player["id"])
-        $j("form[name='secret_form']").attr('action', "addSecretOrPlay.php");
-        $j("form[name='secret_form']").submit();
+      if (hasSpecialChar(name)) {
+        $j("#connModal").modal("show")
+        $j(".modal-title").text("Erreur de connexion")
+        $j("#modal-body").text("Vous ne pouvez plus accéder à ce compte car il contient des caractères spéciaux.")
+        e.preventDefault();
       } else {
-        player = JSON.parse(getPlayerByNamePassword(name, password));
+        var player = getPlayerByNamePassword(name, password);
         console.log(player);
-        disconnectPlayer(player["id"]);
-        console.log("COUUUUUUCOUUUUUUU");
-
-        console.log(name, password)
-
-        OverlayOn();
-        setTimeout(function () {
-          player = JSON.parse(getPlayerByNamePassword(name, password))
-          console.log(player);
-          if (player["logged"] == 1) {
-            e.preventDefault();
-            console.log("already_logged")
-            OverlayOff();
-            $j("#connModal").modal("show")
-            $j(".modal-title").text("Erreur de connexion")
-            $j("#modal-body").text("Cet utilisateur est déjà connecté au jeu")
-          } else {
-            e.preventDefault();
+        if (player != 0) {
+          player = JSON.parse(player);
+          if (player["logged"] == 0) {
+            let second_player = getcurrPlayer();
+            if (second_player != null) {
+              disconnectPlayer(JSON.parse(second_player));
+              destroySessionVariable();
+            }
             setDateLastLogged(player["id"])
-            OverlayOff();
-            console.log(name);
-            console.log(password);
-            SaveNamePassword(name, password);
             $j("form[name='secret_form']").attr('action', "addSecretOrPlay.php");
             $j("form[name='secret_form']").submit();
-            window.location.href = "addSecretOrPlay.php";
-            console.log("logging");
+          } else {
+            player = JSON.parse(getPlayerByNamePassword(name, password));
+            console.log(player);
+            disconnectPlayer(player["id"]);
+
+            OverlayOn();
+            setTimeout(function () {
+              player = JSON.parse(getPlayerByNamePassword(name, password))
+              console.log(player);
+              if (player["logged"] == 1) {
+                e.preventDefault();
+                OverlayOff();
+                $j("#connModal").modal("show")
+                $j(".modal-title").text("Erreur de connexion")
+                $j("#modal-body").text("Cet utilisateur est déjà connecté au jeu")
+              } else {
+                e.preventDefault();
+                setDateLastLogged(player["id"])
+                OverlayOff();
+                SaveNamePassword(name, password);
+                $j("form[name='secret_form']").attr('action', "addSecretOrPlay.php");
+                $j("form[name='secret_form']").submit();
+                window.location.href = "addSecretOrPlay.php";
+                console.log("logging");
+              }
+            }, 2000)
+            if (player["logged"] == 1) {
+              e.preventDefault();
+            }
           }
-        }, 2000)
-        if (player["logged"] == 1) {
+        } else {
+          $j("#connModal").modal("show")
+          $j(".modal-title").text("Erreur de connexion")
+          $j("#modal-body").text("Nom d'utilisateur ou mot de passe incorrect.")
           e.preventDefault();
+
         }
       }
     } else {
@@ -239,13 +248,22 @@ $j(document).ready(function () {
 
   $j("#btn_register").click(function (e, t) {
     console.log(e, t);
-    if (checkSeveralUsernames() != 0) {
+    let username = $j("#username").val();
+    let valid_username = hasSpecialChar(username);
+    if (valid_username) {
       $j("#connModal").modal("show")
       $j(".modal-title").text("Erreur de connexion")
-      $j("#modal-body").text("Un utilisateur possède déjà ce nom.")
+      $j("#modal-body").text("Le nom d'utilisateur ne peut contenir que des chffres et des lettres.")
       e.preventDefault();
     } else {
-      $j("#secret_modal").modal("show");
+      if (checkSeveralUsernames() != 0) {
+        $j("#connModal").modal("show")
+        $j(".modal-title").text("Erreur de connexion")
+        $j("#modal-body").text("Un utilisateur possède déjà ce nom.")
+        e.preventDefault();
+      } else {
+        $j("#secret_modal").modal("show");
+      }
     }
   })
 
@@ -268,7 +286,7 @@ $j(document).ready(function () {
       e.preventDefault();
       $j("#secret-already-saved").removeClass("d-none");
     } else {
-      if (getNbrSecretsEnabled() < 5){
+      if (getNbrSecretsEnabled() < 5) {
         if (addNewSecret()) {
           $j("#mySecret").val("");
           $j("#add_secret_modal").modal("hide");
@@ -283,7 +301,7 @@ $j(document).ready(function () {
         e.preventDefault();
         $j("#nbr-secret-max").removeClass("d-none");
       }
-    } 
+    }
   });
 
   function display_player_secrets() {
@@ -464,7 +482,7 @@ $j(document).ready(function () {
       tooOld = null;
     }
     console.log(now);
-    if (hasGameBegun() == 1){
+    if (hasGameBegun() == 1) {
       e.preventDefault();
       $j("#connModal").modal("show")
       $j(".modal-title").text("Erreur d'insertion de joueur")
@@ -538,9 +556,9 @@ $j(document).ready(function () {
     console.log(window.location.pathname + " " + main_title)
     if ((window.location.pathname != "/secret_project/php/index.php" && window.location.pathname != "/secret_project/php/") && main_title == 0) {
       ConnectCurrPlayer();
-    } 
+    }
 
-    if (window.location.pathname == "/secret_project/php/index.php" || window.location.pathname == "/secret_project/php/"){
+    if (window.location.pathname == "/secret_project/php/index.php" || window.location.pathname == "/secret_project/php/") {
       $j(".nbr_players_online").text("Nombre de joueurs en ligne actuellement : " + getNbrPlayersOnline());
     }
 
@@ -557,7 +575,7 @@ $j(document).ready(function () {
       }, 2500)
     }
 
-    if (window.location.pathname == "/secret_project/php/addSecretOrPlay.php"){
+    if (window.location.pathname == "/secret_project/php/addSecretOrPlay.php") {
       $j(".nbr_players_ingame").text("Nombre de joueurs dans une partie actuellement : " + getNbrPlayersIngame());
     }
 

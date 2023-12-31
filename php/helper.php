@@ -278,9 +278,9 @@
  // on include conn.php pour récupèrer la variable $GLOBALS['conn'] qui va permettre de nous connecter à notre base de données et y faire des requêtes
 
         $username_to_check = addslashes($_POST["username"]); // on récupère le nom d'utilisateur puis on lui ajoute des slashes pour éviter les injections sql
-        $password_to_check = md5($_POST["password"]); // on récupère le mot de passe et on le hache
+        //$password_to_check = md5($_POST["password"]); // on récupère le mot de passe et on le hache
 
-        $request = "SELECT COUNT(*) FROM players WHERE p_name='" . $username_to_check . "' AND p_password='" . $password_to_check . "'";
+        $request = "SELECT COUNT(*) FROM players WHERE p_name='" . $username_to_check . "'"; //. "' AND p_password='" . $password_to_check . "'";
         $output = $GLOBALS['conn']->query($request)->fetch_array(); // on récupère le nombre de personnes qui a cet username et ce mot de passe
 
         echo $output[0]; // On retourne le nombre de personnes qui ont ces noms et mots de passe. Si output >= 1, ce sera interprété comme un true sinon ça sera interprété comme un false
@@ -766,8 +766,11 @@
 
         $request = "SELECT * FROM players WHERE p_name='" . $name . "' AND p_password='" . $hash_psw . "'";
         $player = $GLOBALS['conn']->query($request)->fetch_array(); //on récupère les informations du joueur spécifié grâce à son nom d'utilisateur et son mot de passe haché puis on ajoute ces informations dans une array php
-        
-        return $player; //on retourne ensuite l'array php avec toutes les informations du joueur trouvé
+        if ($player == null){
+            return 0;
+        } else {
+            return $player; //on retourne ensuite l'array php avec toutes les informations du joueur trouvé
+        }
     }
 
     /****** 
