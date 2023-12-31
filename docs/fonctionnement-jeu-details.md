@@ -62,3 +62,5 @@ Pour que vous comprenez mieux quand les joueurs peuvent avoir ces status, voici 
 
 ## Explication du système de choix de secret aléatoire pour l'affichage au joueur
 Lors du développement de cette fonctionnalité, j'ai eu un bug où le secret affiché aux joueurs, censé être le même pour tout le monde, n'était pas le même pour tout le monde. C'est pourquoi, pour afficher un nouveau message pour tous, j'utilise une colonne appelé `random_choice` dans ma base de données qui me permets de choisir par un booléen celui qui est actuellement affiché à tous les joueurs. Une fois que le tour est terminé, le secret qui était affiché est changé en tant que `discovered` dans la base de données grâce à la colonne du même nom et on relance ensuite la recherche d'un nouveau secret à découvrir parmi ceux qui n'ont pas été `discovered`
+
+test
