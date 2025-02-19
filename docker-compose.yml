@@ -7,9 +7,9 @@ services:
       context: ./
       dockerfile: Dockerfile
     ports:
-      - "80:80"
+      - "${port}:${port}"
     volumes:
-      - ../:/var/www/html
+      - ./:/var/www/html
       - ./000-default.conf:/etc/apache2/conf.d/000-default.conf
     depends_on:
       - db
@@ -19,19 +19,19 @@ services:
       context: ./
       dockerfile: Dockerfile.db
     environment:
-      MARIADB_ROOT_PASSWORD: clonn
-      MARIADB_DATABASE: test
-      MARIADB_USER: clonn
-      MARIADB_PASSWORD: clonn
+      MARIADB_ROOT_PASSWORD: ${root_pswd}
+      MARIADB_DATABASE: ${db_name}
+      MARIADB_USER: ${username}
+      MARIADB_PASSWORD: ${pswd}
     ports:
-      - "3307:3306"
+      - "${port_db}:${port_db2}"
     volumes:
       - ./sql:/docker-entrypoint-initdb.d
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     restart: always
     ports:
-      - 82:80
+      - ${port_phpmyadmin}:${port}
     environment:
       PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: clonn
+      MYSQL_ROOT_PASSWORD: ${root_pswd}
