@@ -29,10 +29,12 @@ services:
     volumes:
       - ./sql:/docker-entrypoint-initdb.d
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    build:
+      context: ./
+      dockerfile: Dockerfile.phpmyadmin
     restart: always
     ports:
-      - ${port_phpmyadmin}:${port}
+      - "${port_phpmyadmin}:${port_phpmyadmin}"
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: ${root_pswd}

@@ -1,0 +1,9 @@
+# Use the official phpMyAdmin image as a base
+FROM phpmyadmin/phpmyadmin:latest
+
+# Set environment variables (optional, can also be set in docker-compose.yml)
+ENV PMA_HOST=db
+ENV MYSQL_ROOT_PASSWORD=root_password
+
+# Expose the port phpMyAdmin will run on
+EXPOSE {port_phpmyadmin} {port2}
